@@ -4,11 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - İPEK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <title>İPEK Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #22263a;
+            --border: #2e3350;
+            --accent: #4f6ef7;
+            --accent2: #7c3aed;
+            --green: #10b981;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --text: #e2e8f0;
+            --text2: #8892b0;
+            --text3: #4a5568;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,1147 +32,2834 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-        }
-
-        .admin-layout {
             display: flex;
-            min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* SIDEBAR */
         .sidebar {
-            width: 250px;
-            background: #2c3e50;
-            color: #fff;
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            z-index: 1000;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
         }
 
-        .sidebar-header {
-            padding: 2rem 1rem;
-            border-bottom: 1px solid #34495e;
-            text-align: center;
+        .sidebar-logo {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .sidebar-header h2 {
-            font-size: 1.5rem;
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .logo-text {
             font-weight: 700;
-            color: #3498db;
+            font-size: 16px;
+            color: var(--text);
         }
 
-        .sidebar-menu {
-            padding: 1rem 0;
+        .logo-sub {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 1px;
         }
 
-        .menu-item {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .menu-item:hover {
-            background: #34495e;
-            color: #3498db;
-            border-left-color: #3498db;
-        }
-
-        .menu-item.active {
-            background: #34495e;
-            color: #3498db;
-            border-left-color: #3498db;
-        }
-
-        .menu-item i {
-            width: 20px;
-            margin-right: 0.5rem;
-        }
-
-        /* Main Content */
-        .main-content {
+        .sidebar-nav {
+            padding: 16px 0;
             flex: 1;
-            margin-left: 250px;
-            padding: 2rem;
         }
 
-        .top-bar {
-            background: #fff;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
+        .nav-section {
+            margin-bottom: 8px;
         }
 
-        .page-title {
-            font-size: 1.8rem;
+        .nav-section-title {
+            padding: 8px 20px;
+            font-size: 10px;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .user-info {
+        .nav-item {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 10px;
+            padding: 10px 20px;
+            color: var(--text2);
+            text-decoration: none;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 13.5px;
+        }
+
+        .nav-item:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: rgba(79, 110, 247, 0.12);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: #3498db;
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
             color: #fff;
-            font-weight: 600;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: var(--text2);
         }
 
         .logout-btn {
-            background: #e74c3c;
-            color: #fff;
+            margin-left: auto;
+            background: none;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            color: var(--text3);
             cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 6px;
+            border-radius: 6px;
+            transition: all 0.2s;
         }
 
         .logout-btn:hover {
-            background: #c0392b;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
         }
 
-        /* Content Sections */
-        .content-section {
-            display: none;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /* MAIN */
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
         }
 
-        .content-section.active {
-            display: block;
-        }
-
-        .section-header {
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 64px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
 
-        .section-title {
-            font-size: 1.5rem;
+        .topbar-title {
+            font-size: 18px;
             font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .add-btn {
-            background: #27ae60;
-            color: #fff;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 10px;
         }
 
-        .add-btn:hover {
-            background: #229954;
-            transform: translateY(-2px);
+        .topbar-title i {
+            color: var(--accent);
         }
 
-        /* Forms */
+        .topbar-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .page-indicator {
+            background: rgba(79, 110, 247, 0.12);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 28px;
+            background: var(--surface);
+            padding: 6px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            color: var(--text2);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .tab:hover:not(.active) {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--accent);
+        }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-card.blue::before {
+            background: linear-gradient(90deg, var(--accent), #818cf8);
+        }
+
+        .stat-card.green::before {
+            background: linear-gradient(90deg, var(--green), #34d399);
+        }
+
+        .stat-card.red::before {
+            background: linear-gradient(90deg, var(--red), #f87171);
+        }
+
+        .stat-card.yellow::before {
+            background: linear-gradient(90deg, var(--yellow), #fbbf24);
+        }
+
+        .stat-num {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text2);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            opacity: 0.12;
+        }
+
+        /* TABLE */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+        }
+
+        .data-table th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .data-table th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(46, 51, 80, 0.5);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(79, 110, 247, 0.04);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* FORMS */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-grid.three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .form-grid.full {
+            grid-template-columns: 1fr;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
+            gap: 6px;
         }
 
-        .form-group label {
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-            font-weight: 500;
+        .form-group.span2 {
+            grid-column: span 2;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 0.8rem;
-            border: 2px solid #e9ecef;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        .form-group.span3 {
+            grid-column: span 3;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .form-label span {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .form-control {
+            padding: 10px 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13.5px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
         }
 
-        .form-group textarea {
+        .form-control::placeholder {
+            color: var(--text3);
+        }
+
+        textarea.form-control {
             resize: vertical;
             min-height: 100px;
         }
 
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
+        select.form-control option {
+            background: var(--surface2);
         }
 
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 5px;
+        /* IMAGE UPLOAD */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px 24px;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            background: rgba(79, 110, 247, 0.05);
+        }
+
+        .upload-zone input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            color: var(--text3);
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: var(--text2);
+            margin-bottom: 4px;
+        }
+
+        .upload-sub {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .upload-progress {
+            margin-top: 12px;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--surface2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        /* IMAGE PREVIEW */
+        .img-preview-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .img-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        .img-preview-placeholder {
+            width: 100%;
+            height: 160px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .img-preview-placeholder i {
+            font-size: 32px;
+        }
+
+        /* MEDIA GALLERY */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .media-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .media-item:hover {
+            border-color: var(--accent);
+        }
+
+        .media-item.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .media-thumb {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .media-thumb-placeholder {
+            width: 100%;
+            height: 120px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+        }
+
+        .media-info {
+            padding: 8px;
+        }
+
+        .media-name {
+            font-size: 11px;
+            color: var(--text2);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .media-size {
+            font-size: 10px;
+            color: var(--text3);
+        }
+
+        .media-actions {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            display: none;
+            gap: 4px;
+        }
+
+        .media-item:hover .media-actions {
+            display: flex;
+        }
+
+        .media-action-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            backdrop-filter: blur(8px);
+        }
+
+        .media-action-btn.del {
+            background: rgba(239, 68, 68, 0.85);
+            color: #fff;
+        }
+
+        .media-action-btn.copy {
+            background: rgba(79, 110, 247, 0.85);
+            color: #fff;
+        }
+
+        .media-action-btn.edit {
+            background: rgba(245, 158, 11, 0.85);
+            color: #fff;
+        }
+
+        .media-check {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #fff;
+        }
+
+        .media-item.selected .media-check {
+            display: flex;
+        }
+
+        /* CONTENT ITEMS - Nav/Cards/Pages */
+        .content-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s;
+        }
+
+        .content-item:hover {
+            border-color: rgba(79, 110, 247, 0.4);
+        }
+
+        .drag-handle {
+            color: var(--text3);
+            cursor: grab;
+            font-size: 16px;
+        }
+
+        .ci-thumb {
+            width: 60px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            background: var(--surface);
+        }
+
+        .ci-thumb-placeholder {
+            width: 60px;
+            height: 44px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .ci-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ci-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ci-meta {
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .ci-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .ci-badge.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green);
+        }
+
+        .ci-badge.inactive {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--red);
+        }
+
+        .ci-badge.insaat {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--yellow);
+        }
+
+        .ci-badge.satis {
+            background: rgba(79, 110, 247, 0.12);
+            color: var(--accent);
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 9px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
             font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
         }
 
         .btn-primary {
-            background: #3498db;
+            background: var(--accent);
             color: #fff;
         }
 
         .btn-primary:hover {
-            background: #2980b9;
+            background: #3b5cf0;
         }
 
-        .btn-secondary {
-            background: #95a5a6;
+        .btn-success {
+            background: var(--green);
             color: #fff;
         }
 
-        .btn-secondary:hover {
-            background: #7f8c8d;
+        .btn-success:hover {
+            background: #059669;
         }
 
         .btn-danger {
-            background: #e74c3c;
+            background: var(--red);
             color: #fff;
         }
 
         .btn-danger:hover {
-            background: #c0392b;
+            background: #dc2626;
         }
 
-        /* Tables */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
+        .btn-ghost {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
         }
 
-        .data-table th,
-        .data-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
+        .btn-ghost:hover {
+            background: var(--border);
         }
 
-        .data-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
         }
 
-        .data-table tr:hover {
-            background: #f8f9fa;
+        .btn-icon {
+            padding: 7px;
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
         }
 
-        .table-actions {
-            display: flex;
-            gap: 0.5rem;
+        .btn-icon.edit {
+            background: rgba(79, 110, 247, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(79, 110, 247, 0.2);
         }
 
-        .action-btn {
-            padding: 0.3rem 0.6rem;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
+        .btn-icon.del {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        .edit-btn {
-            background: #3498db;
-            color: #fff;
+        .btn-icon.view {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
-        .edit-btn:hover {
-            background: #2980b9;
+        .btn-icon:hover.edit {
+            background: rgba(79, 110, 247, 0.25);
         }
 
-        .delete-btn {
-            background: #e74c3c;
-            color: #fff;
+        .btn-icon:hover.del {
+            background: rgba(239, 68, 68, 0.2);
         }
 
-        .delete-btn:hover {
-            background: #c0392b;
+        .btn-icon:hover.view {
+            background: rgba(16, 185, 129, 0.2);
         }
 
-        /* Navigation Items */
-        .nav-item {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            border: 2px solid #e9ecef;
-        }
-
-        .nav-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-item-title {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .nav-item-url {
-            color: #3498db;
-            font-size: 0.9rem;
-            word-break: break-all;
-        }
-
-        .sub-nav-items {
-            margin-left: 2rem;
-            margin-top: 0.5rem;
-        }
-
-        .sub-nav-item {
-            padding: 0.5rem;
-            background: #fff;
-            border-radius: 3px;
-            margin-bottom: 0.3rem;
-            border: 1px solid #e9ecef;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
+        /* MODAL */
+        .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.25s ease;
+        }
+
+        .modal.wide {
+            max-width: 900px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-title i {
+            color: var(--accent);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--surface2);
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .modal.active {
-            display: flex;
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
         }
 
-        .modal-content {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 10px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
+        .modal-body {
+            padding: 24px;
             overflow-y: auto;
+            flex: 1;
         }
 
-        .modal-header {
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #2c3e50;
+        /* IMAGE PICKER */
+        .img-picker-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
         }
 
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+        .img-picker-tab {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface2);
+            color: var(--text2);
             cursor: pointer;
-            color: #95a5a6;
+            font-size: 13px;
+            text-align: center;
+            transition: all 0.2s;
         }
 
-        .close-modal:hover {
-            color: #2c3e50;
+        .img-picker-tab.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
         }
 
-        /* Toast Notifications */
-        .toast {
+        /* TOAST */
+        .toast-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 5px;
-            color: #fff;
-            z-index: 3000;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .toast.show {
-            transform: translateX(0);
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease;
+            font-size: 13px;
         }
 
-        .toast.success {
-            background: #27ae60;
-        }
-
-        .toast.error {
-            background: #e74c3c;
-        }
-
-        .toast.info {
-            background: #3498db;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
             }
 
-            .sidebar.active {
+            to {
+                opacity: 1;
                 transform: translateX(0);
             }
+        }
 
-            .main-content {
+        .toast.success .toast-icon {
+            color: var(--green);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--red);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--accent);
+        }
+
+        .toast-icon {
+            font-size: 18px;
+        }
+
+        /* RICHTEXT EDITOR */
+        .editor-toolbar {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            padding: 8px 12px;
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .editor-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: none;
+            color: var(--text2);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .editor-btn:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .editor-sep {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 3px 4px;
+        }
+
+        .editor-area {
+            min-height: 160px;
+            padding: 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 0 0 8px 8px;
+            color: var(--text);
+            outline: none;
+            font-size: 13.5px;
+            line-height: 1.7;
+        }
+
+        .editor-area:focus {
+            border-color: var(--accent);
+        }
+
+        .editor-area:empty::before {
+            content: attr(placeholder);
+            color: var(--text3);
+        }
+
+        /* STATUS BADGE */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .badge-active {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--green);
+        }
+
+        .badge-inactive {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--red);
+        }
+
+        .badge-draft {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--yellow);
+        }
+
+        /* SUB-ITEMS */
+        .sub-items {
+            margin-top: 10px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .sub-items.open {
+            display: block;
+        }
+
+        .sub-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background: var(--surface);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 12.5px;
+            border: 1px solid var(--border);
+        }
+
+        .sub-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* SECTION */
+        .section-page {
+            display: none;
+        }
+
+        .section-page.active {
+            display: block;
+        }
+
+        /* SEARCH */
+        .search-box {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 9px 14px 9px 38px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            font-size: 13px;
+        }
+
+        /* COLOR PICKER */
+        .color-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .color-input {
+            width: 44px;
+            height: 36px;
+            padding: 2px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface2);
+            cursor: pointer;
+        }
+
+        .color-text {
+            flex: 1;
+        }
+
+        /* DIVIDER */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width:900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main {
                 margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
             }
 
-            .data-table {
-                font-size: 0.8rem;
+            .form-grid .span2,
+            .form-grid .span3 {
+                grid-column: span 1;
             }
+        }
 
-            .table-actions {
-                flex-direction: column;
-            }
+        /* OVERRIDES */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text3);
+        }
+
+        input[type=file] {
+            font-family: 'Inter', sans-serif;
+            color: var(--text2);
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 
 <body>
-    <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>İPEK ADMIN</h2>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-mark">N</div>
+            <div>
+                <div class="logo-text">İPEK Admin</div>
+                <div class="logo-sub">İçerik Yönetim Sistemi</div>
             </div>
-            <nav class="sidebar-menu">
-                <a href="#" class="menu-item active" data-section="dashboard">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a href="#" class="menu-item" data-section="navigation">
-                    <i class="fas fa-bars"></i> Navigasyon
-                </a>
-                <a href="#" class="menu-item" data-section="pages">
-                    <i class="fas fa-file"></i> Sayfalar
-                </a>
-                <a href="#" class="menu-item" data-section="projects">
-                    <i class="fas fa-building"></i> Projeler
-                </a>
-                <a href="#" class="menu-item" data-section="images">
-                    <i class="fas fa-images"></i> Resim Yönetimi
-                </a>
-                <a href="#" class="menu-item" data-section="settings">
-                    <i class="fas fa-cog"></i> Ayarlar
-                </a>
-            </nav>
-        </aside>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Genel</div>
+                <div class="nav-item active" data-page="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</div>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Site İçeriği</div>
+                <div class="nav-item" data-page="navigation"><i class="fas fa-bars"></i> Navigasyon & Menüler</div>
+                <div class="nav-item" data-page="pages"><i class="fas fa-file-alt"></i> Sayfalar</div>
+                <div class="nav-item" data-page="cards"><i class="fas fa-th-large"></i> Kartlar & İçerikler</div>
+                <div class="nav-item" data-page="projects"><i class="fas fa-building"></i> Projeler</div>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Medya</div>
+                <div class="nav-item" data-page="media"><i class="fas fa-images"></i> Resim Kütüphanesi</div>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Sistem</div>
+                <div class="nav-item" data-page="settings"><i class="fas fa-cog"></i> Site Ayarları</div>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar" id="sidebarAvatar">A</div>
+                <div>
+                    <div class="user-name" id="sidebarName">Admin</div>
+                    <div class="user-role">Süper Admin</div>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Çıkış"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Bar -->
-            <div class="top-bar">
-                <h1 class="page-title" id="pageTitle">Dashboard</h1>
-                <div class="user-info">
-                    <div class="user-avatar">A</div>
-                    <span id="username">Admin</span>
-                    <button class="logout-btn" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Çıkış
-                    </button>
+    <!-- MAIN -->
+    <div class="main">
+        <div class="topbar">
+            <div class="topbar-title"><i class="fas fa-chart-pie" id="topbarIcon"></i><span
+                    id="topbarTitle">Dashboard</span></div>
+            <div class="topbar-actions">
+                <a href="index.html" target="_blank" class="btn btn-ghost btn-sm"><i
+                        class="fas fa-external-link-alt"></i> Siteyi Görüntüle</a>
+                <span class="page-indicator" id="currentPageBadge">Ana Sayfa</span>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+            <div class="section-page active" id="page-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card blue">
+                        <div class="stat-num" id="stat-pages">0</div>
+                        <div class="stat-label">Sayfalar</div>
+                        <i class="fas fa-file-alt stat-icon"></i>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-num" id="stat-projects">0</div>
+                        <div class="stat-label">Projeler</div>
+                        <i class="fas fa-building stat-icon"></i>
+                    </div>
+                    <div class="stat-card yellow">
+                        <div class="stat-num" id="stat-cards">0</div>
+                        <div class="stat-label">Kartlar</div>
+                        <i class="fas fa-th-large stat-icon"></i>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-num" id="stat-images">0</div>
+                        <div class="stat-label">Resimler</div>
+                        <i class="fas fa-images stat-icon"></i>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-clock"></i> Son Aktiviteler</div>
+                        </div>
+                        <div id="activityList"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-bolt"></i> Hızlı İşlemler</div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <button class="btn btn-primary" onclick="goPage('navigation')"><i class="fas fa-bars"></i>
+                                Menü Düzenle</button>
+                            <button class="btn btn-ghost" onclick="goPage('cards')"><i class="fas fa-th-large"></i> Kart
+                                Ekle</button>
+                            <button class="btn btn-ghost" onclick="goPage('projects')"><i class="fas fa-building"></i>
+                                Proje Ekle</button>
+                            <button class="btn btn-ghost" onclick="goPage('media')"><i class="fas fa-upload"></i> Resim
+                                Yükle</button>
+                            <button class="btn btn-ghost" onclick="goPage('settings')"><i class="fas fa-cog"></i>
+                                Ayarlar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Dashboard Section -->
-            <section class="content-section active" id="dashboard">
-                <div class="section-header">
-                    <h2 class="section-title">Dashboard</h2>
+            <!-- NAVIGATION -->
+            <div class="section-page" id="page-navigation">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-bars"></i> Ana Menü Öğeleri</div>
+                        <button class="btn btn-primary btn-sm" onclick="openNavModal()"><i class="fas fa-plus"></i> Menü
+                            Öğesi Ekle</button>
+                    </div>
+                    <div id="navList"></div>
                 </div>
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <div
-                        style="background: #3498db; color: #fff; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                        <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">5</h3>
-                        <p>Sayfalar</p>
-                    </div>
-                    <div
-                        style="background: #27ae60; color: #fff; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                        <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">12</h3>
-                        <p>Projeler</p>
-                    </div>
-                    <div
-                        style="background: #e74c3c; color: #fff; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                        <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">8</h3>
-                        <p>Resimler</p>
-                    </div>
-                    <div
-                        style="background: #f39c12; color: #fff; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                        <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">4</h3>
-                        <p>Menü Öğeleri</p>
-                    </div>
-                </div>
-                <div style="background: #fff; padding: 1.5rem; border-radius: 10px; border: 2px solid #e9ecef;">
-                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">Hızlı İşlemler</h3>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <button class="btn btn-primary" onclick="showSection('navigation')">
-                            <i class="fas fa-bars"></i> Navigasyon Düzenle
-                        </button>
-                        <button class="btn btn-primary" onclick="showSection('pages')">
-                            <i class="fas fa-file"></i> Sayfa Ekle
-                        </button>
-                        <button class="btn btn-primary" onclick="showSection('projects')">
-                            <i class="fas fa-building"></i> Proje Ekle
-                        </button>
-                    </div>
-                </div>
-            </section>
+            </div>
 
-            <!-- Navigation Section -->
-            <section class="content-section" id="navigation">
-                <div class="section-header">
-                    <h2 class="section-title">Navigasyon Yönetimi</h2>
-                    <button class="add-btn" onclick="openNavModal()">
-                        <i class="fas fa-plus"></i> Menü Öğesi Ekle
-                    </button>
+            <!-- PAGES -->
+            <div class="section-page" id="page-pages">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-file-alt"></i> Sayfa Yönetimi</div>
+                        <button class="btn btn-primary btn-sm" onclick="openPageModal()"><i class="fas fa-plus"></i>
+                            Sayfa Ekle</button>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sayfa Adı</th>
+                                    <th>Dosya</th>
+                                    <th>Meta Açıklama</th>
+                                    <th>Durum</th>
+                                    <th>Güncelleme</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pagesTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div id="navItems"></div>
-            </section>
+            </div>
 
-            <!-- Pages Section -->
-            <section class="content-section" id="pages">
-                <div class="section-header">
-                    <h2 class="section-title">Sayfa Yönetimi</h2>
-                    <button class="add-btn" onclick="openPageModal()">
-                        <i class="fas fa-plus"></i> Yeni Sayfa
-                    </button>
+            <!-- CARDS -->
+            <div class="section-page" id="page-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-th-large"></i> Kart & İçerik Yönetimi</div>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <select class="form-control" style="width:200px;" id="cardPageFilter"
+                                onchange="renderCards()">
+                                <option value="">Tüm Sayfalar</option>
+                                <option value="index.html">Ana Sayfa</option>
+                                <option value="biz-kimiz.html">Biz Kimiz</option>
+                                <option value="projeler.html">Projeler</option>
+                                <option value="ipek-kesifleri.html">İpek Keşifleri</option>
+                                <option value="iletisim.html">İletişim</option>
+                            </select>
+                            <button class="btn btn-primary btn-sm" onclick="openCardModal()"><i class="fas fa-plus"></i>
+                                Kart Ekle</button>
+                        </div>
+                    </div>
+                    <div id="cardsList"></div>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Sayfa Adı</th>
-                            <th>Dosya Adı</th>
-                            <th>Durum</th>
-                            <th>Güncelleme</th>
-                            <th>İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pagesTableBody">
-                        <tr>
-                            <td>Ana Sayfa</td>
-                            <td>index.html</td>
-                            <td><span style="color: #27ae60;">Aktif</span></td>
-                            <td>2024-05-10</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn edit-btn" onclick="editPage('index.html')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete-btn" onclick="deletePage('index.html')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+            </div>
+
+            <!-- PROJECTS -->
+            <div class="section-page" id="page-projects">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-building"></i> Proje Yönetimi</div>
+                        <button class="btn btn-primary btn-sm" onclick="openProjectModal()"><i class="fas fa-plus"></i>
+                            Proje Ekle</button>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Resim</th>
+                                    <th>Proje Adı</th>
+                                    <th>Kategori</th>
+                                    <th>Lokasyon</th>
+                                    <th>Durum</th>
+                                    <th>Fiyat</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEDIA -->
+            <div class="section-page" id="page-media">
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-upload"></i> Resim Yükle</div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div>
+                            <p style="font-size:12px;color:var(--text2);margin-bottom:10px;font-weight:600;">DOSYADAN
+                                YÜKLE</p>
+                            <div class="upload-zone" id="uploadZone">
+                                <input type="file" id="fileUploadInput" multiple accept="image/*"
+                                    onchange="handleFileUpload(event)">
+                                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                                <div class="upload-text">Resimleri buraya sürükleyin veya tıklayın</div>
+                                <div class="upload-sub">PNG, JPG, GIF, WEBP — Maks. 10MB</div>
+                                <div class="upload-progress" id="uploadProgress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="progressFill"></div>
+                                    </div>
+                                    <p style="font-size:11px;color:var(--text2);margin-top:6px;" id="progressText">
+                                        Yükleniyor...</p>
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <!-- Projects Section -->
-            <section class="content-section" id="projects">
-                <div class="section-header">
-                    <h2 class="section-title">Proje Yönetimi</h2>
-                    <button class="add-btn" onclick="openProjectModal()">
-                        <i class="fas fa-plus"></i> Yeni Proje
-                    </button>
+                            </div>
+                        </div>
+                        <div>
+                            <p style="font-size:12px;color:var(--text2);margin-bottom:10px;font-weight:600;">URL'DEN
+                                EKLE</p>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label class="form-label">Resim URL</label>
+                                <input class="form-control" type="url" id="urlImageInput"
+                                    placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label class="form-label">Resim Adı</label>
+                                <input class="form-control" type="text" id="urlImageName" placeholder="resim-adi.jpg">
+                            </div>
+                            <div id="urlPreviewWrap" style="margin-bottom:12px;display:none;">
+                                <img id="urlPreviewImg" class="img-preview" src="" alt="Önizleme"
+                                    onerror="this.style.display='none'">
+                            </div>
+                            <button class="btn btn-primary" onclick="addImageFromUrl()"><i class="fas fa-plus"></i>
+                                Kütüphaneye Ekle</button>
+                        </div>
+                    </div>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Proje Adı</th>
-                            <th>Kategori</th>
-                            <th>Lokasyon</th>
-                            <th>Durum</th>
-                            <th>İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody id="projectsTableBody">
-                        <tr>
-                            <td>İpek Sapanca</td>
-                            <td>Konut</td>
-                            <td>Sapanca</td>
-                            <td><span style="color: #27ae60;">Yaşam Başladı</span></td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn edit-btn" onclick="editProject(1)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete-btn" onclick="deleteProject(1)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-images"></i> Resim Kütüphanesi <span
+                                style="font-weight:400;color:var(--text2);font-size:13px;" id="mediaCount"></span></div>
+                        <div style="display:flex;gap:10px;">
+                            <div class="search-box" style="width:200px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Resim ara..." id="mediaSearch" oninput="renderMedia()">
+                            </div>
+                            <button class="btn btn-danger btn-sm" id="bulkDeleteBtn" onclick="bulkDeleteImages()"
+                                style="display:none;"><i class="fas fa-trash"></i> Seçilenleri Sil</button>
+                        </div>
+                    </div>
+                    <div class="media-grid" id="mediaGrid"></div>
+                </div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div class="section-page" id="page-settings">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-cog"></i> Site Ayarları</div>
+                    </div>
+                    <form id="settingsForm" onsubmit="saveSettings(event)">
+                        <div style="margin-bottom:24px;">
+                            <p
+                                style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
+                                Genel Bilgiler</p>
+                            <div class="form-grid">
+                                <div class="form-group span2">
+                                    <label class="form-label">Site Başlığı <span>*</span></label>
+                                    <input class="form-control" type="text" id="siteTitle">
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
+                                <div class="form-group span2">
+                                    <label class="form-label">Site Açıklaması</label>
+                                    <textarea class="form-control" id="siteDescription" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Meta Keywords</label>
+                                    <input class="form-control" type="text" id="metaKeywords"
+                                        placeholder="ipek, inşaat, konut">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Favicon URL</label>
+                                    <input class="form-control" type="url" id="faviconUrl">
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div style="margin-bottom:24px;">
+                            <p
+                                style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
+                                İletişim Bilgileri</p>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">E-posta</label>
+                                    <input class="form-control" type="email" id="contactEmail">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Telefon</label>
+                                    <input class="form-control" type="tel" id="contactPhone">
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Adres</label>
+                                    <input class="form-control" type="text" id="contactAddress">
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div style="margin-bottom:24px;">
+                            <p
+                                style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
+                                Analitik & Entegrasyonlar</p>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Google Analytics ID</label>
+                                    <input class="form-control" type="text" id="googleAnalytics"
+                                        placeholder="UA-XXXXXXX-X">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content:flex-end;">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Ayarları
+                                Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-            <!-- Images Section -->
-            <section class="content-section" id="images">
-                <div class="section-header">
-                    <h2 class="section-title">Resim Yönetimi</h2>
-                    <button class="add-btn" onclick="document.getElementById('imageUpload').click()">
-                        <i class="fas fa-upload"></i> Resim Yükle
-                    </button>
-                    <input type="file" id="imageUpload" style="display: none;" accept="image/*" multiple
-                        onchange="handleImageUpload(event)">
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;"
-                    id="imagesGrid">
-                    <!-- Images will be loaded here -->
-                </div>
-            </section>
+        </div><!-- /content -->
+    </div><!-- /main -->
 
-            <!-- Settings Section -->
-            <section class="content-section" id="settings">
-                <div class="section-header">
-                    <h2 class="section-title">Site Ayarları</h2>
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========================== MODALS ========================== -->
+
+    <!-- NAV MODAL -->
+    <div class="modal-overlay" id="navModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-bars"></i> <span id="navModalTitle">Menü Öğesi Ekle</span>
                 </div>
-                <form id="settingsForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Site Başlığı</label>
-                            <input type="text" id="siteTitle" value="İPEK - İnce Düşünülmüş Yaşam Alanları">
-                        </div>
-                        <div class="form-group">
-                            <label>Site Açıklaması</label>
-                            <input type="text" id="siteDescription"
-                                value="2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.">
-                        </div>
-                        <div class="form-group">
-                            <label>İletişim E-posta</label>
-                            <input type="email" id="contactEmail" value="info@ipek.com.tr">
-                        </div>
-                        <div class="form-group">
-                            <label>İletişim Telefon</label>
-                            <input type="tel" id="contactPhone" value="+90 212 555 00 00">
+                <button class="modal-close" onclick="closeModal('navModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="navId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Menü Adı <span>*</span></label>
+                        <input class="form-control" type="text" id="navName" placeholder="Ana Sayfa">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL <span>*</span></label>
+                        <input class="form-control" type="text" id="navUrl" placeholder="index.html">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sıra</label>
+                        <input class="form-control" type="number" id="navOrder" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select class="form-control" id="navActive">
+                            <option value="true">Aktif</option>
+                            <option value="false">Pasif</option>
+                        </select>
+                    </div>
+                </div>
+                <hr class="divider">
+                <p style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:12px;">ALT MENÜ ÖĞELERİ</p>
+                <div id="subNavItems"></div>
+                <button class="btn btn-ghost btn-sm" onclick="addSubNavRow()"><i class="fas fa-plus"></i> Alt Menü
+                    Ekle</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('navModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveNav()"><i class="fas fa-save"></i> Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE MODAL -->
+    <div class="modal-overlay" id="pageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-file-alt"></i> <span id="pageModalTitle">Sayfa Ekle</span>
+                </div>
+                <button class="modal-close" onclick="closeModal('pageModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="pageModalFile">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Sayfa Başlığı <span>*</span></label>
+                        <input class="form-control" type="text" id="pmTitle">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dosya Adı <span>*</span></label>
+                        <input class="form-control" type="text" id="pmFile" placeholder="sayfa.html">
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Meta Açıklama</label>
+                        <textarea class="form-control" id="pmDescription" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keywords</label>
+                        <input class="form-control" type="text" id="pmKeywords">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select class="form-control" id="pmStatus">
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Pasif</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('pageModal')">İptal</button>
+                <button class="btn btn-primary" onclick="savePage()"><i class="fas fa-save"></i> Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARD MODAL -->
+    <div class="modal-overlay" id="cardModal">
+        <div class="modal wide">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-th-large"></i> <span id="cardModalTitle">Kart Ekle</span>
+                </div>
+                <button class="modal-close" onclick="closeModal('cardModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="cardId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Kart Başlığı <span>*</span></label>
+                        <input class="form-control" type="text" id="cardTitle">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sayfa <span>*</span></label>
+                        <select class="form-control" id="cardPage">
+                            <option value="index.html">Ana Sayfa</option>
+                            <option value="biz-kimiz.html">Biz Kimiz</option>
+                            <option value="projeler.html">Projeler</option>
+                            <option value="ipek-kesifleri.html">İpek Keşifleri</option>
+                            <option value="iletisim.html">İletişim</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sıra</label>
+                        <input class="form-control" type="number" id="cardOrder" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum Etiketi</label>
+                        <select class="form-control" id="cardStatus">
+                            <option value="">Yok</option>
+                            <option value="Yaşam Başladı">Yaşam Başladı</option>
+                            <option value="Satışta">Satışta</option>
+                            <option value="İnşaat Devam Ediyor">İnşaat Devam Ediyor</option>
+                            <option value="Tamamlandı">Tamamlandı</option>
+                        </select>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Açıklama</label>
+                        <textarea class="form-control" id="cardDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Kart Resmi</label>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div>
+                                <div class="img-picker-tabs">
+                                    <div class="img-picker-tab active" onclick="switchCardImgTab('url',this)"><i
+                                            class="fas fa-link"></i> URL</div>
+                                    <div class="img-picker-tab" onclick="switchCardImgTab('upload',this)"><i
+                                            class="fas fa-upload"></i> Yükle</div>
+                                    <div class="img-picker-tab" onclick="switchCardImgTab('library',this)"><i
+                                            class="fas fa-images"></i> Kütüphane</div>
+                                </div>
+                                <div id="cardImgTabUrl">
+                                    <input class="form-control" type="url" id="cardImage" placeholder="https://..."
+                                        oninput="updateCardImgPreview()">
+                                </div>
+                                <div id="cardImgTabUpload" style="display:none;">
+                                    <div class="upload-zone" style="padding:20px;">
+                                        <input type="file" accept="image/*" onchange="handleCardImageUpload(event)">
+                                        <div style="font-size:24px;color:var(--text3);margin-bottom:6px;"><i
+                                                class="fas fa-upload"></i></div>
+                                        <div style="font-size:12px;color:var(--text2);">Resim seç veya sürükle</div>
+                                    </div>
+                                </div>
+                                <div id="cardImgTabLibrary" style="display:none;">
+                                    <div style="max-height:200px;overflow-y:auto;" id="cardLibraryGrid"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">ÖNİZLEME
+                                </p>
+                                <div id="cardImgPreviewWrap">
+                                    <div class="img-preview-placeholder" id="cardImgPlaceholder"><i
+                                            class="fas fa-image"></i><span>Resim seçilmedi</span></div>
+                                    <img id="cardImgPreview" class="img-preview" src="" style="display:none;"
+                                        onerror="this.style.display='none';document.getElementById('cardImgPlaceholder').style.display='flex'">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <div class="form-group">
+                        <label class="form-label">Özellikler</label>
+                        <input class="form-control" type="text" id="cardFeatures"
+                            placeholder="Deniz Manzarası, Lüks, Özel">
                     </div>
-                </form>
-            </section>
-        </main>
-    </div>
-
-    <!-- Navigation Modal -->
-    <div class="modal" id="navModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Menü Öğesi Ekle/Düzenle</h3>
-                <button class="close-modal" onclick="closeModal('navModal')">&times;</button>
+                    <div class="form-group">
+                        <label class="form-label">Fiyat</label>
+                        <input class="form-control" type="text" id="cardPrice" placeholder="₺2.000.000 - ₺5.000.000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Link URL</label>
+                        <input class="form-control" type="text" id="cardLink" placeholder="#">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Buton Metni</label>
+                        <input class="form-control" type="text" id="cardButtonText" placeholder="Keşfet">
+                    </div>
+                </div>
             </div>
-            <form id="navForm">
-                <div class="form-group">
-                    <label>Menü Adı</label>
-                    <input type="text" id="navName" required>
-                </div>
-                <div class="form-group">
-                    <label>URL</label>
-                    <input type="text" id="navUrl" required>
-                </div>
-                <div class="form-group">
-                    <label>Sıra</label>
-                    <input type="number" id="navOrder" min="1">
-                </div>
-                <div class="form-group">
-                    <label>Aktif</label>
-                    <select id="navActive">
-                        <option value="true">Evet</option>
-                        <option value="false">Hayır</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('navModal')">İptal</button>
-                </div>
-            </form>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('cardModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveCard()"><i class="fas fa-save"></i> Kaydet</button>
+            </div>
         </div>
     </div>
 
-    <!-- Page Modal -->
-    <div class="modal" id="pageModal">
-        <div class="modal-content">
+    <!-- PROJECT MODAL -->
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal wide">
             <div class="modal-header">
-                <h3 class="modal-title">Sayfa Ekle/Düzenle</h3>
-                <button class="close-modal" onclick="closeModal('pageModal')">&times;</button>
+                <div class="modal-title"><i class="fas fa-building"></i> <span id="projectModalTitle">Proje Ekle</span>
+                </div>
+                <button class="modal-close" onclick="closeModal('projectModal')">✕</button>
             </div>
-            <form id="pageForm">
-                <div class="form-group">
-                    <label>Sayfa Başlığı</label>
-                    <input type="text" id="pageTitle" required>
+            <div class="modal-body">
+                <input type="hidden" id="projectId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Proje Adı <span>*</span></label>
+                        <input class="form-control" type="text" id="projectName">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-control" id="projectCategory">
+                            <option value="konut">Konut</option>
+                            <option value="arsa">Arsa</option>
+                            <option value="ticari">Ticari</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lokasyon</label>
+                        <input class="form-control" type="text" id="projectLocation">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select class="form-control" id="projectStatus">
+                            <option value="Yaşam Başladı">Yaşam Başladı</option>
+                            <option value="İnşaat Devam Ediyor">İnşaat Devam Ediyor</option>
+                            <option value="Satışta">Satışta</option>
+                            <option value="Tamamlandı">Tamamlandı</option>
+                        </select>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Proje Resmi</label>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div>
+                                <div class="img-picker-tabs">
+                                    <div class="img-picker-tab active" onclick="switchProjImgTab('url',this)"><i
+                                            class="fas fa-link"></i> URL</div>
+                                    <div class="img-picker-tab" onclick="switchProjImgTab('upload',this)"><i
+                                            class="fas fa-upload"></i> Yükle</div>
+                                    <div class="img-picker-tab" onclick="switchProjImgTab('library',this)"><i
+                                            class="fas fa-images"></i> Kütüphane</div>
+                                </div>
+                                <div id="projImgTabUrl">
+                                    <input class="form-control" type="url" id="projectImage" placeholder="https://..."
+                                        oninput="updateProjImgPreview()">
+                                </div>
+                                <div id="projImgTabUpload" style="display:none;">
+                                    <div class="upload-zone" style="padding:20px;">
+                                        <input type="file" accept="image/*" onchange="handleProjImageUpload(event)">
+                                        <div style="font-size:24px;color:var(--text3);margin-bottom:6px;"><i
+                                                class="fas fa-upload"></i></div>
+                                        <div style="font-size:12px;color:var(--text2);">Resim seç</div>
+                                    </div>
+                                </div>
+                                <div id="projImgTabLibrary" style="display:none;">
+                                    <div style="max-height:200px;overflow-y:auto;" id="projLibraryGrid"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">ÖNİZLEME
+                                </p>
+                                <div id="projImgPreviewWrap">
+                                    <div class="img-preview-placeholder" id="projImgPlaceholder"><i
+                                            class="fas fa-image"></i><span>Resim seçilmedi</span></div>
+                                    <img id="projImgPreview" class="img-preview" src="" style="display:none;"
+                                        onerror="this.style.display='none';document.getElementById('projImgPlaceholder').style.display='flex'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Açıklama</label>
+                        <textarea class="form-control" id="projectDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Özellikler</label>
+                        <input class="form-control" type="text" id="projectFeatures"
+                            placeholder="Göl Manzarası, Villa, Modern">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fiyat Aralığı</label>
+                        <input class="form-control" type="text" id="projectPrice" placeholder="₺2.500.000 - ₺5.000.000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Teslim Tarihi</label>
+                        <input class="form-control" type="date" id="projectDelivery">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Dosya Adı</label>
-                    <input type="text" id="pageFile" required>
-                </div>
-                <div class="form-group">
-                    <label>Meta Açıklaması</label>
-                    <textarea id="pageDescription"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>İçerik</label>
-                    <textarea id="pageContent" rows="10"></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('pageModal')">İptal</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('projectModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveProject()"><i class="fas fa-save"></i> Kaydet</button>
+            </div>
         </div>
     </div>
 
-    <!-- Project Modal -->
-    <div class="modal" id="projectModal">
-        <div class="modal-content">
+    <!-- IMAGE EDIT MODAL -->
+    <div class="modal-overlay" id="imgEditModal">
+        <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Proje Ekle/Düzenle</h3>
-                <button class="close-modal" onclick="closeModal('projectModal')">&times;</button>
+                <div class="modal-title"><i class="fas fa-edit"></i> Resim Düzenle / Değiştir</div>
+                <button class="modal-close" onclick="closeModal('imgEditModal')">✕</button>
             </div>
-            <form id="projectForm">
-                <div class="form-group">
-                    <label>Proje Adı</label>
-                    <input type="text" id="projectName" required>
+            <div class="modal-body">
+                <input type="hidden" id="editImgId">
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label class="form-label">Resim Adı</label>
+                    <input class="form-control" type="text" id="editImgName">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;">
+                    <div>
+                        <p style="font-size:11px;color:var(--text2);font-weight:600;margin-bottom:8px;">MEVCUT RESİM</p>
+                        <img id="editImgCurrent" class="img-preview" src="" alt="">
+                    </div>
+                    <div>
+                        <p style="font-size:11px;color:var(--text2);font-weight:600;margin-bottom:8px;">YENİ RESİM
+                            (İSTEĞE BAĞLI)</p>
+                        <div class="upload-zone" style="padding:20px;">
+                            <input type="file" accept="image/*" id="editImgFile" onchange="previewEditImage(event)">
+                            <div style="font-size:22px;color:var(--text3);"><i class="fas fa-sync-alt"></i></div>
+                            <div style="font-size:12px;color:var(--text2);margin-top:6px;">Değiştirmek için seç</div>
+                        </div>
+                        <img id="editImgNewPreview" class="img-preview" src="" style="display:none;margin-top:8px;"
+                            alt="Yeni">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Kategori</label>
-                    <select id="projectCategory">
-                        <option value="konut">Konut</option>
-                        <option value="arsa">Arsa</option>
-                        <option value="ticari">Ticari</option>
-                    </select>
+                    <label class="form-label">Veya URL ile değiştir</label>
+                    <input class="form-control" type="url" id="editImgUrl" placeholder="https://"
+                        oninput="document.getElementById('editImgNewPreview').src=this.value;document.getElementById('editImgNewPreview').style.display=this.value?'block':'none'">
                 </div>
-                <div class="form-group">
-                    <label>Lokasyon</label>
-                    <input type="text" id="projectLocation" required>
-                </div>
-                <div class="form-group">
-                    <label>Durum</label>
-                    <select id="projectStatus">
-                        <option value="insaat">İnşaat Devam Ediyor</option>
-                        <option value="tamamlandi">Tamamlandı</option>
-                        <option value="yasam-basladi">Yaşam Başladı</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Açıklama</label>
-                    <textarea id="projectDescription"></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('projectModal')">İptal</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('imgEditModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveImageEdit()"><i class="fas fa-save"></i> Güncelle</button>
+            </div>
         </div>
     </div>
 
-    <script src="admin-data.js"></script>
+    <!-- CONFIRM MODAL -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-exclamation-triangle" style="color:var(--red)"></i> Onay</div>
+                <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmText" style="font-size:14px;color:var(--text2);line-height:1.6;"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('confirmModal')">İptal</button>
+                <button class="btn btn-danger" id="confirmBtn"><i class="fas fa-trash"></i> Sil</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Check authentication
-        if (!localStorage.getItem('adminLoggedIn')) {
-            window.location.href = 'admin-login.html';
+        // ===========================
+        // DATA LAYER (localStorage)
+        // ===========================
+        const KEYS = {
+            nav: 'ipek_navigation',
+            pages: 'ipek_pages',
+            projects: 'ipek_projects',
+            images: 'ipek_images',
+            settings: 'ipek_settings',
+            cards: 'ipek_cards',
+            activities: 'ipek_activities'
+        };
+
+        function getData(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
+        function setData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+        function initData() {
+            if (!getData(KEYS.nav)) setData(KEYS.nav, [
+                { id: 1, name: 'Ana Sayfa', url: 'index.html', order: 1, active: true, subItems: [] },
+                {
+                    id: 2, name: 'Biz Kimiz', url: 'biz-kimiz.html', order: 2, active: true, subItems: [
+                        { id: 21, name: 'BİZ KİMİZ', url: 'biz-kimiz.html' },
+                        { id: 22, name: 'Manifesto', url: 'biz-kimiz.html#manifesto' },
+                        { id: 23, name: 'Tarihçe', url: 'biz-kimiz.html#tarihce' }
+                    ]
+                },
+                {
+                    id: 3, name: 'Projeler', url: 'projeler.html', order: 3, active: true, subItems: [
+                        { id: 31, name: 'İpek Reserve', url: 'projeler.html' },
+                        { id: 32, name: 'İpek Projeler', url: 'projeler.html' },
+                        { id: 33, name: 'İpek Arsa', url: 'projeler.html' },
+                        { id: 34, name: 'İpek Global', url: 'projeler.html' },
+                        { id: 35, name: 'NOVU', url: 'projeler.html' },
+                        { id: 36, name: 'Tümünü Gör', url: 'projeler.html' }
+                    ]
+                },
+                { id: 4, name: 'İpek Keşifleri', url: 'ipek-kesifleri.html', order: 4, active: true, subItems: [] },
+                { id: 5, name: 'İletişim', url: 'iletisim.html', order: 5, active: true, subItems: [] }
+            ]);
+            if (!getData(KEYS.pages)) setData(KEYS.pages, [
+                { file: 'index.html', title: 'Ana Sayfa', description: 'İPEK - İnce Düşünülmüş Yaşam Alanları', keywords: 'ipek,inşaat,konut', active: true, updated: today() },
+                { file: 'biz-kimiz.html', title: 'Biz Kimiz', description: 'İPEK Hakkımızda', keywords: 'ipek,hakkımızda', active: true, updated: today() },
+                { file: 'projeler.html', title: 'Projeler', description: 'İPEK Projeleri', keywords: 'ipek,projeler', active: true, updated: today() },
+                { file: 'ipek-kesifleri.html', title: 'İpek Keşifleri', description: 'İPEK Keşifleri', keywords: 'ipek,keşifler', active: true, updated: today() },
+                { file: 'iletisim.html', title: 'İletişim', description: 'İPEK İletişim', keywords: 'ipek,iletişim', active: true, updated: today() }
+            ]);
+            if (!getData(KEYS.projects)) setData(KEYS.projects, [
+                { id: 1, name: 'İpek Sapanca', category: 'konut', location: 'Sapanca, Kocaeli', status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", features: 'Doğa Manzarası, Göl Yakınlığı', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Sapanca', price: '₺2.500.000 - ₺5.000.000', delivery: '2024-06-01' },
+                { id: 2, name: 'İpek Meram', category: 'konut', location: 'Meram, Konya', status: 'İnşaat Devam Ediyor', description: 'Trakya\'nın yıldızı parlıyor', features: 'Merkezi Konum, Yeşil Alanlar', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Meram', price: '₺1.800.000 - ₺3.200.000', delivery: '2025-03-01' },
+                { id: 3, name: 'İpek Reserve', category: 'konut', location: 'Bodrum, Muğla', status: 'Yaşam Başladı', description: 'Premium yaşam alanları', features: 'Deniz Manzarası, Lüks Tasarım', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Reserve', price: '₺8.000.000 - ₺15.000.000', delivery: '2023-12-01' },
+                { id: 4, name: 'İpek Arsa Kaz Dağları', category: 'arsa', location: 'Kaz Dağları, Çanakkale', status: 'Satışta', description: "Kaz Dağları'nın Havası", features: 'Doğa İç İçe, Modüler Ev', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Kaz', price: '₺500.000 - ₺1.500.000', delivery: '' },
+                { id: 5, name: 'İpek Arsa Dikili', category: 'arsa', location: 'Dikili, İzmir', status: 'Satışta', description: "Ege'nin incisi", features: 'Deniz Yakınlığı, Turistik', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Dikili', price: '₺600.000 - ₺2.000.000', delivery: '' },
+                { id: 6, name: 'İpek Arsa Lüleburgaz', category: 'arsa', location: 'Lüleburgaz, Kırklareli', status: 'Satışta', description: 'Trakya\'nın yıldızı', features: 'Stratejik Konum, Yatırımlık', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Luleburgaz', price: '₺400.000 - ₺1.200.000', delivery: '' }
+            ]);
+            if (!getData(KEYS.images)) setData(KEYS.images, [
+                { id: 1, name: 'hero-image.jpg', url: 'https://via.placeholder.com/800x400/34495e/ffffff?text=Hero+Image', size: '125 KB', date: today() },
+                { id: 2, name: 'logo.png', url: 'https://via.placeholder.com/200x100/2c3e50/ffffff?text=İPEK+Logo', size: '45 KB', date: today() },
+                { id: 3, name: 'project-1.jpg', url: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Project+1', size: '89 KB', date: today() },
+                { id: 4, name: 'about-image.jpg', url: 'https://via.placeholder.com/600x400/34495e/ffffff?text=About+Image', size: '156 KB', date: today() }
+            ]);
+            if (!getData(KEYS.settings)) setData(KEYS.settings, {
+                siteTitle: 'İPEK - İnce Düşünülmüş Yaşam Alanları',
+                siteDescription: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.',
+                contactEmail: 'info@ipek.com.tr', contactPhone: '+90 212 555 00 00',
+                contactAddress: 'Maslak, Büyükdere Cad. No:123, Sarıyer/İstanbul',
+                metaKeywords: 'ipek,inşaat,konut,arsa', faviconUrl: '', googleAnalytics: ''
+            });
+            if (!getData(KEYS.cards)) setData(KEYS.cards, [
+                { id: 1, title: 'İpek Reserve', page: 'index.html', order: 1, status: 'Yaşam Başladı', description: 'Premium yaşam alanları', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Reserve', features: 'Deniz Manzarası, Lüks Tasarım', price: '₺8.000.000 - ₺15.000.000', link: '#', buttonText: 'Keşfet' },
+                { id: 2, title: 'İpek Sapanca', page: 'index.html', order: 2, status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Sapanca', features: 'Doğa Manzarası, Göl Yakınlığı', price: '₺2.500.000 - ₺5.000.000', link: '#', buttonText: 'Keşfet' },
+                { id: 3, title: 'İpek Arsa', page: 'index.html', order: 3, status: 'Satışta', description: 'Birikiminizle Birlikte Hayallerinizi Büyütün', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Arsa', features: 'Yatırımlık, Modüler Ev', price: '₺500.000 - ₺1.500.000', link: '#', buttonText: 'Keşfet' }
+            ]);
+            if (!getData(KEYS.activities)) setData(KEYS.activities, [{ id: 1, text: 'Admin paneli oluşturuldu', time: new Date().toISOString(), type: 'info' }]);
         }
 
-        // Set username
-        document.getElementById('username').textContent = localStorage.getItem('adminUsername') || 'Admin';
+        function today() { return new Date().toISOString().split('T')[0]; }
 
-        // Navigation
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const section = this.dataset.section;
-                showSection(section);
+        function addActivity(text, type = 'info') {
+            const acts = getData(KEYS.activities) || [];
+            acts.unshift({ id: Date.now(), text, time: new Date().toISOString(), type });
+            if (acts.length > 30) acts.pop();
+            setData(KEYS.activities, acts);
+        }
 
-                // Update active menu
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-            });
+        // ===========================
+        // ROUTING
+        // ===========================
+        const pageIcons = {
+            dashboard: 'chart-pie', navigation: 'bars', pages: 'file-alt',
+            cards: 'th-large', projects: 'building', media: 'images', settings: 'cog'
+        };
+        const pageTitles = {
+            dashboard: 'Dashboard', navigation: 'Navigasyon & Menüler', pages: 'Sayfa Yönetimi',
+            cards: 'Kartlar & İçerikler', projects: 'Proje Yönetimi', media: 'Resim Kütüphanesi', settings: 'Site Ayarları'
+        };
+
+        function goPage(name) {
+            document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + name).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => { i.classList.toggle('active', i.dataset.page === name); });
+            document.getElementById('topbarTitle').textContent = pageTitles[name] || name;
+            document.getElementById('topbarIcon').className = 'fas fa-' + (pageIcons[name] || 'circle');
+            document.getElementById('currentPageBadge').textContent = pageTitles[name] || name;
+            loadPage(name);
+        }
+
+        function loadPage(name) {
+            if (name === 'dashboard') renderDashboard();
+            else if (name === 'navigation') renderNav();
+            else if (name === 'pages') renderPages();
+            else if (name === 'cards') renderCards();
+            else if (name === 'projects') renderProjects();
+            else if (name === 'media') renderMedia();
+            else if (name === 'settings') loadSettings();
+        }
+
+        document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+            item.addEventListener('click', () => goPage(item.dataset.page));
         });
 
-        function showSection(sectionName) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionName).classList.add('active');
-            document.getElementById('pageTitle').textContent = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+        // ===========================
+        // DASHBOARD
+        // ===========================
+        function renderDashboard() {
+            const pages = getData(KEYS.pages) || [];
+            const projects = getData(KEYS.projects) || [];
+            const images = getData(KEYS.images) || [];
+            const cards = getData(KEYS.cards) || [];
+            document.getElementById('stat-pages').textContent = pages.length;
+            document.getElementById('stat-projects').textContent = projects.length;
+            document.getElementById('stat-cards').textContent = cards.length;
+            document.getElementById('stat-images').textContent = images.length;
 
-            // Load section data
-            loadSectionData(sectionName);
+            const acts = getData(KEYS.activities) || [];
+            const actEl = document.getElementById('activityList');
+            actEl.innerHTML = acts.slice(0, 8).map(a => `
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--${a.type === 'error' ? 'red' : a.type === 'success' ? 'green' : 'accent'});flex-shrink:0;"></div>
+            <div style="flex:1;font-size:13px;">${a.text}</div>
+            <div style="font-size:11px;color:var(--text3);">${timeAgo(a.time)}</div>
+        </div>`).join('');
         }
 
-        function loadSectionData(sectionName) {
-            switch (sectionName) {
-                case 'navigation':
-                    loadNavigationItems();
-                    break;
-                case 'pages':
-                    loadPages();
-                    break;
-                case 'projects':
-                    loadProjects();
-                    break;
-                case 'images':
-                    loadImages();
-                    break;
-            }
+        function timeAgo(iso) {
+            const diff = (Date.now() - new Date(iso)) / 1000;
+            if (diff < 60) return 'Az önce';
+            if (diff < 3600) return Math.floor(diff / 60) + ' dk önce';
+            if (diff < 86400) return Math.floor(diff / 3600) + ' sa önce';
+            return Math.floor(diff / 86400) + ' gün önce';
         }
 
-        function loadNavigationItems() {
-            const navItems = getNavigationItems();
-            const container = document.getElementById('navItems');
-            container.innerHTML = '';
-
-            navItems.forEach(item => {
-                const navDiv = document.createElement('div');
-                navDiv.className = 'nav-item';
-                navDiv.innerHTML = `
-                    <div class="nav-item-header">
-                        <span class="nav-item-title">${item.name}</span>
-                        <div class="table-actions">
-                            <button class="action-btn edit-btn" onclick="editNav(${item.id})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deleteNav(${item.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="nav-item-url">${item.url}</div>
-                    ${item.subItems && item.subItems.length > 0 ? `
-                        <div class="sub-nav-items">
-                            ${item.subItems.map(sub => `
-                                <div class="sub-nav-item">
-                                    ${sub.name} - ${sub.url}
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                `;
-                container.appendChild(navDiv);
-            });
+        // ===========================
+        // NAVIGATION
+        // ===========================
+        function renderNav() {
+            const items = getData(KEYS.nav) || [];
+            const el = document.getElementById('navList');
+            if (!items.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:20px;">Henüz menü öğesi yok.</p>'; return; }
+            el.innerHTML = items.sort((a, b) => a.order - b.order).map(item => `
+        <div class="content-item">
+            <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+            <div class="ci-thumb-placeholder"><i class="fas fa-link"></i></div>
+            <div class="ci-info">
+                <div class="ci-name">${item.name}</div>
+                <div class="ci-meta">${item.url} ${item.subItems && item.subItems.length ? '• ' + item.subItems.length + ' alt menü' : ''}</div>
+                ${item.subItems && item.subItems.length ? `
+                <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
+                ${item.subItems.map(s => `<span style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--text2);">${s.name}</span>`).join('')}
+                </div>`: ''}
+            </div>
+            <span class="ci-badge ${item.active ? 'active' : 'inactive'}">${item.active ? 'Aktif' : 'Pasif'}</span>
+            <div style="display:flex;gap:6px;">
+                <button class="btn btn-icon edit" onclick="editNav(${item.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-icon del" onclick="deleteConfirm('nav',${item.id},'${item.name} menüsünü silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`).join('');
         }
 
-        function loadPages() {
-            const pages = getPages();
-            const tbody = document.getElementById('pagesTableBody');
-            tbody.innerHTML = '';
-
-            pages.forEach(page => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${page.title}</td>
-                    <td>${page.file}</td>
-                    <td><span style="color: ${page.active ? '#27ae60' : '#e74c3c'};">${page.active ? 'Aktif' : 'Pasif'}</span></td>
-                    <td>${page.updated}</td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="action-btn edit-btn" onclick="editPage('${page.file}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deletePage('${page.file}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function loadProjects() {
-            const projects = getProjects();
-            const tbody = document.getElementById('projectsTableBody');
-            tbody.innerHTML = '';
-
-            projects.forEach(project => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${project.name}</td>
-                    <td>${project.category}</td>
-                    <td>${project.location}</td>
-                    <td><span style="color: #27ae60;">${project.status}</span></td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="action-btn edit-btn" onclick="editProject(${project.id})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deleteProject(${project.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function loadImages() {
-            const images = getImages();
-            const grid = document.getElementById('imagesGrid');
-            grid.innerHTML = '';
-
-            images.forEach(image => {
-                const div = document.createElement('div');
-                div.style.cssText = 'position: relative; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);';
-                div.innerHTML = `
-                    <img src="${image.url}" alt="${image.name}" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 0.5rem; background: #fff;">
-                        <small>${image.name}</small>
-                    </div>
-                    <button class="action-btn delete-btn" style="position: absolute; top: 5px; right: 5px;" onclick="deleteImage(${image.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                grid.appendChild(div);
-            });
-        }
-
-        // Modal functions
-        function openNavModal() {
-            document.getElementById('navModal').classList.add('active');
-            document.getElementById('navForm').reset();
-        }
-
-        function openPageModal() {
-            document.getElementById('pageModal').classList.add('active');
-            document.getElementById('pageForm').reset();
-        }
-
-        function openProjectModal() {
-            document.getElementById('projectModal').classList.add('active');
-            document.getElementById('projectForm').reset();
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        // Form submissions
-        document.getElementById('navForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = {
-                name: document.getElementById('navName').value,
-                url: document.getElementById('navUrl').value,
-                order: document.getElementById('navOrder').value,
-                active: document.getElementById('navActive').value === 'true'
-            };
-
-            saveNavigationItem(formData);
-            closeModal('navModal');
-            loadNavigationItems();
-            showToast('Menü öğesi kaydedildi', 'success');
-        });
-
-        document.getElementById('pageForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = {
-                title: document.getElementById('pageTitle').value,
-                file: document.getElementById('pageFile').value,
-                description: document.getElementById('pageDescription').value,
-                content: document.getElementById('pageContent').value
-            };
-
-            savePage(formData);
-            closeModal('pageModal');
-            loadPages();
-            showToast('Sayfa kaydedildi', 'success');
-        });
-
-        document.getElementById('projectForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = {
-                name: document.getElementById('projectName').value,
-                category: document.getElementById('projectCategory').value,
-                location: document.getElementById('projectLocation').value,
-                status: document.getElementById('projectStatus').value,
-                description: document.getElementById('projectDescription').value
-            };
-
-            saveProject(formData);
-            closeModal('projectModal');
-            loadProjects();
-            showToast('Proje kaydedildi', 'success');
-        });
-
-        document.getElementById('settingsForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const settings = {
-                siteTitle: document.getElementById('siteTitle').value,
-                siteDescription: document.getElementById('siteDescription').value,
-                contactEmail: document.getElementById('contactEmail').value,
-                contactPhone: document.getElementById('contactPhone').value
-            };
-
-            saveSettings(settings);
-            showToast('Ayarlar kaydedildi', 'success');
-        });
-
-        // Image upload
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            for (let file of files) {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const imageData = {
-                            name: file.name,
-                            url: e.target.result
-                        };
-                        saveImage(imageData);
-                        loadImages();
-                        showToast('Resim yüklendi', 'success');
-                    };
-                    reader.readAsDataURL(file);
+        function openNavModal(id = null) {
+            document.getElementById('navId').value = id || '';
+            document.getElementById('navModalTitle').textContent = id ? 'Menü Öğesini Düzenle' : 'Menü Öğesi Ekle';
+            document.getElementById('navName').value = '';
+            document.getElementById('navUrl').value = '';
+            document.getElementById('navOrder').value = 1;
+            document.getElementById('navActive').value = 'true';
+            document.getElementById('subNavItems').innerHTML = '';
+            if (id) {
+                const items = getData(KEYS.nav) || [];
+                const item = items.find(i => i.id === id);
+                if (item) {
+                    document.getElementById('navName').value = item.name;
+                    document.getElementById('navUrl').value = item.url;
+                    document.getElementById('navOrder').value = item.order || 1;
+                    document.getElementById('navActive').value = item.active.toString();
+                    (item.subItems || []).forEach(s => addSubNavRow(s.name, s.url));
                 }
             }
+            openModal('navModal');
         }
 
-        // Delete functions
-        function deleteNav(id) {
-            if (confirm('Bu menü öğesini silmek istediğinizden emin misiniz?')) {
-                deleteNavigationItem(id);
-                loadNavigationItems();
-                showToast('Menü öğesi silindi', 'info');
+        function addSubNavRow(name = '', url = '') {
+            const row = document.createElement('div');
+            row.className = 'sub-item';
+            row.innerHTML = `
+        <input class="form-control sub-name" type="text" placeholder="Alt menü adı" value="${name}" style="flex:1;">
+        <input class="form-control sub-url" type="text" placeholder="URL" value="${url}" style="flex:1;">
+        <button class="btn btn-icon del" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            document.getElementById('subNavItems').appendChild(row);
+        }
+
+        function editNav(id) { openNavModal(id); }
+
+        function saveNav() {
+            const name = document.getElementById('navName').value.trim();
+            const url = document.getElementById('navUrl').value.trim();
+            if (!name || !url) { toast('Menü adı ve URL zorunludur.', 'error'); return; }
+            const id = parseInt(document.getElementById('navId').value) || null;
+            const items = getData(KEYS.nav) || [];
+            const subRows = document.querySelectorAll('#subNavItems .sub-item');
+            const subItems = [];
+            subRows.forEach((row, i) => {
+                const n = row.querySelector('.sub-name').value.trim();
+                const u = row.querySelector('.sub-url').value.trim();
+                if (n && u) subItems.push({ id: Date.now() + i, name: n, url: u });
+            });
+            const data = { name, url, order: parseInt(document.getElementById('navOrder').value) || 1, active: document.getElementById('navActive').value === 'true', subItems };
+            if (id) {
+                const idx = items.findIndex(i => i.id === id);
+                if (idx >= 0) items[idx] = { ...items[idx], ...data };
+            } else {
+                const newId = Math.max(0, ...items.map(i => i.id)) + 1;
+                items.push({ id: newId, ...data });
             }
+            setData(KEYS.nav, items);
+            addActivity(`Menü "${name}" ${id ? 'güncellendi' : 'eklendi'}`, 'success');
+            closeModal('navModal');
+            renderNav();
+            toast(`Menü ${id ? 'güncellendi' : 'eklendi'}!`, 'success');
+        }
+
+        function deleteNav(id) {
+            const items = (getData(KEYS.nav) || []).filter(i => i.id !== id);
+            setData(KEYS.nav, items); renderNav(); addActivity('Menü silindi', 'info'); toast('Menü silindi', 'info');
+        }
+
+        // ===========================
+        // PAGES
+        // ===========================
+        function renderPages() {
+            const pages = getData(KEYS.pages) || [];
+            const tbody = document.getElementById('pagesTableBody');
+            tbody.innerHTML = pages.map(p => `
+        <tr>
+            <td><strong>${p.title}</strong></td>
+            <td><code style="background:var(--surface2);padding:2px 8px;border-radius:4px;font-size:11px;">${p.file}</code></td>
+            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2);font-size:12px;">${p.description || '-'}</td>
+            <td><span class="badge ${p.active !== false ? 'badge-active' : 'badge-inactive'}">${p.active !== false ? 'Aktif' : 'Pasif'}</span></td>
+            <td style="color:var(--text2);font-size:12px;">${p.updated || '-'}</td>
+            <td>
+                <div style="display:flex;gap:6px;">
+                    <a href="${p.file}" target="_blank" class="btn btn-icon view" title="Görüntüle"><i class="fas fa-eye"></i></a>
+                    <button class="btn btn-icon edit" onclick="editPage('${p.file}')" title="Düzenle"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-icon del" onclick="deleteConfirm('page','${p.file}','${p.title} sayfasını silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
+        </tr>`).join('');
+        }
+
+        function openPageModal(file = null) {
+            document.getElementById('pageModalFile').value = file || '';
+            document.getElementById('pageModalTitle').textContent = file ? 'Sayfayı Düzenle' : 'Yeni Sayfa';
+            document.getElementById('pmTitle').value = '';
+            document.getElementById('pmFile').value = '';
+            document.getElementById('pmDescription').value = '';
+            document.getElementById('pmKeywords').value = '';
+            document.getElementById('pmStatus').value = 'active';
+            if (file) {
+                const pages = getData(KEYS.pages) || [];
+                const p = pages.find(x => x.file === file);
+                if (p) {
+                    document.getElementById('pmTitle').value = p.title || '';
+                    document.getElementById('pmFile').value = p.file || '';
+                    document.getElementById('pmDescription').value = p.description || '';
+                    document.getElementById('pmKeywords').value = p.keywords || '';
+                    document.getElementById('pmStatus').value = p.active !== false ? 'active' : 'inactive';
+                }
+            }
+            openModal('pageModal');
+        }
+
+        function editPage(file) { openPageModal(file); }
+
+        function savePage() {
+            const title = document.getElementById('pmTitle').value.trim();
+            const file = document.getElementById('pmFile').value.trim();
+            if (!title || !file) { toast('Başlık ve dosya adı zorunludur.', 'error'); return; }
+            const origFile = document.getElementById('pageModalFile').value;
+            const pages = getData(KEYS.pages) || [];
+            const data = { title, file, description: document.getElementById('pmDescription').value, keywords: document.getElementById('pmKeywords').value, active: document.getElementById('pmStatus').value === 'active', updated: today() };
+            if (origFile) {
+                const idx = pages.findIndex(p => p.file === origFile);
+                if (idx >= 0) pages[idx] = { ...pages[idx], ...data };
+            } else {
+                pages.push(data);
+            }
+            setData(KEYS.pages, pages);
+            addActivity(`Sayfa "${title}" ${origFile ? 'güncellendi' : 'eklendi'}`, 'success');
+            closeModal('pageModal'); renderPages();
+            toast(`Sayfa ${origFile ? 'güncellendi' : 'eklendi'}!`, 'success');
         }
 
         function deletePage(file) {
-            if (confirm('Bu sayfayı silmek istediğinizden emin misiniz?')) {
-                deletePageItem(file);
-                loadPages();
-                showToast('Sayfa silindi', 'info');
+            const pages = (getData(KEYS.pages) || []).filter(p => p.file !== file);
+            setData(KEYS.pages, pages); renderPages(); addActivity('Sayfa silindi', 'info'); toast('Sayfa silindi', 'info');
+        }
+
+        // ===========================
+        // CARDS
+        // ===========================
+        function renderCards() {
+            const filter = document.getElementById('cardPageFilter').value;
+            let cards = getData(KEYS.cards) || [];
+            if (filter) cards = cards.filter(c => c.page === filter);
+            cards.sort((a, b) => a.order - b.order);
+            const el = document.getElementById('cardsList');
+            if (!cards.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:30px;">Bu sayfa için kart bulunamadı. Yeni kart ekleyin.</p>'; return; }
+            el.innerHTML = cards.map(c => `
+        <div class="content-item">
+            <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+            ${c.image ? `<img class="ci-thumb" src="${c.image}" alt="${c.title}" onerror="this.style.display='none'">` :
+                    `<div class="ci-thumb-placeholder"><i class="fas fa-image"></i></div>`}
+            <div class="ci-info" style="flex:1;min-width:0;">
+                <div class="ci-name">${c.title}</div>
+                <div class="ci-meta">${c.page} • Sıra:${c.order} ${c.price ? '• ' + c.price : ''}</div>
+                ${c.description ? `<div style="font-size:12px;color:var(--text2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.description}</div>` : ''}
+                ${c.features ? `<div style="font-size:11px;color:var(--accent);margin-top:4px;">${c.features}</div>` : ''}
+            </div>
+            ${c.status ? `<span class="ci-badge ${c.status === 'Satışta' ? 'satis' : c.status === 'İnşaat Devam Ediyor' ? 'insaat' : 'active'}">${c.status}</span>` : ''}
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+                <button class="btn btn-icon edit" onclick="editCard(${c.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-icon del" onclick="deleteConfirm('card',${c.id},'${c.title} kartını silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+        }
+
+        function openCardModal(id = null) {
+            document.getElementById('cardId').value = id || '';
+            document.getElementById('cardModalTitle').textContent = id ? 'Kartı Düzenle' : 'Yeni Kart Ekle';
+            ['cardTitle', 'cardFeatures', 'cardPrice', 'cardLink', 'cardButtonText'].forEach(f => document.getElementById(f).value = '');
+            document.getElementById('cardDescription').value = '';
+            document.getElementById('cardOrder').value = 1;
+            document.getElementById('cardStatus').value = '';
+            document.getElementById('cardPage').value = 'index.html';
+            document.getElementById('cardImage').value = '';
+            setCardImgPreview('');
+            switchCardImgTab('url', null);
+            if (id) {
+                const cards = getData(KEYS.cards) || [];
+                const c = cards.find(x => x.id === id);
+                if (c) {
+                    document.getElementById('cardTitle').value = c.title || '';
+                    document.getElementById('cardPage').value = c.page || 'index.html';
+                    document.getElementById('cardOrder').value = c.order || 1;
+                    document.getElementById('cardStatus').value = c.status || '';
+                    document.getElementById('cardDescription').value = c.description || '';
+                    document.getElementById('cardImage').value = c.image || '';
+                    document.getElementById('cardFeatures').value = c.features || '';
+                    document.getElementById('cardPrice').value = c.price || '';
+                    document.getElementById('cardLink').value = c.link || '';
+                    document.getElementById('cardButtonText').value = c.buttonText || 'Keşfet';
+                    setCardImgPreview(c.image);
+                }
             }
+            renderCardLibrary();
+            openModal('cardModal');
+        }
+
+        function editCard(id) { openCardModal(id); }
+
+        function saveCard() {
+            const title = document.getElementById('cardTitle').value.trim();
+            const page = document.getElementById('cardPage').value;
+            if (!title || !page) { toast('Başlık ve sayfa zorunludur.', 'error'); return; }
+            const id = parseInt(document.getElementById('cardId').value) || null;
+            const cards = getData(KEYS.cards) || [];
+            const data = { title, page, order: parseInt(document.getElementById('cardOrder').value) || 1, status: document.getElementById('cardStatus').value, description: document.getElementById('cardDescription').value, image: document.getElementById('cardImage').value, features: document.getElementById('cardFeatures').value, price: document.getElementById('cardPrice').value, link: document.getElementById('cardLink').value, buttonText: document.getElementById('cardButtonText').value || 'Keşfet' };
+            if (id) {
+                const idx = cards.findIndex(c => c.id === id);
+                if (idx >= 0) cards[idx] = { ...cards[idx], ...data };
+            } else {
+                const newId = Math.max(0, ...cards.map(c => c.id)) + 1;
+                cards.push({ id: newId, ...data });
+            }
+            setData(KEYS.cards, cards);
+            addActivity(`Kart "${title}" ${id ? 'güncellendi' : 'eklendi'}`, 'success');
+            closeModal('cardModal'); renderCards();
+            toast(`Kart ${id ? 'güncellendi' : 'eklendi'}!`, 'success');
+        }
+
+        function deleteCard(id) {
+            const cards = (getData(KEYS.cards) || []).filter(c => c.id !== id);
+            setData(KEYS.cards, cards); renderCards(); addActivity('Kart silindi', 'info'); toast('Kart silindi', 'info');
+        }
+
+        function switchCardImgTab(tab, el) {
+            ['url', 'upload', 'library'].forEach(t => {
+                const el2 = document.getElementById('cardImgTab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (el2) el2.style.display = t === tab ? 'block' : 'none';
+            });
+            document.querySelectorAll('#cardModal .img-picker-tab').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+            else {
+                const tabs = document.querySelectorAll('#cardModal .img-picker-tab');
+                const idx = { url: 0, upload: 1, library: 2 }[tab] || 0;
+                if (tabs[idx]) tabs[idx].classList.add('active');
+            }
+            if (tab === 'library') renderCardLibrary();
+        }
+
+        function renderCardLibrary() {
+            const images = getData(KEYS.images) || [];
+            const el = document.getElementById('cardLibraryGrid');
+            el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+        ${images.map(img => `
+        <div onclick="selectCardLibraryImg('${img.url}','${img.name}')" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;" 
+             title="${img.name}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="${img.url}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+            <div style="padding:4px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${img.name}</div>
+        </div>`).join('')}
+    </div>`;
+        }
+
+        function selectCardLibraryImg(url, name) {
+            document.getElementById('cardImage').value = url;
+            setCardImgPreview(url);
+            switchCardImgTab('url', null);
+            toast(`"${name}" seçildi`, 'success');
+        }
+
+        function handleCardImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) { toast('Dosya 10MB\'dan büyük olamaz.', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = e => {
+                const url = e.target.result;
+                document.getElementById('cardImage').value = url;
+                setCardImgPreview(url);
+                // Also save to library
+                const images = getData(KEYS.images) || [];
+                const newId = Math.max(0, ...images.map(i => i.id)) + 1;
+                images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                setData(KEYS.images, images);
+                toast('Resim yüklendi ve kütüphaneye eklendi!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateCardImgPreview() { setCardImgPreview(document.getElementById('cardImage').value); }
+
+        function setCardImgPreview(url) {
+            const img = document.getElementById('cardImgPreview');
+            const ph = document.getElementById('cardImgPlaceholder');
+            if (url) { img.src = url; img.style.display = 'block'; ph.style.display = 'none'; }
+            else { img.style.display = 'none'; ph.style.display = 'flex'; }
+        }
+
+        // ===========================
+        // PROJECTS
+        // ===========================
+        function renderProjects() {
+            const projects = getData(KEYS.projects) || [];
+            const tbody = document.getElementById('projectsTableBody');
+            tbody.innerHTML = projects.map(p => `
+        <tr>
+            <td>${p.image ? `<img src="${p.image}" style="width:60px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" onerror="this.style.display='none'">` :
+                    `<div style="width:60px;height:42px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text3);"><i class="fas fa-image"></i></div>`}</td>
+            <td><strong>${p.name}</strong></td>
+            <td style="color:var(--text2);font-size:12px;">${p.category}</td>
+            <td style="color:var(--text2);font-size:12px;">${p.location}</td>
+            <td><span class="ci-badge ${p.status === 'Yaşam Başladı' ? 'active' : p.status === 'Satışta' ? 'satis' : 'insaat'}" style="font-size:11px;">${p.status}</span></td>
+            <td style="color:var(--text2);font-size:12px;">${p.price || '-'}</td>
+            <td>
+                <div style="display:flex;gap:6px;">
+                    <button class="btn btn-icon edit" onclick="editProject(${p.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-icon del" onclick="deleteConfirm('project',${p.id},'${p.name} projesini silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
+        </tr>`).join('');
+        }
+
+        function openProjectModal(id = null) {
+            document.getElementById('projectId').value = id || '';
+            document.getElementById('projectModalTitle').textContent = id ? 'Projeyi Düzenle' : 'Yeni Proje Ekle';
+            ['projectName', 'projectLocation', 'projectDescription', 'projectFeatures', 'projectImage', 'projectPrice'].forEach(f => document.getElementById(f).value = '');
+            document.getElementById('projectCategory').value = 'konut';
+            document.getElementById('projectStatus').value = 'Yaşam Başladı';
+            document.getElementById('projectDelivery').value = '';
+            setProjImgPreview('');
+            switchProjImgTab('url', null);
+            if (id) {
+                const projects = getData(KEYS.projects) || [];
+                const p = projects.find(x => x.id === id);
+                if (p) {
+                    document.getElementById('projectName').value = p.name || '';
+                    document.getElementById('projectCategory').value = p.category || 'konut';
+                    document.getElementById('projectLocation').value = p.location || '';
+                    document.getElementById('projectStatus').value = p.status || 'Yaşam Başladı';
+                    document.getElementById('projectDescription').value = p.description || '';
+                    document.getElementById('projectImage').value = p.image || '';
+                    document.getElementById('projectFeatures').value = p.features || '';
+                    document.getElementById('projectPrice').value = p.price || '';
+                    document.getElementById('projectDelivery').value = p.delivery || '';
+                    setProjImgPreview(p.image);
+                }
+            }
+            renderProjLibrary();
+            openModal('projectModal');
+        }
+
+        function editProject(id) { openProjectModal(id); }
+
+        function saveProject() {
+            const name = document.getElementById('projectName').value.trim();
+            if (!name) { toast('Proje adı zorunludur.', 'error'); return; }
+            const id = parseInt(document.getElementById('projectId').value) || null;
+            const projects = getData(KEYS.projects) || [];
+            const data = { name, category: document.getElementById('projectCategory').value, location: document.getElementById('projectLocation').value, status: document.getElementById('projectStatus').value, description: document.getElementById('projectDescription').value, image: document.getElementById('projectImage').value, features: document.getElementById('projectFeatures').value, price: document.getElementById('projectPrice').value, delivery: document.getElementById('projectDelivery').value };
+            if (id) {
+                const idx = projects.findIndex(p => p.id === id);
+                if (idx >= 0) projects[idx] = { ...projects[idx], ...data };
+            } else {
+                const newId = Math.max(0, ...projects.map(p => p.id)) + 1;
+                projects.push({ id: newId, ...data });
+            }
+            setData(KEYS.projects, projects);
+            addActivity(`Proje "${name}" ${id ? 'güncellendi' : 'eklendi'}`, 'success');
+            closeModal('projectModal'); renderProjects();
+            toast(`Proje ${id ? 'güncellendi' : 'eklendi'}!`, 'success');
         }
 
         function deleteProject(id) {
-            if (confirm('Bu projeyi silmek istediğinizden emin misiniz?')) {
-                deleteProjectItem(id);
-                loadProjects();
-                showToast('Proje silindi', 'info');
+            const projects = (getData(KEYS.projects) || []).filter(p => p.id !== id);
+            setData(KEYS.projects, projects); renderProjects(); addActivity('Proje silindi', 'info'); toast('Proje silindi', 'info');
+        }
+
+        function switchProjImgTab(tab, el) {
+            ['url', 'upload', 'library'].forEach(t => {
+                const e = document.getElementById('projImgTab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (e) e.style.display = t === tab ? 'block' : 'none';
+            });
+            document.querySelectorAll('#projectModal .img-picker-tab').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+            else {
+                const tabs = document.querySelectorAll('#projectModal .img-picker-tab');
+                const idx = { url: 0, upload: 1, library: 2 }[tab] || 0;
+                if (tabs[idx]) tabs[idx].classList.add('active');
+            }
+            if (tab === 'library') renderProjLibrary();
+        }
+
+        function renderProjLibrary() {
+            const images = getData(KEYS.images) || [];
+            const el = document.getElementById('projLibraryGrid');
+            el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+        ${images.map(img => `
+        <div onclick="selectProjLibraryImg('${img.url}','${img.name}')" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;"
+             onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="${img.url}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+            <div style="padding:4px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${img.name}</div>
+        </div>`).join('')}
+    </div>`;
+        }
+
+        function selectProjLibraryImg(url, name) {
+            document.getElementById('projectImage').value = url;
+            setProjImgPreview(url);
+            switchProjImgTab('url', null);
+            toast(`"${name}" seçildi`, 'success');
+        }
+
+        function handleProjImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const url = e.target.result;
+                document.getElementById('projectImage').value = url;
+                setProjImgPreview(url);
+                const images = getData(KEYS.images) || [];
+                const newId = Math.max(0, ...images.map(i => i.id)) + 1;
+                images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                setData(KEYS.images, images);
+                toast('Resim yüklendi!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateProjImgPreview() { setProjImgPreview(document.getElementById('projectImage').value); }
+
+        function setProjImgPreview(url) {
+            const img = document.getElementById('projImgPreview');
+            const ph = document.getElementById('projImgPlaceholder');
+            if (url) { img.src = url; img.style.display = 'block'; ph.style.display = 'none'; }
+            else { img.style.display = 'none'; ph.style.display = 'flex'; }
+        }
+
+        // ===========================
+        // MEDIA
+        // ===========================
+        let selectedImages = new Set();
+
+        function renderMedia() {
+            const images = getData(KEYS.images) || [];
+            const search = document.getElementById('mediaSearch').value.toLowerCase();
+            const filtered = images.filter(img => !search || img.name.toLowerCase().includes(search));
+            document.getElementById('mediaCount').textContent = `(${filtered.length} resim)`;
+            const grid = document.getElementById('mediaGrid');
+            if (!filtered.length) { grid.innerHTML = '<p style="color:var(--text2);font-size:13px;grid-column:1/-1;text-align:center;padding:40px;">Resim bulunamadı.</p>'; return; }
+            grid.innerHTML = filtered.map(img => `
+        <div class="media-item ${selectedImages.has(img.id) ? 'selected' : ''}" id="mitem-${img.id}">
+            <img class="media-thumb" src="${img.url}" alt="${img.name}" onerror="this.parentElement.querySelector('.media-thumb-placeholder').style.display='flex';this.style.display='none'">
+            <div class="media-thumb-placeholder" style="display:none;"><i class="fas fa-image" style="font-size:28px;"></i></div>
+            <div class="media-info">
+                <div class="media-name" title="${img.name}">${img.name}</div>
+                <div class="media-size">${img.size || '—'} • ${img.date || ''}</div>
+            </div>
+            <div class="media-actions">
+                <button class="media-action-btn copy" onclick="copyUrl('${img.url}')" title="URL Kopyala"><i class="fas fa-copy"></i></button>
+                <button class="media-action-btn edit" onclick="openImgEdit(${img.id})" title="Düzenle/Değiştir"><i class="fas fa-edit"></i></button>
+                <button class="media-action-btn del" onclick="deleteConfirm('image',${img.id},'Bu resmi silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="media-check"><i class="fas fa-check"></i></div>
+        </div>`).join('');
+            document.getElementById('bulkDeleteBtn').style.display = selectedImages.size ? 'flex' : 'none';
+        }
+
+        function handleFileUpload(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
+            const progress = document.getElementById('uploadProgress');
+            const fill = document.getElementById('progressFill');
+            const ptext = document.getElementById('progressText');
+            progress.style.display = 'block'; fill.style.width = '0%';
+            let done = 0;
+            files.forEach((file, i) => {
+                if (!file.type.startsWith('image/')) { done++; return; }
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const images = getData(KEYS.images) || [];
+                    const newId = Math.max(0, ...images.map(x => x.id)) + 1;
+                    images.push({ id: newId, name: file.name, url: e.target.result, size: formatSize(file.size), date: today() });
+                    setData(KEYS.images, images);
+                    done++;
+                    const pct = Math.round(done / files.length * 100);
+                    fill.style.width = pct + '%';
+                    ptext.textContent = `Yükleniyor... ${done}/${files.length}`;
+                    if (done === files.length) {
+                        setTimeout(() => { progress.style.display = 'none'; fill.style.width = '0%'; }, 800);
+                        renderMedia(); updateStats();
+                        addActivity(`${files.length} resim yüklendi`, 'success');
+                        toast(`${done} resim yüklendi!`, 'success');
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = '';
+        }
+
+        function addImageFromUrl() {
+            const url = document.getElementById('urlImageInput').value.trim();
+            const name = document.getElementById('urlImageName').value.trim() || 'url-image-' + Date.now() + '.jpg';
+            if (!url) { toast('URL zorunludur.', 'error'); return; }
+            const images = getData(KEYS.images) || [];
+            const newId = Math.max(0, ...images.map(i => i.id)) + 1;
+            images.push({ id: newId, name, url, size: 'URL', date: today() });
+            setData(KEYS.images, images);
+            document.getElementById('urlImageInput').value = '';
+            document.getElementById('urlImageName').value = '';
+            document.getElementById('urlPreviewWrap').style.display = 'none';
+            renderMedia(); updateStats();
+            addActivity(`Resim URL'den eklendi`, 'success');
+            toast('Resim kütüphaneye eklendi!', 'success');
+        }
+
+        document.getElementById('urlImageInput').addEventListener('input', function () {
+            const wrap = document.getElementById('urlPreviewWrap');
+            const img = document.getElementById('urlPreviewImg');
+            if (this.value) { wrap.style.display = 'block'; img.src = this.value; }
+            else { wrap.style.display = 'none'; }
+        });
+
+        function copyUrl(url) {
+            navigator.clipboard.writeText(url).then(() => toast('URL kopyalandı!', 'success')).catch(() => {
+                const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('URL kopyalandı!', 'success');
+            });
+        }
+
+        function openImgEdit(id) {
+            const images = getData(KEYS.images) || [];
+            const img = images.find(i => i.id === id);
+            if (!img) return;
+            document.getElementById('editImgId').value = id;
+            document.getElementById('editImgName').value = img.name;
+            document.getElementById('editImgCurrent').src = img.url;
+            document.getElementById('editImgUrl').value = '';
+            document.getElementById('editImgNewPreview').style.display = 'none';
+            document.getElementById('editImgFile').value = '';
+            openModal('imgEditModal');
+        }
+
+        function previewEditImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const prev = document.getElementById('editImgNewPreview');
+                prev.src = e.target.result; prev.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveImageEdit() {
+            const id = parseInt(document.getElementById('editImgId').value);
+            const name = document.getElementById('editImgName').value.trim();
+            const urlInput = document.getElementById('editImgUrl').value.trim();
+            const fileInput = document.getElementById('editImgFile');
+            const images = getData(KEYS.images) || [];
+            const idx = images.findIndex(i => i.id === id);
+            if (idx < 0) return;
+            images[idx].name = name || images[idx].name;
+            const finish = (url) => {
+                if (url) images[idx].url = url;
+                images[idx].date = today();
+                setData(KEYS.images, images);
+                closeModal('imgEditModal'); renderMedia();
+                addActivity(`Resim "${images[idx].name}" güncellendi`, 'success');
+                toast('Resim güncellendi!', 'success');
+            };
+            if (fileInput.files.length) {
+                const reader = new FileReader();
+                reader.onload = e => finish(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                finish(urlInput || null);
             }
         }
 
         function deleteImage(id) {
-            if (confirm('Bu resmi silmek istediğinizden emin misiniz?')) {
-                deleteImageItem(id);
-                loadImages();
-                showToast('Resim silindi', 'info');
-            }
+            const images = (getData(KEYS.images) || []).filter(i => i.id !== id);
+            setData(KEYS.images, images); selectedImages.delete(id); renderMedia(); updateStats();
+            addActivity('Resim silindi', 'info'); toast('Resim silindi', 'info');
         }
 
-        // Edit functions
-        function editNav(id) {
-            const item = getNavigationItemById(id);
-            if (item) {
-                document.getElementById('navName').value = item.name;
-                document.getElementById('navUrl').value = item.url;
-                document.getElementById('navOrder').value = item.order;
-                document.getElementById('navActive').value = item.active.toString();
-                document.getElementById('navModal').classList.add('active');
-            }
+        function bulkDeleteImages() {
+            if (!selectedImages.size) return;
+            const images = (getData(KEYS.images) || []).filter(i => !selectedImages.has(i.id));
+            setData(KEYS.images, images); selectedImages.clear(); renderMedia(); updateStats();
+            toast('Seçili resimler silindi', 'info');
         }
 
-        function editPage(file) {
-            const page = getPageByFile(file);
-            if (page) {
-                document.getElementById('pageTitle').value = page.title;
-                document.getElementById('pageFile').value = page.file;
-                document.getElementById('pageDescription').value = page.description;
-                document.getElementById('pageContent').value = page.content;
-                document.getElementById('pageModal').classList.add('active');
-            }
+        function formatSize(bytes) {
+            if (!bytes) return '?';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
         }
 
-        function editProject(id) {
-            const project = getProjectById(id);
-            if (project) {
-                document.getElementById('projectName').value = project.name;
-                document.getElementById('projectCategory').value = project.category;
-                document.getElementById('projectLocation').value = project.location;
-                document.getElementById('projectStatus').value = project.status;
-                document.getElementById('projectDescription').value = project.description;
-                document.getElementById('projectModal').classList.add('active');
-            }
+        // Drag to upload
+        const zone = document.getElementById('uploadZone');
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault(); zone.classList.remove('dragover');
+            const dt = e.dataTransfer;
+            if (dt.files.length) handleFileUpload({ target: { files: dt.files }, });
+        });
+
+        // ===========================
+        // SETTINGS
+        // ===========================
+        function loadSettings() {
+            const s = getData(KEYS.settings) || {};
+            ['siteTitle', 'siteDescription', 'metaKeywords', 'faviconUrl', 'contactEmail', 'contactPhone', 'contactAddress', 'googleAnalytics'].forEach(k => {
+                const el = document.getElementById(k);
+                if (el) el.value = s[k] || '';
+            });
         }
 
-        // Toast notification
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 3000);
+        function saveSettings(e) {
+            e.preventDefault();
+            const s = {};
+            ['siteTitle', 'siteDescription', 'metaKeywords', 'faviconUrl', 'contactEmail', 'contactPhone', 'contactAddress', 'googleAnalytics'].forEach(k => {
+                const el = document.getElementById(k);
+                if (el) s[k] = el.value;
+            });
+            setData(KEYS.settings, s);
+            addActivity('Site ayarları güncellendi', 'success');
+            toast('Ayarlar kaydedildi!', 'success');
         }
 
-        // Logout
+        // ===========================
+        // STATS
+        // ===========================
+        function updateStats() {
+            if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+        }
+
+        // ===========================
+        // CONFIRM DELETE
+        // ===========================
+        let _confirmCb = null;
+        function deleteConfirm(type, id, text) {
+            document.getElementById('confirmText').textContent = text;
+            _confirmCb = () => {
+                if (type === 'nav') deleteNav(id);
+                else if (type === 'page') deletePage(id);
+                else if (type === 'card') deleteCard(id);
+                else if (type === 'project') deleteProject(id);
+                else if (type === 'image') deleteImage(id);
+                closeModal('confirmModal');
+            };
+            document.getElementById('confirmBtn').onclick = _confirmCb;
+            openModal('confirmModal');
+        }
+
+        // ===========================
+        // MODAL HELPERS
+        // ===========================
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+        });
+
+        // ===========================
+        // TOAST
+        // ===========================
+        function toast(msg, type = 'info') {
+            const tc = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            const icons = { success: 'check-circle', error: 'exclamation-circle', info: 'info-circle' };
+            t.innerHTML = `<i class="fas fa-${icons[type] || 'info-circle'} toast-icon"></i><span>${msg}</span>`;
+            tc.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100%)'; t.style.transition = 'all .3s'; setTimeout(() => t.remove(), 300); }, 3000);
+        }
+
+        // ===========================
+        // AUTH
+        // ===========================
         function logout() {
             if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
                 localStorage.removeItem('adminLoggedIn');
@@ -1165,8 +2868,21 @@
             }
         }
 
-        // Initialize
-        loadSectionData('dashboard');
+        // ===========================
+        // INIT
+        // ===========================
+        window.addEventListener('load', () => {
+            // Auth check
+            if (!localStorage.getItem('adminLoggedIn')) {
+                window.location.href = 'admin-login.html'; return;
+            }
+            const uname = localStorage.getItem('adminUsername') || 'Admin';
+            document.getElementById('sidebarName').textContent = uname;
+            document.getElementById('sidebarAvatar').textContent = uname.charAt(0).toUpperCase();
+
+            initData();
+            renderDashboard();
+        });
     </script>
 </body>
 
