@@ -1330,6 +1330,7 @@
                 <div class="nav-section-title">Site İçeriği</div>
                 <div class="nav-item" data-page="navigation"><i class="fas fa-bars"></i> Navigasyon & Menüler</div>
                 <div class="nav-item" data-page="pages"><i class="fas fa-file-alt"></i> Sayfalar</div>
+                <div class="nav-item" data-page="sections"><i class="fas fa-layer-group"></i> Bölümler</div>
                 <div class="nav-item" data-page="cards"><i class="fas fa-th-large"></i> Kartlar & İçerikler</div>
                 <div class="nav-item" data-page="projects"><i class="fas fa-building"></i> Projeler</div>
             </div>
@@ -1454,6 +1455,26 @@
                             <tbody id="pagesTableBody"></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+
+            <!-- SECTIONS -->
+            <div class="section-page" id="page-sections">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-layer-group"></i> Bölüm Yönetimi</div>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <select class="form-control" style="width:200px;" id="sectionPageFilter" onchange="renderSections()">
+                                <option value="">Tüm Sayfalar</option>
+                                <option value="index.html">Ana Sayfa</option>
+                                <option value="biz-kimiz.html">Biz Kimiz</option>
+                                <option value="projeler.html">Projeler</option>
+                            </select>
+                            <button class="btn btn-primary btn-sm" onclick="openSectionModal()"><i class="fas fa-plus"></i> Bölüm Ekle</button>
+                        </div>
+                    </div>
+                    <div id="sectionsList"></div>
                 </div>
             </div>
 
@@ -1634,6 +1655,20 @@
                                 </div>
                             </div>
                         </div>
+                        <hr class="divider">
+                        <div style="margin-bottom:24px;">
+                            <p
+                                style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
+                                Veri Yönetimi (Vercel Senkronizasyonu İçin)</p>
+                            <div style="background:var(--surface2);padding:20px;border-radius:var(--radius);border:1px solid var(--border);">
+                                <p style="font-size:13px;color:var(--text2);margin-bottom:15px;">LocalStorage verilerinizi bir JSON dosyası olarak indirebilir veya başka bir tarayıcıya/cihaza (örneğin Vercel üzerindeki sitenize) yükleyebilirsiniz.</p>
+                                <div style="display:flex;gap:12px;">
+                                    <button type="button" class="btn btn-primary" onclick="exportData()"><i class="fas fa-download"></i> Verileri İndir (Backup)</button>
+                                    <button type="button" class="btn btn-ghost" onclick="document.getElementById('importFile').click()"><i class="fas fa-upload"></i> Verileri Yükle (Restore)</button>
+                                    <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importData(event)">
+                                </div>
+                            </div>
+                        </div>
                         <div style="display:flex;justify-content:flex-end;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Ayarları
                                 Kaydet</button>
@@ -1736,7 +1771,93 @@
             </div>
         </div>
     </div>
-
+    <!-- SECTION MODAL -->
+    <div class="modal-overlay" id="sectionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-layer-group"></i> <span id="sectionModalTitle">Bölüm Ekle</span>
+                </div>
+                <button class="modal-close" onclick="closeModal('sectionModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="sectionId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Bölüm Adı (Dahili) <span>*</span></label>
+                        <input class="form-control" type="text" id="sectionName" placeholder="Hero Bölümü">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sayfa <span>*</span></label>
+                        <select class="form-control" id="sectionPage">
+                            <option value="index.html">Ana Sayfa</option>
+                            <option value="biz-kimiz.html">Biz Kimiz</option>
+                            <option value="projeler.html">Projeler</option>
+                        </select>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Ana Başlık (H2)</label>
+                        <input class="form-control" type="text" id="sectionTitle">
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Alt Başlık / Spot</label>
+                        <textarea class="form-control" id="sectionSubtitle" rows="2"></textarea>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">İçerik Metni</label>
+                        <textarea class="form-control" id="sectionContent" rows="4"></textarea>
+                    </div>
+                    <div class="form-group span2">
+                        <label class="form-label">Arka Plan / Görsel</label>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div>
+                                <div class="img-picker-tabs">
+                                    <div class="img-picker-tab active" onclick="switchSectionImgTab('url',this)"><i class="fas fa-link"></i> URL</div>
+                                    <div class="img-picker-tab" onclick="switchSectionImgTab('upload',this)"><i class="fas fa-upload"></i> Yükle</div>
+                                    <div class="img-picker-tab" onclick="switchSectionImgTab('library',this)"><i class="fas fa-images"></i> Kütüphane</div>
+                                </div>
+                                <div id="sectionImgTabUrl">
+                                    <input class="form-control" type="url" id="sectionBgImage" placeholder="https://..." oninput="updateSectionImgPreview()">
+                                </div>
+                                <div id="sectionImgTabUpload" style="display:none;">
+                                    <div class="upload-zone" style="padding:20px;">
+                                        <input type="file" accept="image/*" onchange="handleSectionImageUpload(event)">
+                                        <div style="font-size:24px;color:var(--text3);margin-bottom:6px;"><i class="fas fa-upload"></i></div>
+                                        <div style="font-size:12px;color:var(--text2);">Resim seç veya sürükle</div>
+                                    </div>
+                                </div>
+                                <div id="sectionImgTabLibrary" style="display:none;">
+                                    <div style="max-height:200px;overflow-y:auto;" id="sectionLibraryGrid"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">ÖNİZLEME</p>
+                                <div id="sectionImgPreviewWrap">
+                                    <div class="img-preview-placeholder" id="sectionImgPlaceholder"><i class="fas fa-image"></i><span>Resim seçilmedi</span></div>
+                                    <img id="sectionImgPreview" class="img-preview" src="" style="display:none;" onerror="this.style.display='none';document.getElementById('sectionImgPlaceholder').style.display='flex'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tip</label>
+                        <select class="form-control" id="sectionType">
+                            <option value="hero">Hero (Giriş)</option>
+                            <option value="content">İçerik Bölümü</option>
+                            <option value="banner">Banner</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sıra</label>
+                        <input class="form-control" type="number" id="sectionOrder" min="1" value="1">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal('sectionModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveSection()"><i class="fas fa-save"></i> Kaydet</button>
+            </div>
+        </div>
+    </div>
     <!-- CARD MODAL -->
     <div class="modal-overlay" id="cardModal">
         <div class="modal wide">
@@ -2023,7 +2144,18 @@
         };
 
         function getData(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
-        function setData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+        function setData(key, val) { 
+            try {
+                localStorage.setItem(key, JSON.stringify(val)); 
+            } catch (e) {
+                console.error('LocalStorage error:', e);
+                if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                    toast('Depolama alanı dolu! Lütfen bazı resimleri silin veya daha küçük resimler kullanın.', 'error');
+                } else {
+                    toast('Veri kaydedilirken bir hata oluştu.', 'error');
+                }
+            }
+        }
 
         function initData() {
             if (!getData(KEYS.nav)) setData(KEYS.nav, [
@@ -2081,6 +2213,9 @@
                 { id: 2, title: 'İpek Sapanca', page: 'index.html', order: 2, status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Sapanca', features: 'Doğa Manzarası, Göl Yakınlığı', price: '₺2.500.000 - ₺5.000.000', link: '#', buttonText: 'Keşfet' },
                 { id: 3, title: 'İpek Arsa', page: 'index.html', order: 3, status: 'Satışta', description: 'Birikiminizle Birlikte Hayallerinizi Büyütün', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Arsa', features: 'Yatırımlık, Modüler Ev', price: '₺500.000 - ₺1.500.000', link: '#', buttonText: 'Keşfet' }
             ]);
+            if (!getData(KEYS.sections)) setData(KEYS.sections, [
+                { id: 1, name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Yaşam+Alanları', order: 1 }
+            ]);
             if (!getData(KEYS.activities)) setData(KEYS.activities, [{ id: 1, text: 'Admin paneli oluşturuldu', time: new Date().toISOString(), type: 'info' }]);
         }
 
@@ -2097,11 +2232,11 @@
         // ROUTING
         // ===========================
         const pageIcons = {
-            dashboard: 'chart-pie', navigation: 'bars', pages: 'file-alt',
+            dashboard: 'chart-pie', navigation: 'bars', pages: 'file-alt', sections: 'layer-group',
             cards: 'th-large', projects: 'building', media: 'images', settings: 'cog'
         };
         const pageTitles = {
-            dashboard: 'Dashboard', navigation: 'Navigasyon & Menüler', pages: 'Sayfa Yönetimi',
+            dashboard: 'Dashboard', navigation: 'Navigasyon & Menüler', pages: 'Sayfa Yönetimi', sections: 'Bölüm Yönetimi',
             cards: 'Kartlar & İçerikler', projects: 'Proje Yönetimi', media: 'Resim Kütüphanesi', settings: 'Site Ayarları'
         };
 
@@ -2119,6 +2254,7 @@
             if (name === 'dashboard') renderDashboard();
             else if (name === 'navigation') renderNav();
             else if (name === 'pages') renderPages();
+            else if (name === 'sections') renderSections();
             else if (name === 'cards') renderCards();
             else if (name === 'projects') renderProjects();
             else if (name === 'media') renderMedia();
@@ -2323,6 +2459,149 @@
         function deletePage(file) {
             const pages = (getData(KEYS.pages) || []).filter(p => p.file !== file);
             setData(KEYS.pages, pages); renderPages(); addActivity('Sayfa silindi', 'info'); toast('Sayfa silindi', 'info');
+        }
+
+        // ===========================
+        // SECTIONS
+        // ===========================
+        function renderSections() {
+            const filter = document.getElementById('sectionPageFilter').value;
+            let sections = getData(DATA_KEYS.sections) || getData('ipek_sections') || [];
+            if (filter) sections = sections.filter(s => s.page === filter);
+            sections.sort((a, b) => a.order - b.order);
+            const el = document.getElementById('sectionsList');
+            if (!sections.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:30px;">Bölüm bulunamadı.</p>'; return; }
+            el.innerHTML = sections.map(s => `
+        <div class="content-item">
+            <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+            ${s.bgImage ? `<img class="ci-thumb" src="${s.bgImage}" style="width:80px;height:50px;object-fit:cover;">` : `<div class="ci-thumb-placeholder"><i class="fas fa-layer-group"></i></div>`}
+            <div class="ci-info">
+                <div class="ci-name">${s.name}</div>
+                <div class="ci-meta">${s.page} • Tip: ${s.type} • Sıra: ${s.order}</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${s.title}</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+                <button class="btn btn-icon edit" onclick="editSection(${s.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-icon del" onclick="deleteConfirm('section',${s.id},'${s.name} bölümünü silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+        }
+
+        function openSectionModal(id = null) {
+            document.getElementById('sectionId').value = id || '';
+            document.getElementById('sectionModalTitle').textContent = id ? 'Bölümü Düzenle' : 'Yeni Bölüm Ekle';
+            ['sectionName', 'sectionTitle', 'sectionSubtitle', 'sectionBgImage'].forEach(f => document.getElementById(f).value = '');
+            document.getElementById('sectionContent').value = '';
+            document.getElementById('sectionOrder').value = 1;
+            document.getElementById('sectionType').value = 'hero';
+            document.getElementById('sectionPage').value = 'index.html';
+            
+            if (id) {
+                const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
+                const s = sections.find(x => x.id === id);
+                if (s) {
+                    document.getElementById('sectionName').value = s.name || '';
+                    document.getElementById('sectionTitle').value = s.title || '';
+                    document.getElementById('sectionSubtitle').value = s.subtitle || '';
+                    document.getElementById('sectionContent').value = s.content || '';
+                    document.getElementById('sectionBgImage').value = s.bgImage || '';
+                    document.getElementById('sectionOrder').value = s.order || 1;
+                    document.getElementById('sectionType').value = s.type || 'hero';
+                    document.getElementById('sectionPage').value = s.page || 'index.html';
+                }
+            }
+            openModal('sectionModal');
+        }
+
+        function editSection(id) { openSectionModal(id); }
+
+        function saveSection() {
+            const name = document.getElementById('sectionName').value.trim();
+            const page = document.getElementById('sectionPage').value;
+            if (!name || !page) { toast('Ad ve sayfa zorunludur.', 'error'); return; }
+            const id = parseInt(document.getElementById('sectionId').value) || null;
+            const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
+            const data = { 
+                name, 
+                page, 
+                order: parseInt(document.getElementById('sectionOrder').value) || 1, 
+                type: document.getElementById('sectionType').value,
+                title: document.getElementById('sectionTitle').value,
+                subtitle: document.getElementById('sectionSubtitle').value,
+                content: document.getElementById('sectionContent').value,
+                bgImage: document.getElementById('sectionBgImage').value
+            };
+            if (id) {
+                const idx = sections.findIndex(s => s.id === id);
+                if (idx >= 0) sections[idx] = { ...sections[idx], ...data };
+            } else {
+                const newId = Math.max(0, ...sections.map(s => s.id)) + 1;
+                sections.push({ id: newId, ...data });
+            }
+            setData(KEYS.sections, sections);
+            addActivity(`Bölüm "${name}" güncellendi`, 'success');
+            closeModal('sectionModal'); renderSections();
+            toast(`Bölüm kaydedildi!`, 'success');
+        }
+
+        function deleteSection(id) {
+            const sections = (getData(KEYS.sections) || []).filter(s => s.id !== id);
+            setData(KEYS.sections, sections); renderSections(); toast('Bölüm silindi', 'info');
+        }
+
+        function switchSectionImgTab(tab, el) {
+            ['url', 'upload', 'library'].forEach(t => {
+                const e = document.getElementById('sectionImgTab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (e) e.style.display = t === tab ? 'block' : 'none';
+            });
+            document.querySelectorAll('#sectionModal .img-picker-tab').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+            if (tab === 'library') renderSectionLibrary();
+        }
+
+        function renderSectionLibrary() {
+            const images = getData(KEYS.images) || [];
+            const el = document.getElementById('sectionLibraryGrid');
+            el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+        ${images.map(img => `
+        <div onclick="selectSectionLibraryImg('${img.url}','${img.name}')" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;" 
+             title="${img.name}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="${img.url}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+        </div>`).join('')}
+    </div>`;
+        }
+
+        function selectSectionLibraryImg(url, name) {
+            document.getElementById('sectionBgImage').value = url;
+            setSectionImgPreview(url);
+            switchSectionImgTab('url', document.querySelectorAll('#sectionModal .img-picker-tab')[0]);
+            toast(`"${name}" seçildi`, 'success');
+        }
+
+        function handleSectionImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const url = e.target.result;
+                document.getElementById('sectionBgImage').value = url;
+                setSectionImgPreview(url);
+                const images = getData(KEYS.images) || [];
+                const newId = Math.max(0, ...images.map(i => i.id)) + 1;
+                images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                setData(KEYS.images, images);
+                toast('Resim yüklendi!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateSectionImgPreview() { setSectionImgPreview(document.getElementById('sectionBgImage').value); }
+
+        function setSectionImgPreview(url) {
+            const img = document.getElementById('sectionImgPreview');
+            const ph = document.getElementById('sectionImgPlaceholder');
+            if (url) { img.src = url; img.style.display = 'block'; ph.style.display = 'none'; }
+            else { img.style.display = 'none'; ph.style.display = 'flex'; }
         }
 
         // ===========================
@@ -2654,23 +2933,45 @@
             const ptext = document.getElementById('progressText');
             progress.style.display = 'block'; fill.style.width = '0%';
             let done = 0;
+            let errors = 0;
+            
             files.forEach((file, i) => {
-                if (!file.type.startsWith('image/')) { done++; return; }
+                if (!file.type.startsWith('image/')) { 
+                    done++; 
+                    errors++;
+                    return; 
+                }
                 const reader = new FileReader();
+                reader.onerror = () => {
+                    done++;
+                    errors++;
+                    console.error('FileReader error');
+                };
                 reader.onload = e => {
-                    const images = getData(KEYS.images) || [];
-                    const newId = Math.max(0, ...images.map(x => x.id)) + 1;
-                    images.push({ id: newId, name: file.name, url: e.target.result, size: formatSize(file.size), date: today() });
-                    setData(KEYS.images, images);
+                    try {
+                        const images = getData(KEYS.images) || [];
+                        const newId = Math.max(0, ...images.map(x => x.id)) + 1;
+                        images.push({ id: newId, name: file.name, url: e.target.result, size: formatSize(file.size), date: today() });
+                        setData(KEYS.images, images);
+                    } catch (err) {
+                        errors++;
+                    }
+                    
                     done++;
                     const pct = Math.round(done / files.length * 100);
                     fill.style.width = pct + '%';
                     ptext.textContent = `Yükleniyor... ${done}/${files.length}`;
+                    
                     if (done === files.length) {
                         setTimeout(() => { progress.style.display = 'none'; fill.style.width = '0%'; }, 800);
                         renderMedia(); updateStats();
-                        addActivity(`${files.length} resim yüklendi`, 'success');
-                        toast(`${done} resim yüklendi!`, 'success');
+                        if (errors === 0) {
+                            addActivity(`${files.length} resim yüklendi`, 'success');
+                            toast(`${done} resim yüklendi!`, 'success');
+                        } else {
+                            addActivity(`${files.length - errors} resim yüklendi, ${errors} hata`, 'warning');
+                            toast(`${files.length - errors} resim yüklendi, ${errors} dosya yüklenemedi.`, 'warning');
+                        }
                     }
                 };
                 reader.readAsDataURL(file);
@@ -2808,6 +3109,42 @@
             setData(KEYS.settings, s);
             addActivity('Site ayarları güncellendi', 'success');
             toast('Ayarlar kaydedildi!', 'success');
+        }
+
+        // ===========================
+        // DATA IMPORT/EXPORT
+        // ===========================
+        function exportData() {
+            const data = {};
+            Object.values(KEYS).forEach(k => {
+                data[k] = localStorage.getItem(k);
+            });
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ipek_yapi_backup_${today()}.json`;
+            a.click();
+            toast('Yedek dosyası indirildi.', 'success');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    Object.keys(data).forEach(k => {
+                        if (data[k]) localStorage.setItem(k, data[k]);
+                    });
+                    toast('Veriler başarıyla yüklendi! Sayfa yenileniyor...', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } catch (err) {
+                    toast('Hatalı dosya formatı.', 'error');
+                }
+            };
+            reader.readAsText(file);
         }
 
         // ===========================

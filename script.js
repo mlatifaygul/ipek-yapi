@@ -4,6 +4,7 @@ const navMenu = document.querySelector('.nav-menu');
 
 if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
+<<<<<<< HEAD
         const willOpen = !navMenu.classList.contains('active');
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
@@ -21,6 +22,135 @@ document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', 
     navMenu.classList.remove('active');
     document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
 }));
+
+// ==========================================
+// DYNAMIC CONTENT LOADING SYSTEM
+// ==========================================
+
+const DATA_KEYS = {
+    nav: 'ipek_navigation',
+    pages: 'ipek_pages',
+    projects: 'ipek_projects',
+    images: 'ipek_images',
+    settings: 'ipek_settings',
+    cards: 'ipek_cards',
+    sections: 'ipek_sections'
+};
+
+function getLocalData(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (e) {
+        console.error('Error reading localStorage:', e);
+        return null;
+    }
+}
+
+// Initialize Dynamic Content
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize defaults if localStorage is empty (important for Vercel deployment)
+    checkAndInitData();
+    
+    loadDynamicNav();
+    loadDynamicSettings();
+    
+    // Run content loading
+    loadDynamicContent();
+});
+
+function checkAndInitData() {
+    if (!localStorage.getItem(DATA_KEYS.nav)) {
+        console.log('Initializing default data...');
+        // Default Nav
+        const defaultNav = [
+            { id: 1, name: 'Ana Sayfa', url: 'index.html', order: 1, active: true, subItems: [] },
+            { id: 2, name: 'Biz Kimiz', url: 'biz-kimiz.html', order: 2, active: true, subItems: [
+                { id: 21, name: 'BİZ KİMİZ', url: 'biz-kimiz.html' },
+                { id: 22, name: 'Manifesto', url: 'biz-kimiz.html#manifesto' },
+                { id: 23, name: 'Tarihçe', url: 'biz-kimiz.html#tarihce' }
+            ]},
+            { id: 3, name: 'Projeler', url: 'projeler.html', order: 3, active: true, subItems: [
+                { id: 31, name: 'İpek Reserve', url: 'projeler.html' },
+                { id: 32, name: 'İpek Sapanca', url: 'projeler.html' },
+                { id: 33, name: 'İpek Arsa', url: 'projeler.html' }
+            ]},
+            { id: 5, name: 'İletişim', url: 'iletisim.html', order: 5, active: true, subItems: [] }
+        ];
+        localStorage.setItem(DATA_KEYS.nav, JSON.stringify(defaultNav));
+
+        // Default Sections
+        const defaultSections = [
+            { id: 1, name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Yaşam+Alanları', order: 1 }
+        ];
+        localStorage.setItem(DATA_KEYS.sections, JSON.stringify(defaultSections));
+
+        // Default Cards
+        const defaultCards = [
+            { id: 1, title: 'İpek Reserve', page: 'index.html', order: 1, status: 'Yaşam Başladı', description: 'Premium yaşam alanları', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Reserve', features: 'Deniz Manzarası, Lüks Tasarım', link: '#', buttonText: 'Keşfet' },
+            { id: 2, title: 'İpek Sapanca', page: 'index.html', order: 2, status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Sapanca', features: 'Doğa Manzarası, Göl Yakınlığı', link: '#', buttonText: 'Keşfet' },
+            { id: 3, title: 'İpek Arsa', page: 'index.html', order: 3, status: 'Satışta', description: 'Birikiminizle Birlikte Hayallerinizi Büyütün', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Arsa', features: 'Yatırımlık, Modüler Ev', link: '#', buttonText: 'Keşfet' }
+        ];
+        localStorage.setItem(DATA_KEYS.cards, JSON.stringify(defaultCards));
+
+        // Default Settings
+        const defaultSettings = {
+            siteTitle: 'İPEK - İnce Düşünülmüş Yaşam Alanları',
+            contactEmail: 'info@ipek.com.tr',
+            contactPhone: '+90 212 555 00 00'
+        };
+        localStorage.setItem(DATA_KEYS.settings, JSON.stringify(defaultSettings));
+    }
+}
+
+
+function loadDynamicContent() {
+    const sections = getLocalData(DATA_KEYS.sections) || [];
+    const cards = getLocalData(DATA_KEYS.cards) || [];
+
+    // 1. Hero Section
+    const heroSection = sections.find(s => s.type === 'hero' && (s.page === 'index.html' || s.page === location.pathname.split('/').pop()));
+    if (heroSection) {
+        const heroTitle = document.getElementById('hero-title');
+        if (heroTitle) heroTitle.innerHTML = `${heroSection.title} <br> <span style="font-weight: 300;">${heroSection.subtitle || ''}</span>`;
+        
+        const heroImg = document.getElementById('hero-img');
+        if (heroImg && heroSection.bgImage) heroImg.src = heroSection.bgImage;
+    }
+
+    // 2. Project Cards (Generic handler for any projects grid)
+    const projectsGrid = document.getElementById('projects-grid') || document.getElementById('projectsGrid');
+    if (projectsGrid && cards.length > 0) {
+        const currentPage = location.pathname.split('/').pop() || 'index.html';
+        const pageCards = cards
+            .filter(c => c.page === currentPage || (!c.page && currentPage === 'index.html'))
+            .sort((a, b) => a.order - b.order);
+            
+        if (pageCards.length > 0) {
+            projectsGrid.innerHTML = pageCards.map(card => `
+                <div class="project-card" data-category="${card.status === 'Satışta' ? 'arsa' : 'konut'}" data-location="istanbul">
+                    <div class="project-image">
+                        <img src="${card.image || 'https://via.placeholder.com/400x300'}" alt="${card.title}">
+                        ${card.status ? `<span class="project-status ${card.status === 'Yaşam Başladı' ? 'yasam-basladi' : ''}">${card.status}</span>` : ''}
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-name">${card.title}</h3>
+                        <div class="project-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${card.description || 'Lokasyon Bilgisi'}</span>
+                        </div>
+                        <div class="project-features">
+                            ${(card.features || '').split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
+                        </div>
+                        <div class="project-action">
+                            <a href="${card.link || '#'}" class="discover-btn">${card.buttonText || 'Keşfet'} <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+}
 
 // Mobile dropdown toggle
 document.querySelectorAll('.nav-item.dropdown > .nav-link').forEach(link => {
