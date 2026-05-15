@@ -1,14 +1,14 @@
 /**
- * NEF Frontend Integration Module
+ * IPEK Frontend Integration Module
  * Admin panel verilerini frontend sayfalarına entegre eder
- * Tüm HTML sayfalarına dahil edilmeli: <script src="nef-frontend.js"></script>
+ * Tüm HTML sayfalarına dahil edilmeli: <script src="ipek-frontend.js"></script>
  */
 
 (function () {
     'use strict';
 
     // Admin data helper - admin-data-enhanced.js'den verileri çeker
-    const NEFData = {
+    const IPEKData = {
         // Navigation
         getNavigation: function () {
             return JSON.parse(localStorage.getItem('ipek_navigation') || '[]');
@@ -59,7 +59,7 @@
             const navMenu = document.querySelector('.nav-menu');
             if (!navMenu) return;
 
-            const items = NEFData.getNavigation().filter(item => item.active);
+            const items = IPEKData.getNavigation().filter(item => item.active);
             navMenu.innerHTML = items.map(item => this.buildItem(item)).join('');
         },
 
@@ -97,8 +97,8 @@
     // Page Meta Builder
     const MetaBuilder = {
         build: function () {
-            const currentPage = NEFData.getCurrentPage();
-            const settings = NEFData.getSettings();
+            const currentPage = IPEKData.getCurrentPage();
+            const settings = IPEKData.getSettings();
 
             // Update title
             if (currentPage && currentPage.title) {
@@ -148,7 +148,7 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            const cards = NEFData.getCards(page || this.getCurrentPageName());
+            const cards = IPEKData.getCards(page || this.getCurrentPageName());
             container.innerHTML = cards.map(card => this.buildCard(card)).join('');
         },
 
@@ -195,7 +195,7 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            let projects = NEFData.getProjects();
+            let projects = IPEKData.getProjects();
 
             // Apply filters
             if (options.category) {
@@ -258,7 +258,7 @@
     // Footer Builder
     const FooterBuilder = {
         build: function () {
-            const settings = NEFData.getSettings();
+            const settings = IPEKData.getSettings();
 
             // Update footer description
             const footerDesc = document.querySelector('.footer-section p');
@@ -283,7 +283,7 @@
         },
 
         buildFooterLinks: function () {
-            const navigation = NEFData.getNavigation();
+            const navigation = IPEKData.getNavigation();
 
             // Find "Biz Kimiz" for corporate links
             const corporate = navigation.find(item => item.name === 'Biz Kimiz');
@@ -313,7 +313,7 @@
     const DynamicLoader = {
         loadHeroContent: function () {
             const hero = document.querySelector('.hero h2');
-            const settings = NEFData.getSettings();
+            const settings = IPEKData.getSettings();
 
             if (hero && settings.heroTitle) {
                 hero.textContent = settings.heroTitle;
@@ -324,7 +324,7 @@
             const container = document.getElementById(sectionId);
             if (!container) return;
 
-            const sections = NEFData.getSections(pageFile);
+            const sections = IPEKData.getSections(pageFile);
             const section = sections.find(s => s.id === parseInt(sectionId.replace('section-', '')));
 
             if (section) {
@@ -388,10 +388,10 @@
     const AdminHelper = {
         showAdminLink: function () {
             if (localStorage.getItem('adminLoggedIn') === 'true') {
-                const existingLink = document.getElementById('nef-admin-link');
+                const existingLink = document.getElementById('ipek-admin-link');
                 if (!existingLink) {
                     const adminLink = document.createElement('div');
-                    adminLink.id = 'nef-admin-link';
+                    adminLink.id = 'ipek-admin-link';
                     adminLink.style.cssText = 'position: fixed; bottom: 20px; left: 20px; z-index: 9999;';
                     adminLink.innerHTML = `
                         <a href="admin-panel-enhanced.html" 
@@ -417,7 +417,7 @@
     };
 
     // Main Initialization
-    const NEFFrontend = {
+    const IPEKFrontend = {
         init: function () {
             // Wait for DOM to be ready
             if (document.readyState === 'loading') {
@@ -428,8 +428,8 @@
         },
 
         load: function () {
-            console.log('🚀 NEF Frontend Integration Loading...');
-            
+            console.log('🚀 IPEK Frontend Integration Loading...');
+
             // Initialize default data if available (e.g. from admin-data-enhanced.js)
             // This is crucial for Vercel deployments where localStorage is initially empty
             if (typeof window.initializeEnhancedData === 'function') {
@@ -449,16 +449,16 @@
                 // Show admin link if logged in
                 AdminHelper.showAdminLink();
 
-                console.log('✅ NEF Frontend Integration Loaded Successfully');
+                console.log('✅ IPEK Frontend Integration Loaded Successfully');
             } catch (error) {
-                console.error('❌ NEF Frontend Integration Error:', error);
+                console.error('❌ IPEK Frontend Integration Error:', error);
             }
         },
 
         // Public API
         api: {
             // Data access
-            data: NEFData,
+            data: IPEKData,
 
             // Builders
             buildNavigation: () => NavigationBuilder.build(),
@@ -470,15 +470,15 @@
             loadSection: (sectionId, page) => DynamicLoader.loadSection(sectionId, page),
 
             // Utilities
-            getCurrentPage: () => NEFData.getCurrentPage(),
-            getSettings: () => NEFData.getSettings()
+            getCurrentPage: () => IPEKData.getCurrentPage(),
+            getSettings: () => IPEKData.getSettings()
         }
     };
 
     // Auto-initialize
-    NEFFrontend.init();
+    IPEKFrontend.init();
 
     // Export to global scope
-    window.NEFFrontend = NEFFrontend.api;
+    window.IPEKFrontend = IPEKFrontend.api;
 
 })();
