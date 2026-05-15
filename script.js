@@ -1,4 +1,4 @@
-// Header scroll effect
+﻿// Header scroll effect
 window.addEventListener('scroll', () => {
     const header = document.querySelector('.header');
     if (window.scrollY > 50) {
@@ -47,6 +47,9 @@ const DATA_KEYS = {
     sections: 'ipek_sections'
 };
 
+const CLOUD_STATE_ENDPOINT = '/api/state';
+let cloudStateHydrated = false;
+
 function getLocalData(key) {
     try {
         const data = localStorage.getItem(key);
@@ -57,8 +60,26 @@ function getLocalData(key) {
     }
 }
 
+async function hydrateCloudState() {
+    if (cloudStateHydrated) return;
+    try {
+        const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
+        if (!res.ok) return;
+        const payload = await res.json();
+        if (!payload || !payload.ok || !payload.state) return;
+        Object.entries(payload.state).forEach(([key, raw]) => {
+            if (typeof raw === 'string') localStorage.setItem(key, raw);
+        });
+        cloudStateHydrated = true;
+    } catch (e) {
+        console.warn('Cloud state could not be loaded:', e);
+    }
+}
+
 // Initialize Dynamic Content
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await hydrateCloudState();
+
     // Initialize defaults if localStorage is empty (important for Vercel deployment)
     checkAndInitData();
     
@@ -68,6 +89,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run content loading
     loadDynamicContent();
 });
+
+function loadDynamicNav() {
+    const nav = getLocalData(DATA_KEYS.nav) || [];
+    const navMenuEl = document.querySelector('.nav-menu');
+    if (!navMenuEl || !nav.length) return;
+
+    const items = nav
+        .filter(item => item.active !== false)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    navMenuEl.innerHTML = items.map(item => {
+        const hasSub = Array.isArray(item.subItems) && item.subItems.length > 0;
+        if (!hasSub) {
+            return `
+                <li class="nav-item">
+                    <a href="${item.url || '#'}" class="nav-link">${item.name || ''}</a>
+                </li>
+            `;
+        }
+
+        return `
+            <li class="nav-item dropdown">
+                <a href="${item.url || '#'}" class="nav-link">${item.name || ''} <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    ${item.subItems.map(sub => `<a href="${sub.url || '#'}">${sub.name || ''}</a>`).join('')}
+                </div>
+            </li>
+        `;
+    }).join('');
+}
+
+function loadDynamicSettings() {
+    const settings = getLocalData(DATA_KEYS.settings) || {};
+
+    if (settings.siteTitle) {
+        document.title = settings.siteTitle;
+    }
+
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc && settings.siteDescription) {
+        metaDesc.setAttribute('content', settings.siteDescription);
+    }
+}
 
 function checkAndInitData() {
     if (!localStorage.getItem(DATA_KEYS.nav)) {
@@ -117,25 +181,52 @@ function checkAndInitData() {
 function loadDynamicContent() {
     const sections = getLocalData(DATA_KEYS.sections) || [];
     const cards = getLocalData(DATA_KEYS.cards) || [];
+    const projects = getLocalData(DATA_KEYS.projects) || [];
+    const currentPage = location.pathname.split('/').pop() || 'index.html';
 
-    // 1. Hero Section
-    const heroSection = sections.find(s => s.type === 'hero' && (s.page === 'index.html' || s.page === location.pathname.split('/').pop()));
+    const heroSection = sections.find(s => s.type === 'hero' && (s.page === 'index.html' || s.page === currentPage));
     if (heroSection) {
         const heroTitle = document.getElementById('hero-title');
         if (heroTitle) heroTitle.innerHTML = `${heroSection.title} <br> <span style="font-weight: 300;">${heroSection.subtitle || ''}</span>`;
-        
+
         const heroImg = document.getElementById('hero-img');
         if (heroImg && heroSection.bgImage) heroImg.src = heroSection.bgImage;
     }
 
-    // 2. Project Cards (Generic handler for any projects grid)
     const projectsGrid = document.getElementById('projects-grid') || document.getElementById('projectsGrid');
-    if (projectsGrid && cards.length > 0) {
-        const currentPage = location.pathname.split('/').pop() || 'index.html';
+    if (!projectsGrid) return;
+
+    if (currentPage === 'projeler.html' && projects.length > 0) {
+        projectsGrid.innerHTML = projects.map(project => `
+            <div class="project-card" data-category="${project.category || ''}" data-location="${(project.location || '').toLowerCase()}">
+                <div class="project-image">
+                    <img src="${project.image || 'https://via.placeholder.com/400x300'}" alt="${project.name || 'Proje'}">
+                    ${project.status ? `<span class="project-status ${project.status === 'Yaşam Başladı' ? 'yasam-basladi' : ''}">${project.status}</span>` : ''}
+                </div>
+                <div class="project-info">
+                    <h3 class="project-name">${project.name || ''}</h3>
+                    <div class="project-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${project.location || ''}</span>
+                    </div>
+                    <div class="project-features">
+                        ${(project.features || '').split(',').filter(Boolean).map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
+                    </div>
+                    ${project.price ? `<div class="project-price">${project.price}</div>` : ''}
+                    <div class="project-action">
+                        <a href="#" class="discover-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        return;
+    }
+
+    if (cards.length > 0) {
         const pageCards = cards
             .filter(c => c.page === currentPage || (!c.page && currentPage === 'index.html'))
             .sort((a, b) => a.order - b.order);
-            
+
         if (pageCards.length > 0) {
             projectsGrid.innerHTML = pageCards.map(card => `
                 <div class="project-card" data-category="${card.status === 'Satışta' ? 'arsa' : 'konut'}" data-location="istanbul">
@@ -150,7 +241,7 @@ function loadDynamicContent() {
                             <span>${card.description || 'Lokasyon Bilgisi'}</span>
                         </div>
                         <div class="project-features">
-                            ${(card.features || '').split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
+                            ${(card.features || '').split(',').filter(Boolean).map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
                         </div>
                         <div class="project-action">
                             <a href="${card.link || '#'}" class="discover-btn">${card.buttonText || 'Keşfet'} <i class="fas fa-arrow-right"></i></a>
@@ -513,3 +604,4 @@ window.addEventListener('load', () => {
 // Console Easter egg
 console.log('%c İPEK Clone ', 'background: #2c3e50; color: #fff; font-size: 20px; font-weight: bold; padding: 10px;');
 console.log('%c Modern web development with attention to detail ', 'background: #3498db; color: #fff; padding: 5px;');
+
