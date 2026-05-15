@@ -14,16 +14,40 @@ const navMenu = document.querySelector('.nav-menu');
 
 if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
+        const willOpen = !navMenu.classList.contains('active');
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
-    });
 
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-    }));
+        if (!willOpen) {
+            document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
+        }
+    });
 }
+
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+    if (!hamburger || !navMenu) return;
+    hamburger.classList.remove('active');
+    navMenu.classList.remove('active');
+    document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
+}));
+
+// Mobile dropdown toggle
+document.querySelectorAll('.nav-item.dropdown > .nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        if (window.innerWidth > 768) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        const parent = link.parentElement;
+        const isOpen = parent.classList.contains('open');
+
+        document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
+        if (!isOpen) {
+            parent.classList.add('open');
+        }
+    });
+})
 
 // ==========================================
 // DYNAMIC CONTENT LOADING SYSTEM
