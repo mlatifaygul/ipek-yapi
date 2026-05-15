@@ -189,6 +189,20 @@ function loadDynamicContent() {
         const heroTitle = document.getElementById('hero-title');
         if (heroTitle) heroTitle.innerHTML = `${heroSection.title} <br> <span style="font-weight: 300;">${heroSection.subtitle || ''}</span>`;
 
+        const heroEl = document.querySelector('.hero');
+        if (heroEl) {
+            if (heroSection.bgImage) {
+                heroEl.style.backgroundImage = `linear-gradient(rgba(26, 42, 58, 0.72), rgba(26, 42, 58, 0.72)), url('${heroSection.bgImage}')`;
+                heroEl.style.backgroundSize = 'cover';
+                heroEl.style.backgroundPosition = 'center';
+                heroEl.style.backgroundRepeat = 'no-repeat';
+                heroEl.classList.add('has-bg-image');
+            } else {
+                heroEl.style.backgroundImage = '';
+                heroEl.classList.remove('has-bg-image');
+            }
+        }
+
         const heroImg = document.getElementById('hero-img');
         if (heroImg && heroSection.bgImage) heroImg.src = heroSection.bgImage;
     }
@@ -234,17 +248,14 @@ function loadDynamicContent() {
                         <img src="${card.image || 'https://via.placeholder.com/400x300'}" alt="${card.title}">
                         ${card.status ? `<span class="project-status ${card.status === 'Yaşam Başladı' ? 'yasam-basladi' : ''}">${card.status}</span>` : ''}
                     </div>
-                    <div class="project-info">
-                        <h3 class="project-name">${card.title}</h3>
-                        <div class="project-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>${card.description || 'Lokasyon Bilgisi'}</span>
-                        </div>
+                    <div class="project-content">
+                        <h3>${card.title}</h3>
+                        <p>${card.description || 'Lokasyon Bilgisi'}</p>
                         <div class="project-features">
                             ${(card.features || '').split(',').filter(Boolean).map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
                         </div>
                         <div class="project-action">
-                            <a href="${card.link || '#'}" class="discover-btn">${card.buttonText || 'Keşfet'} <i class="fas fa-arrow-right"></i></a>
+                            <a href="${card.link || '#'}" class="project-link">${card.buttonText || 'Keşfet'} <i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>

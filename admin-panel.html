@@ -2546,7 +2546,7 @@
         // ===========================
         function renderSections() {
             const filter = document.getElementById('sectionPageFilter').value;
-            let sections = getData(DATA_KEYS.sections) || getData('ipek_sections') || [];
+            let sections = getData(KEYS.sections) || getData('ipek_sections') || [];
             if (filter) sections = sections.filter(s => s.page === filter);
             sections.sort((a, b) => a.order - b.order);
             const el = document.getElementById('sectionsList');
@@ -2575,6 +2575,8 @@
             document.getElementById('sectionOrder').value = 1;
             document.getElementById('sectionType').value = 'hero';
             document.getElementById('sectionPage').value = 'index.html';
+            setSectionImgPreview('');
+            switchSectionImgTab('url', document.querySelector('#sectionModal .img-picker-tab'));
             
             if (id) {
                 const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
@@ -2588,6 +2590,7 @@
                     document.getElementById('sectionOrder').value = s.order || 1;
                     document.getElementById('sectionType').value = s.type || 'hero';
                     document.getElementById('sectionPage').value = s.page || 'index.html';
+                    setSectionImgPreview(s.bgImage || '');
                 }
             }
             openModal('sectionModal');

@@ -326,6 +326,10 @@ img {
     transform: scale(1.1);
 }
 
+.hero.has-bg-image .hero-image {
+    display: none;
+}
+
 /* Section Styles */
 .section-padding {
     padding: 100px 0;
@@ -1136,7 +1140,6 @@ img {
         justify-content: center;
     }
 }
-
 @media (max-width: 480px) {
     .nav-container {
         padding: 0 15px;
