@@ -8,10 +8,10 @@ files.forEach(f => {
     const content = fs.readFileSync(filePath, 'utf8');
 
     if (!content.includes('ipek-frontend.js')) {
-        let newContent = content.replace('<script src="script.js"></script>', '<script src="admin-data-enhanced.js"></script>\n    <script src="ipek-frontend.js"></script>\n    <script src="script.js"></script>');
+        let newContent = content.replace('<script src="script.js"></script>', '<script src="admin-data.js"></script>\n    <script src="ipek-frontend.js"></script>\n    <script src="script.js"></script>');
 
         if (newContent === content) {
-            newContent = content.replace('</body>', '    <script src="admin-data-enhanced.js"></script>\n    <script src="ipek-frontend.js"></script>\n</body>');
+            newContent = content.replace('</body>', '    <script src="admin-data.js"></script>\n    <script src="ipek-frontend.js"></script>\n</body>');
         }
 
         if (newContent !== content) {

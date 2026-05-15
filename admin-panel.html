@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -1327,7 +1327,7 @@
                 <div class="nav-item active" data-page="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</div>
             </div>
             <div class="nav-section">
-                <div class="nav-section-title">Site İçeriği</div>
+                <div class="nav-section-title">Site İçeri�Yi</div>
                 <div class="nav-item" data-page="navigation"><i class="fas fa-bars"></i> Navigasyon & Menüler</div>
                 <div class="nav-item" data-page="pages"><i class="fas fa-file-alt"></i> Sayfalar</div>
                 <div class="nav-item" data-page="sections"><i class="fas fa-layer-group"></i> Bölümler</div>
@@ -1350,7 +1350,7 @@
                     <div class="user-name" id="sidebarName">Admin</div>
                     <div class="user-role">Süper Admin</div>
                 </div>
-                <button class="logout-btn" onclick="logout()" title="Çıkış"><i class="fas fa-sign-out-alt"></i></button>
+                <button class="logout-btn" onclick="logout()" title="�?ıkı�Y"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     </aside>
@@ -1402,7 +1402,7 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title"><i class="fas fa-bolt"></i> Hızlı İşlemler</div>
+                            <div class="card-title"><i class="fas fa-bolt"></i> Hızlı İ�Ylemler</div>
                         </div>
                         <div style="display:flex;flex-direction:column;gap:10px;">
                             <button class="btn btn-primary" onclick="goPage('navigation')"><i class="fas fa-bars"></i>
@@ -1424,9 +1424,9 @@
             <div class="section-page" id="page-navigation">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title"><i class="fas fa-bars"></i> Ana Menü Öğeleri</div>
+                        <div class="card-title"><i class="fas fa-bars"></i> Ana Menü �-�Yeleri</div>
                         <button class="btn btn-primary btn-sm" onclick="openNavModal()"><i class="fas fa-plus"></i> Menü
-                            Öğesi Ekle</button>
+                            �-�Yesi Ekle</button>
                     </div>
                     <div id="navList"></div>
                 </div>
@@ -1449,7 +1449,7 @@
                                     <th>Meta Açıklama</th>
                                     <th>Durum</th>
                                     <th>Güncelleme</th>
-                                    <th>İşlemler</th>
+                                    <th>İ�Ylemler</th>
                                 </tr>
                             </thead>
                             <tbody id="pagesTableBody"></tbody>
@@ -1490,8 +1490,8 @@
                                 <option value="index.html">Ana Sayfa</option>
                                 <option value="biz-kimiz.html">Biz Kimiz</option>
                                 <option value="projeler.html">Projeler</option>
-                                <option value="ipek-kesifleri.html">İpek Keşifleri</option>
-                                <option value="iletisim.html">İletişim</option>
+                                <option value="ipek-kesifleri.html">İpek Ke�Yifleri</option>
+                                <option value="iletisim.html">İleti�Yim</option>
                             </select>
                             <button class="btn btn-primary btn-sm" onclick="openCardModal()"><i class="fas fa-plus"></i>
                                 Kart Ekle</button>
@@ -1519,7 +1519,7 @@
                                     <th>Lokasyon</th>
                                     <th>Durum</th>
                                     <th>Fiyat</th>
-                                    <th>İşlemler</th>
+                                    <th>İ�Ylemler</th>
                                 </tr>
                             </thead>
                             <tbody id="projectsTableBody"></tbody>
@@ -1537,13 +1537,13 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
                         <div>
                             <p style="font-size:12px;color:var(--text2);margin-bottom:10px;font-weight:600;">DOSYADAN
-                                YÜKLE</p>
+                                Y�oKLE</p>
                             <div class="upload-zone" id="uploadZone">
                                 <input type="file" id="fileUploadInput" multiple accept="image/*"
                                     onchange="handleFileUpload(event)">
                                 <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                                 <div class="upload-text">Resimleri buraya sürükleyin veya tıklayın</div>
-                                <div class="upload-sub">PNG, JPG, GIF, WEBP — Maks. 10MB</div>
+                                <div class="upload-sub">PNG, JPG, GIF, WEBP - Maks. 3MB</div>
                                 <div class="upload-progress" id="uploadProgress">
                                     <div class="progress-bar">
                                         <div class="progress-fill" id="progressFill"></div>
@@ -1566,7 +1566,7 @@
                                 <input class="form-control" type="text" id="urlImageName" placeholder="resim-adi.jpg">
                             </div>
                             <div id="urlPreviewWrap" style="margin-bottom:12px;display:none;">
-                                <img id="urlPreviewImg" class="img-preview" src="" alt="Önizleme"
+                                <img id="urlPreviewImg" class="img-preview" src="" alt="�-nizleme"
                                     onerror="this.style.display='none'">
                             </div>
                             <button class="btn btn-primary" onclick="addImageFromUrl()"><i class="fas fa-plus"></i>
@@ -1604,7 +1604,7 @@
                                 Genel Bilgiler</p>
                             <div class="form-grid">
                                 <div class="form-group span2">
-                                    <label class="form-label">Site Başlığı <span>*</span></label>
+                                    <label class="form-label">Site Ba�Ylı�Yı <span>*</span></label>
                                     <input class="form-control" type="text" id="siteTitle">
                                 </div>
                                 <div class="form-group span2">
@@ -1614,7 +1614,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Meta Keywords</label>
                                     <input class="form-control" type="text" id="metaKeywords"
-                                        placeholder="ipek, inşaat, konut">
+                                        placeholder="ipek, in�Yaat, konut">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Favicon URL</label>
@@ -1626,7 +1626,7 @@
                         <div style="margin-bottom:24px;">
                             <p
                                 style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
-                                İletişim Bilgileri</p>
+                                İleti�Yim Bilgileri</p>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label class="form-label">E-posta</label>
@@ -1661,7 +1661,7 @@
                                 style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
                                 Veri Yönetimi (Vercel Senkronizasyonu İçin)</p>
                             <div style="background:var(--surface2);padding:20px;border-radius:var(--radius);border:1px solid var(--border);">
-                                <p style="font-size:13px;color:var(--text2);margin-bottom:15px;">LocalStorage verilerinizi bir JSON dosyası olarak indirebilir veya başka bir tarayıcıya/cihaza (örneğin Vercel üzerindeki sitenize) yükleyebilirsiniz.</p>
+                                <p style="font-size:13px;color:var(--text2);margin-bottom:15px;">LocalStorage verilerinizi bir JSON dosyası olarak indirebilir veya ba�Yka bir tarayıcıya/cihaza (örne�Yin Vercel üzerindeki sitenize) yükleyebilirsiniz.</p>
                                 <div style="display:flex;gap:12px;">
                                     <button type="button" class="btn btn-primary" onclick="exportData()"><i class="fas fa-download"></i> Verileri İndir (Backup)</button>
                                     <button type="button" class="btn btn-ghost" onclick="document.getElementById('importFile').click()"><i class="fas fa-upload"></i> Verileri Yükle (Restore)</button>
@@ -1689,9 +1689,9 @@
     <div class="modal-overlay" id="navModal">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-bars"></i> <span id="navModalTitle">Menü Öğesi Ekle</span>
+                <div class="modal-title"><i class="fas fa-bars"></i> <span id="navModalTitle">Menü �-�Yesi Ekle</span>
                 </div>
-                <button class="modal-close" onclick="closeModal('navModal')">✕</button>
+                <button class="modal-close" onclick="closeModal('navModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="navId">
@@ -1717,7 +1717,7 @@
                     </div>
                 </div>
                 <hr class="divider">
-                <p style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:12px;">ALT MENÜ ÖĞELERİ</p>
+                <p style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:12px;">ALT MEN�o �-ĞELERİ</p>
                 <div id="subNavItems"></div>
                 <button class="btn btn-ghost btn-sm" onclick="addSubNavRow()"><i class="fas fa-plus"></i> Alt Menü
                     Ekle</button>
@@ -1735,13 +1735,13 @@
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-file-alt"></i> <span id="pageModalTitle">Sayfa Ekle</span>
                 </div>
-                <button class="modal-close" onclick="closeModal('pageModal')">✕</button>
+                <button class="modal-close" onclick="closeModal('pageModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="pageModalFile">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Sayfa Başlığı <span>*</span></label>
+                        <label class="form-label">Sayfa Ba�Ylı�Yı <span>*</span></label>
                         <input class="form-control" type="text" id="pmTitle">
                     </div>
                     <div class="form-group">
@@ -1777,7 +1777,7 @@
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-layer-group"></i> <span id="sectionModalTitle">Bölüm Ekle</span>
                 </div>
-                <button class="modal-close" onclick="closeModal('sectionModal')">✕</button>
+                <button class="modal-close" onclick="closeModal('sectionModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="sectionId">
@@ -1795,11 +1795,11 @@
                         </select>
                     </div>
                     <div class="form-group span2">
-                        <label class="form-label">Ana Başlık (H2)</label>
+                        <label class="form-label">Ana Ba�Ylık (H2)</label>
                         <input class="form-control" type="text" id="sectionTitle">
                     </div>
                     <div class="form-group span2">
-                        <label class="form-label">Alt Başlık / Spot</label>
+                        <label class="form-label">Alt Ba�Ylık / Spot</label>
                         <textarea class="form-control" id="sectionSubtitle" rows="2"></textarea>
                     </div>
                     <div class="form-group span2">
@@ -1830,7 +1830,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">ÖNİZLEME</p>
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">�-NİZLEME</p>
                                 <div id="sectionImgPreviewWrap">
                                     <div class="img-preview-placeholder" id="sectionImgPlaceholder"><i class="fas fa-image"></i><span>Resim seçilmedi</span></div>
                                     <img id="sectionImgPreview" class="img-preview" src="" style="display:none;" onerror="this.style.display='none';document.getElementById('sectionImgPlaceholder').style.display='flex'">
@@ -1841,7 +1841,7 @@
                     <div class="form-group">
                         <label class="form-label">Tip</label>
                         <select class="form-control" id="sectionType">
-                            <option value="hero">Hero (Giriş)</option>
+                            <option value="hero">Hero (Giri�Y)</option>
                             <option value="content">İçerik Bölümü</option>
                             <option value="banner">Banner</option>
                         </select>
@@ -1864,13 +1864,13 @@
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-th-large"></i> <span id="cardModalTitle">Kart Ekle</span>
                 </div>
-                <button class="modal-close" onclick="closeModal('cardModal')">✕</button>
+                <button class="modal-close" onclick="closeModal('cardModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="cardId">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Kart Başlığı <span>*</span></label>
+                        <label class="form-label">Kart Ba�Ylı�Yı <span>*</span></label>
                         <input class="form-control" type="text" id="cardTitle">
                     </div>
                     <div class="form-group">
@@ -1879,8 +1879,8 @@
                             <option value="index.html">Ana Sayfa</option>
                             <option value="biz-kimiz.html">Biz Kimiz</option>
                             <option value="projeler.html">Projeler</option>
-                            <option value="ipek-kesifleri.html">İpek Keşifleri</option>
-                            <option value="iletisim.html">İletişim</option>
+                            <option value="ipek-kesifleri.html">İpek Ke�Yifleri</option>
+                            <option value="iletisim.html">İleti�Yim</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1891,9 +1891,9 @@
                         <label class="form-label">Durum Etiketi</label>
                         <select class="form-control" id="cardStatus">
                             <option value="">Yok</option>
-                            <option value="Yaşam Başladı">Yaşam Başladı</option>
-                            <option value="Satışta">Satışta</option>
-                            <option value="İnşaat Devam Ediyor">İnşaat Devam Ediyor</option>
+                            <option value="Ya�Yam Ba�Yladı">Ya�Yam Ba�Yladı</option>
+                            <option value="Satı�Yta">Satı�Yta</option>
+                            <option value="İn�Yaat Devam Ediyor">İn�Yaat Devam Ediyor</option>
                             <option value="Tamamlandı">Tamamlandı</option>
                         </select>
                     </div>
@@ -1930,7 +1930,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">ÖNİZLEME
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">�-NİZLEME
                                 </p>
                                 <div id="cardImgPreviewWrap">
                                     <div class="img-preview-placeholder" id="cardImgPlaceholder"><i
@@ -1942,13 +1942,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Özellikler</label>
+                        <label class="form-label">�-zellikler</label>
                         <input class="form-control" type="text" id="cardFeatures"
-                            placeholder="Deniz Manzarası, Lüks, Özel">
+                            placeholder="Deniz Manzarası, Lüks, �-zel">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Fiyat</label>
-                        <input class="form-control" type="text" id="cardPrice" placeholder="₺2.000.000 - ₺5.000.000">
+                        <input class="form-control" type="text" id="cardPrice" placeholder="�,�2.000.000 - �,�5.000.000">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Link URL</label>
@@ -1956,7 +1956,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Buton Metni</label>
-                        <input class="form-control" type="text" id="cardButtonText" placeholder="Keşfet">
+                        <input class="form-control" type="text" id="cardButtonText" placeholder="Ke�Yfet">
                     </div>
                 </div>
             </div>
@@ -1973,7 +1973,7 @@
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-building"></i> <span id="projectModalTitle">Proje Ekle</span>
                 </div>
-                <button class="modal-close" onclick="closeModal('projectModal')">✕</button>
+                <button class="modal-close" onclick="closeModal('projectModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="projectId">
@@ -1997,9 +1997,9 @@
                     <div class="form-group">
                         <label class="form-label">Durum</label>
                         <select class="form-control" id="projectStatus">
-                            <option value="Yaşam Başladı">Yaşam Başladı</option>
-                            <option value="İnşaat Devam Ediyor">İnşaat Devam Ediyor</option>
-                            <option value="Satışta">Satışta</option>
+                            <option value="Ya�Yam Ba�Yladı">Ya�Yam Ba�Yladı</option>
+                            <option value="İn�Yaat Devam Ediyor">İn�Yaat Devam Ediyor</option>
+                            <option value="Satı�Yta">Satı�Yta</option>
                             <option value="Tamamlandı">Tamamlandı</option>
                         </select>
                     </div>
@@ -2032,7 +2032,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">ÖNİZLEME
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;">�-NİZLEME
                                 </p>
                                 <div id="projImgPreviewWrap">
                                     <div class="img-preview-placeholder" id="projImgPlaceholder"><i
@@ -2048,13 +2048,13 @@
                         <textarea class="form-control" id="projectDescription" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Özellikler</label>
+                        <label class="form-label">�-zellikler</label>
                         <input class="form-control" type="text" id="projectFeatures"
                             placeholder="Göl Manzarası, Villa, Modern">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Fiyat Aralığı</label>
-                        <input class="form-control" type="text" id="projectPrice" placeholder="₺2.500.000 - ₺5.000.000">
+                        <label class="form-label">Fiyat Aralı�Yı</label>
+                        <input class="form-control" type="text" id="projectPrice" placeholder="�,�2.500.000 - �,�5.000.000">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Teslim Tarihi</label>
@@ -2073,8 +2073,8 @@
     <div class="modal-overlay" id="imgEditModal">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-edit"></i> Resim Düzenle / Değiştir</div>
-                <button class="modal-close" onclick="closeModal('imgEditModal')">✕</button>
+                <div class="modal-title"><i class="fas fa-edit"></i> Resim Düzenle / De�Yi�Ytir</div>
+                <button class="modal-close" onclick="closeModal('imgEditModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="editImgId">
@@ -2093,14 +2093,14 @@
                         <div class="upload-zone" style="padding:20px;">
                             <input type="file" accept="image/*" id="editImgFile" onchange="previewEditImage(event)">
                             <div style="font-size:22px;color:var(--text3);"><i class="fas fa-sync-alt"></i></div>
-                            <div style="font-size:12px;color:var(--text2);margin-top:6px;">Değiştirmek için seç</div>
+                            <div style="font-size:12px;color:var(--text2);margin-top:6px;">De�Yi�Ytirmek için seç</div>
                         </div>
                         <img id="editImgNewPreview" class="img-preview" src="" style="display:none;margin-top:8px;"
                             alt="Yeni">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Veya URL ile değiştir</label>
+                    <label class="form-label">Veya URL ile de�Yi�Ytir</label>
                     <input class="form-control" type="url" id="editImgUrl" placeholder="https://"
                         oninput="document.getElementById('editImgNewPreview').src=this.value;document.getElementById('editImgNewPreview').style.display=this.value?'block':'none'">
                 </div>
@@ -2117,7 +2117,7 @@
         <div class="modal" style="max-width:400px;">
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-exclamation-triangle" style="color:var(--red)"></i> Onay</div>
-                <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+                <button class="modal-close" onclick="closeModal('confirmModal')">�o.</button>
             </div>
             <div class="modal-body">
                 <p id="confirmText" style="font-size:14px;color:var(--text2);line-height:1.6;"></p>
@@ -2140,23 +2140,97 @@
             images: 'ipek_images',
             settings: 'ipek_settings',
             cards: 'ipek_cards',
+            sections: 'ipek_sections',
             activities: 'ipek_activities'
         };
+
+        const CLOUD_STATE_ENDPOINT = '/api/state';
+        const CLOUD_UPLOAD_ENDPOINT = '/api/upload';
+        const MAX_UPLOAD_SIZE_BYTES = 3 * 1024 * 1024;
+        let cloudSyncTimer = null;
+        let isCloudSyncing = false;
 
         function getData(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
         function setData(key, val) { 
             try {
-                localStorage.setItem(key, JSON.stringify(val)); 
+                localStorage.setItem(key, JSON.stringify(val));
+                scheduleCloudSync();
             } catch (e) {
                 console.error('LocalStorage error:', e);
                 if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
                     toast('Depolama alanı dolu! Lütfen bazı resimleri silin veya daha küçük resimler kullanın.', 'error');
                 } else {
-                    toast('Veri kaydedilirken bir hata oluştu.', 'error');
+                    toast('Veri kaydedilirken bir hata olu�Ytu.', 'error');
                 }
             }
         }
+        function getStateSnapshot() {
+            const snapshot = {};
+            Object.values(KEYS).forEach(k => {
+                const raw = localStorage.getItem(k);
+                if (raw !== null) snapshot[k] = raw;
+            });
+            return snapshot;
+        }
 
+        async function loadCloudState() {
+            try {
+                const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
+                if (!res.ok) return;
+                const payload = await res.json();
+                if (!payload || !payload.ok || !payload.state) return;
+                Object.entries(payload.state).forEach(([key, raw]) => {
+                    if (typeof raw === 'string') localStorage.setItem(key, raw);
+                });
+            } catch (err) {
+                console.warn('Cloud state load skipped:', err);
+            }
+        }
+
+        function scheduleCloudSync() {
+            if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+            cloudSyncTimer = setTimeout(() => syncCloudState(), 700);
+        }
+
+        async function syncCloudState() {
+            if (isCloudSyncing) return;
+            isCloudSyncing = true;
+            try {
+                await fetch(CLOUD_STATE_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ state: getStateSnapshot() })
+                });
+            } catch (err) {
+                console.warn('Cloud state sync failed:', err);
+            } finally {
+                isCloudSyncing = false;
+            }
+        }
+
+        function fileToDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function uploadImageToServer(file) {
+            if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+                throw new Error('File too large');
+            }
+            const dataUrl = await fileToDataURL(file);
+            const res = await fetch(CLOUD_UPLOAD_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: file.name, type: file.type || 'application/octet-stream', dataUrl })
+            });
+            const payload = await res.json();
+            if (!res.ok || !payload.ok || !payload.url) throw new Error(payload.error || 'Upload failed');
+            return payload.url;
+        }
         function initData() {
             if (!getData(KEYS.nav)) setData(KEYS.nav, [
                 { id: 1, name: 'Ana Sayfa', url: 'index.html', order: 1, active: true, subItems: [] },
@@ -2177,23 +2251,23 @@
                         { id: 36, name: 'Tümünü Gör', url: 'projeler.html' }
                     ]
                 },
-                { id: 4, name: 'İpek Keşifleri', url: 'ipek-kesifleri.html', order: 4, active: true, subItems: [] },
-                { id: 5, name: 'İletişim', url: 'iletisim.html', order: 5, active: true, subItems: [] }
+                { id: 4, name: 'İpek Ke�Yifleri', url: 'ipek-kesifleri.html', order: 4, active: true, subItems: [] },
+                { id: 5, name: 'İleti�Yim', url: 'iletisim.html', order: 5, active: true, subItems: [] }
             ]);
             if (!getData(KEYS.pages)) setData(KEYS.pages, [
-                { file: 'index.html', title: 'Ana Sayfa', description: 'İPEK - İnce Düşünülmüş Yaşam Alanları', keywords: 'ipek,inşaat,konut', active: true, updated: today() },
+                { file: 'index.html', title: 'Ana Sayfa', description: 'İPEK - İnce Dü�Yünülmü�Y Ya�Yam Alanları', keywords: 'ipek,in�Yaat,konut', active: true, updated: today() },
                 { file: 'biz-kimiz.html', title: 'Biz Kimiz', description: 'İPEK Hakkımızda', keywords: 'ipek,hakkımızda', active: true, updated: today() },
                 { file: 'projeler.html', title: 'Projeler', description: 'İPEK Projeleri', keywords: 'ipek,projeler', active: true, updated: today() },
-                { file: 'ipek-kesifleri.html', title: 'İpek Keşifleri', description: 'İPEK Keşifleri', keywords: 'ipek,keşifler', active: true, updated: today() },
-                { file: 'iletisim.html', title: 'İletişim', description: 'İPEK İletişim', keywords: 'ipek,iletişim', active: true, updated: today() }
+                { file: 'ipek-kesifleri.html', title: 'İpek Ke�Yifleri', description: 'İPEK Ke�Yifleri', keywords: 'ipek,ke�Yifler', active: true, updated: today() },
+                { file: 'iletisim.html', title: 'İleti�Yim', description: 'İPEK İleti�Yim', keywords: 'ipek,ileti�Yim', active: true, updated: today() }
             ]);
             if (!getData(KEYS.projects)) setData(KEYS.projects, [
-                { id: 1, name: 'İpek Sapanca', category: 'konut', location: 'Sapanca, Kocaeli', status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", features: 'Doğa Manzarası, Göl Yakınlığı', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Sapanca', price: '₺2.500.000 - ₺5.000.000', delivery: '2024-06-01' },
-                { id: 2, name: 'İpek Meram', category: 'konut', location: 'Meram, Konya', status: 'İnşaat Devam Ediyor', description: 'Trakya\'nın yıldızı parlıyor', features: 'Merkezi Konum, Yeşil Alanlar', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Meram', price: '₺1.800.000 - ₺3.200.000', delivery: '2025-03-01' },
-                { id: 3, name: 'İpek Reserve', category: 'konut', location: 'Bodrum, Muğla', status: 'Yaşam Başladı', description: 'Premium yaşam alanları', features: 'Deniz Manzarası, Lüks Tasarım', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Reserve', price: '₺8.000.000 - ₺15.000.000', delivery: '2023-12-01' },
-                { id: 4, name: 'İpek Arsa Kaz Dağları', category: 'arsa', location: 'Kaz Dağları, Çanakkale', status: 'Satışta', description: "Kaz Dağları'nın Havası", features: 'Doğa İç İçe, Modüler Ev', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Kaz', price: '₺500.000 - ₺1.500.000', delivery: '' },
-                { id: 5, name: 'İpek Arsa Dikili', category: 'arsa', location: 'Dikili, İzmir', status: 'Satışta', description: "Ege'nin incisi", features: 'Deniz Yakınlığı, Turistik', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Dikili', price: '₺600.000 - ₺2.000.000', delivery: '' },
-                { id: 6, name: 'İpek Arsa Lüleburgaz', category: 'arsa', location: 'Lüleburgaz, Kırklareli', status: 'Satışta', description: 'Trakya\'nın yıldızı', features: 'Stratejik Konum, Yatırımlık', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Luleburgaz', price: '₺400.000 - ₺1.200.000', delivery: '' }
+                { id: 1, name: 'İpek Sapanca', category: 'konut', location: 'Sapanca, Kocaeli', status: 'Ya�Yam Ba�Yladı', description: "Sapanca'ya Şimdi İpek'den Bakın", features: 'Do�Ya Manzarası, Göl Yakınlı�Yı', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Sapanca', price: '�,�2.500.000 - �,�5.000.000', delivery: '2024-06-01' },
+                { id: 2, name: 'İpek Meram', category: 'konut', location: 'Meram, Konya', status: 'İn�Yaat Devam Ediyor', description: 'Trakya\'nın yıldızı parlıyor', features: 'Merkezi Konum, Ye�Yil Alanlar', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Meram', price: '�,�1.800.000 - �,�3.200.000', delivery: '2025-03-01' },
+                { id: 3, name: 'İpek Reserve', category: 'konut', location: 'Bodrum, Mu�Yla', status: 'Ya�Yam Ba�Yladı', description: 'Premium ya�Yam alanları', features: 'Deniz Manzarası, Lüks Tasarım', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Reserve', price: '�,�8.000.000 - �,�15.000.000', delivery: '2023-12-01' },
+                { id: 4, name: 'İpek Arsa Kaz Da�Yları', category: 'arsa', location: 'Kaz Da�Yları, �?anakkale', status: 'Satı�Yta', description: "Kaz Da�Yları'nın Havası", features: 'Do�Ya İç İçe, Modüler Ev', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Kaz', price: '�,�500.000 - �,�1.500.000', delivery: '' },
+                { id: 5, name: 'İpek Arsa Dikili', category: 'arsa', location: 'Dikili, İzmir', status: 'Satı�Yta', description: "Ege'nin incisi", features: 'Deniz Yakınlı�Yı, Turistik', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Dikili', price: '�,�600.000 - �,�2.000.000', delivery: '' },
+                { id: 6, name: 'İpek Arsa Lüleburgaz', category: 'arsa', location: 'Lüleburgaz, Kırklareli', status: 'Satı�Yta', description: 'Trakya\'nın yıldızı', features: 'Stratejik Konum, Yatırımlık', image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Luleburgaz', price: '�,�400.000 - �,�1.200.000', delivery: '' }
             ]);
             if (!getData(KEYS.images)) setData(KEYS.images, [
                 { id: 1, name: 'hero-image.jpg', url: 'https://via.placeholder.com/800x400/34495e/ffffff?text=Hero+Image', size: '125 KB', date: today() },
@@ -2202,21 +2276,21 @@
                 { id: 4, name: 'about-image.jpg', url: 'https://via.placeholder.com/600x400/34495e/ffffff?text=About+Image', size: '156 KB', date: today() }
             ]);
             if (!getData(KEYS.settings)) setData(KEYS.settings, {
-                siteTitle: 'İPEK - İnce Düşünülmüş Yaşam Alanları',
-                siteDescription: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.',
+                siteTitle: 'İPEK - İnce Dü�Yünülmü�Y Ya�Yam Alanları',
+                siteDescription: '2010 yılından beri metrekarelerle de�Yil santimetrekarelerle çalı�Yarak, ince dü�Yünülmü�Y ya�Yam alanları tasarlıyoruz.',
                 contactEmail: 'info@ipek.com.tr', contactPhone: '+90 212 555 00 00',
                 contactAddress: 'Maslak, Büyükdere Cad. No:123, Sarıyer/İstanbul',
-                metaKeywords: 'ipek,inşaat,konut,arsa', faviconUrl: '', googleAnalytics: ''
+                metaKeywords: 'ipek,in�Yaat,konut,arsa', faviconUrl: '', googleAnalytics: ''
             });
             if (!getData(KEYS.cards)) setData(KEYS.cards, [
-                { id: 1, title: 'İpek Reserve', page: 'index.html', order: 1, status: 'Yaşam Başladı', description: 'Premium yaşam alanları', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Reserve', features: 'Deniz Manzarası, Lüks Tasarım', price: '₺8.000.000 - ₺15.000.000', link: '#', buttonText: 'Keşfet' },
-                { id: 2, title: 'İpek Sapanca', page: 'index.html', order: 2, status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Sapanca', features: 'Doğa Manzarası, Göl Yakınlığı', price: '₺2.500.000 - ₺5.000.000', link: '#', buttonText: 'Keşfet' },
-                { id: 3, title: 'İpek Arsa', page: 'index.html', order: 3, status: 'Satışta', description: 'Birikiminizle Birlikte Hayallerinizi Büyütün', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Arsa', features: 'Yatırımlık, Modüler Ev', price: '₺500.000 - ₺1.500.000', link: '#', buttonText: 'Keşfet' }
+                { id: 1, title: 'İpek Reserve', page: 'index.html', order: 1, status: 'Ya�Yam Ba�Yladı', description: 'Premium ya�Yam alanları', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Reserve', features: 'Deniz Manzarası, Lüks Tasarım', price: '�,�8.000.000 - �,�15.000.000', link: '#', buttonText: 'Ke�Yfet' },
+                { id: 2, title: 'İpek Sapanca', page: 'index.html', order: 2, status: 'Ya�Yam Ba�Yladı', description: "Sapanca'ya Şimdi İpek'den Bakın", image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Sapanca', features: 'Do�Ya Manzarası, Göl Yakınlı�Yı', price: '�,�2.500.000 - �,�5.000.000', link: '#', buttonText: 'Ke�Yfet' },
+                { id: 3, title: 'İpek Arsa', page: 'index.html', order: 3, status: 'Satı�Yta', description: 'Birikiminizle Birlikte Hayallerinizi Büyütün', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Arsa', features: 'Yatırımlık, Modüler Ev', price: '�,�500.000 - �,�1.500.000', link: '#', buttonText: 'Ke�Yfet' }
             ]);
             if (!getData(KEYS.sections)) setData(KEYS.sections, [
-                { id: 1, name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Yaşam+Alanları', order: 1 }
+                { id: 1, name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle de�Yil santimetrekarelerle çalı�Yarak, ince dü�Yünülmü�Y ya�Yam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Ya�Yam+Alanları', order: 1 }
             ]);
-            if (!getData(KEYS.activities)) setData(KEYS.activities, [{ id: 1, text: 'Admin paneli oluşturuldu', time: new Date().toISOString(), type: 'info' }]);
+            if (!getData(KEYS.activities)) setData(KEYS.activities, [{ id: 1, text: 'Admin paneli olu�Yturuldu', time: new Date().toISOString(), type: 'info' }]);
         }
 
         function today() { return new Date().toISOString().split('T')[0]; }
@@ -2302,14 +2376,14 @@
         function renderNav() {
             const items = getData(KEYS.nav) || [];
             const el = document.getElementById('navList');
-            if (!items.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:20px;">Henüz menü öğesi yok.</p>'; return; }
+            if (!items.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:20px;">Henüz menü ö�Yesi yok.</p>'; return; }
             el.innerHTML = items.sort((a, b) => a.order - b.order).map(item => `
         <div class="content-item">
             <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
             <div class="ci-thumb-placeholder"><i class="fas fa-link"></i></div>
             <div class="ci-info">
                 <div class="ci-name">${item.name}</div>
-                <div class="ci-meta">${item.url} ${item.subItems && item.subItems.length ? '• ' + item.subItems.length + ' alt menü' : ''}</div>
+                <div class="ci-meta">${item.url} ${item.subItems && item.subItems.length ? '�?� ' + item.subItems.length + ' alt menü' : ''}</div>
                 ${item.subItems && item.subItems.length ? `
                 <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
                 ${item.subItems.map(s => `<span style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--text2);">${s.name}</span>`).join('')}
@@ -2318,14 +2392,14 @@
             <span class="ci-badge ${item.active ? 'active' : 'inactive'}">${item.active ? 'Aktif' : 'Pasif'}</span>
             <div style="display:flex;gap:6px;">
                 <button class="btn btn-icon edit" onclick="editNav(${item.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-icon del" onclick="deleteConfirm('nav',${item.id},'${item.name} menüsünü silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-icon del" onclick="deleteConfirm('nav',${item.id},'${item.name} menüsünü silmek istedi�Yinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`).join('');
         }
 
         function openNavModal(id = null) {
             document.getElementById('navId').value = id || '';
-            document.getElementById('navModalTitle').textContent = id ? 'Menü Öğesini Düzenle' : 'Menü Öğesi Ekle';
+            document.getElementById('navModalTitle').textContent = id ? 'Menü �-�Yesini Düzenle' : 'Menü �-�Yesi Ekle';
             document.getElementById('navName').value = '';
             document.getElementById('navUrl').value = '';
             document.getElementById('navOrder').value = 1;
@@ -2407,7 +2481,7 @@
                 <div style="display:flex;gap:6px;">
                     <a href="${p.file}" target="_blank" class="btn btn-icon view" title="Görüntüle"><i class="fas fa-eye"></i></a>
                     <button class="btn btn-icon edit" onclick="editPage('${p.file}')" title="Düzenle"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-icon del" onclick="deleteConfirm('page','${p.file}','${p.title} sayfasını silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-icon del" onclick="deleteConfirm('page','${p.file}','${p.title} sayfasını silmek istedi�Yinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`).join('');
@@ -2440,7 +2514,7 @@
         function savePage() {
             const title = document.getElementById('pmTitle').value.trim();
             const file = document.getElementById('pmFile').value.trim();
-            if (!title || !file) { toast('Başlık ve dosya adı zorunludur.', 'error'); return; }
+            if (!title || !file) { toast('Ba�Ylık ve dosya adı zorunludur.', 'error'); return; }
             const origFile = document.getElementById('pageModalFile').value;
             const pages = getData(KEYS.pages) || [];
             const data = { title, file, description: document.getElementById('pmDescription').value, keywords: document.getElementById('pmKeywords').value, active: document.getElementById('pmStatus').value === 'active', updated: today() };
@@ -2477,12 +2551,12 @@
             ${s.bgImage ? `<img class="ci-thumb" src="${s.bgImage}" style="width:80px;height:50px;object-fit:cover;">` : `<div class="ci-thumb-placeholder"><i class="fas fa-layer-group"></i></div>`}
             <div class="ci-info">
                 <div class="ci-name">${s.name}</div>
-                <div class="ci-meta">${s.page} • Tip: ${s.type} • Sıra: ${s.order}</div>
+                <div class="ci-meta">${s.page} �?� Tip: ${s.type} �?� Sıra: ${s.order}</div>
                 <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${s.title}</div>
             </div>
             <div style="display:flex;gap:6px;">
                 <button class="btn btn-icon edit" onclick="editSection(${s.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-icon del" onclick="deleteConfirm('section',${s.id},'${s.name} bölümünü silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-icon del" onclick="deleteConfirm('section',${s.id},'${s.name} bölümünü silmek istedi�Yinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`).join('');
         }
@@ -2578,12 +2652,11 @@
             toast(`"${name}" seçildi`, 'success');
         }
 
-        function handleSectionImageUpload(event) {
+        async function handleSectionImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => {
-                const url = e.target.result;
+            try {
+                const url = await uploadImageToServer(file);
                 document.getElementById('sectionBgImage').value = url;
                 setSectionImgPreview(url);
                 const images = getData(KEYS.images) || [];
@@ -2591,8 +2664,9 @@
                 images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
                 setData(KEYS.images, images);
                 toast('Resim yüklendi!', 'success');
-            };
-            reader.readAsDataURL(file);
+            } catch (err) {
+                toast('Resim yüklenemedi.', 'error');
+            }
         }
 
         function updateSectionImgPreview() { setSectionImgPreview(document.getElementById('sectionBgImage').value); }
@@ -2621,14 +2695,14 @@
                     `<div class="ci-thumb-placeholder"><i class="fas fa-image"></i></div>`}
             <div class="ci-info" style="flex:1;min-width:0;">
                 <div class="ci-name">${c.title}</div>
-                <div class="ci-meta">${c.page} • Sıra:${c.order} ${c.price ? '• ' + c.price : ''}</div>
+                <div class="ci-meta">${c.page} �?� Sıra:${c.order} ${c.price ? '�?� ' + c.price : ''}</div>
                 ${c.description ? `<div style="font-size:12px;color:var(--text2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.description}</div>` : ''}
                 ${c.features ? `<div style="font-size:11px;color:var(--accent);margin-top:4px;">${c.features}</div>` : ''}
             </div>
-            ${c.status ? `<span class="ci-badge ${c.status === 'Satışta' ? 'satis' : c.status === 'İnşaat Devam Ediyor' ? 'insaat' : 'active'}">${c.status}</span>` : ''}
+            ${c.status ? `<span class="ci-badge ${c.status === 'Satı�Yta' ? 'satis' : c.status === 'İn�Yaat Devam Ediyor' ? 'insaat' : 'active'}">${c.status}</span>` : ''}
             <div style="display:flex;gap:6px;flex-shrink:0;">
                 <button class="btn btn-icon edit" onclick="editCard(${c.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-icon del" onclick="deleteConfirm('card',${c.id},'${c.title} kartını silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-icon del" onclick="deleteConfirm('card',${c.id},'${c.title} kartını silmek istedi�Yinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`).join('');
         }
@@ -2657,7 +2731,7 @@
                     document.getElementById('cardFeatures').value = c.features || '';
                     document.getElementById('cardPrice').value = c.price || '';
                     document.getElementById('cardLink').value = c.link || '';
-                    document.getElementById('cardButtonText').value = c.buttonText || 'Keşfet';
+                    document.getElementById('cardButtonText').value = c.buttonText || 'Ke�Yfet';
                     setCardImgPreview(c.image);
                 }
             }
@@ -2670,10 +2744,10 @@
         function saveCard() {
             const title = document.getElementById('cardTitle').value.trim();
             const page = document.getElementById('cardPage').value;
-            if (!title || !page) { toast('Başlık ve sayfa zorunludur.', 'error'); return; }
+            if (!title || !page) { toast('Ba�Ylık ve sayfa zorunludur.', 'error'); return; }
             const id = parseInt(document.getElementById('cardId').value) || null;
             const cards = getData(KEYS.cards) || [];
-            const data = { title, page, order: parseInt(document.getElementById('cardOrder').value) || 1, status: document.getElementById('cardStatus').value, description: document.getElementById('cardDescription').value, image: document.getElementById('cardImage').value, features: document.getElementById('cardFeatures').value, price: document.getElementById('cardPrice').value, link: document.getElementById('cardLink').value, buttonText: document.getElementById('cardButtonText').value || 'Keşfet' };
+            const data = { title, page, order: parseInt(document.getElementById('cardOrder').value) || 1, status: document.getElementById('cardStatus').value, description: document.getElementById('cardDescription').value, image: document.getElementById('cardImage').value, features: document.getElementById('cardFeatures').value, price: document.getElementById('cardPrice').value, link: document.getElementById('cardLink').value, buttonText: document.getElementById('cardButtonText').value || 'Ke�Yfet' };
             if (id) {
                 const idx = cards.findIndex(c => c.id === id);
                 if (idx >= 0) cards[idx] = { ...cards[idx], ...data };
@@ -2727,23 +2801,22 @@
             toast(`"${name}" seçildi`, 'success');
         }
 
-        function handleCardImageUpload(event) {
+        async function handleCardImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            if (file.size > 10 * 1024 * 1024) { toast('Dosya 10MB\'dan büyük olamaz.', 'error'); return; }
-            const reader = new FileReader();
-            reader.onload = e => {
-                const url = e.target.result;
+            if (file.size > MAX_UPLOAD_SIZE_BYTES) { toast('Dosya 3MB\'dan büyük olamaz.', 'error'); return; }
+            try {
+                const url = await uploadImageToServer(file);
                 document.getElementById('cardImage').value = url;
                 setCardImgPreview(url);
-                // Also save to library
                 const images = getData(KEYS.images) || [];
                 const newId = Math.max(0, ...images.map(i => i.id)) + 1;
                 images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
                 setData(KEYS.images, images);
                 toast('Resim yüklendi ve kütüphaneye eklendi!', 'success');
-            };
-            reader.readAsDataURL(file);
+            } catch (err) {
+                toast('Resim yüklenemedi.', 'error');
+            }
         }
 
         function updateCardImgPreview() { setCardImgPreview(document.getElementById('cardImage').value); }
@@ -2768,12 +2841,12 @@
             <td><strong>${p.name}</strong></td>
             <td style="color:var(--text2);font-size:12px;">${p.category}</td>
             <td style="color:var(--text2);font-size:12px;">${p.location}</td>
-            <td><span class="ci-badge ${p.status === 'Yaşam Başladı' ? 'active' : p.status === 'Satışta' ? 'satis' : 'insaat'}" style="font-size:11px;">${p.status}</span></td>
+            <td><span class="ci-badge ${p.status === 'Ya�Yam Ba�Yladı' ? 'active' : p.status === 'Satı�Yta' ? 'satis' : 'insaat'}" style="font-size:11px;">${p.status}</span></td>
             <td style="color:var(--text2);font-size:12px;">${p.price || '-'}</td>
             <td>
                 <div style="display:flex;gap:6px;">
                     <button class="btn btn-icon edit" onclick="editProject(${p.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-icon del" onclick="deleteConfirm('project',${p.id},'${p.name} projesini silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-icon del" onclick="deleteConfirm('project',${p.id},'${p.name} projesini silmek istedi�Yinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`).join('');
@@ -2784,7 +2857,7 @@
             document.getElementById('projectModalTitle').textContent = id ? 'Projeyi Düzenle' : 'Yeni Proje Ekle';
             ['projectName', 'projectLocation', 'projectDescription', 'projectFeatures', 'projectImage', 'projectPrice'].forEach(f => document.getElementById(f).value = '');
             document.getElementById('projectCategory').value = 'konut';
-            document.getElementById('projectStatus').value = 'Yaşam Başladı';
+            document.getElementById('projectStatus').value = 'Ya�Yam Ba�Yladı';
             document.getElementById('projectDelivery').value = '';
             setProjImgPreview('');
             switchProjImgTab('url', null);
@@ -2795,7 +2868,7 @@
                     document.getElementById('projectName').value = p.name || '';
                     document.getElementById('projectCategory').value = p.category || 'konut';
                     document.getElementById('projectLocation').value = p.location || '';
-                    document.getElementById('projectStatus').value = p.status || 'Yaşam Başladı';
+                    document.getElementById('projectStatus').value = p.status || 'Ya�Yam Ba�Yladı';
                     document.getElementById('projectDescription').value = p.description || '';
                     document.getElementById('projectImage').value = p.image || '';
                     document.getElementById('projectFeatures').value = p.features || '';
@@ -2869,12 +2942,11 @@
             toast(`"${name}" seçildi`, 'success');
         }
 
-        function handleProjImageUpload(event) {
+        async function handleProjImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => {
-                const url = e.target.result;
+            try {
+                const url = await uploadImageToServer(file);
                 document.getElementById('projectImage').value = url;
                 setProjImgPreview(url);
                 const images = getData(KEYS.images) || [];
@@ -2882,8 +2954,9 @@
                 images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
                 setData(KEYS.images, images);
                 toast('Resim yüklendi!', 'success');
-            };
-            reader.readAsDataURL(file);
+            } catch (err) {
+                toast('Resim yüklenemedi.', 'error');
+            }
         }
 
         function updateProjImgPreview() { setProjImgPreview(document.getElementById('projectImage').value); }
@@ -2913,19 +2986,19 @@
             <div class="media-thumb-placeholder" style="display:none;"><i class="fas fa-image" style="font-size:28px;"></i></div>
             <div class="media-info">
                 <div class="media-name" title="${img.name}">${img.name}</div>
-                <div class="media-size">${img.size || '—'} • ${img.date || ''}</div>
+                <div class="media-size">${img.size || '�?"'} �?� ${img.date || ''}</div>
             </div>
             <div class="media-actions">
                 <button class="media-action-btn copy" onclick="copyUrl('${img.url}')" title="URL Kopyala"><i class="fas fa-copy"></i></button>
-                <button class="media-action-btn edit" onclick="openImgEdit(${img.id})" title="Düzenle/Değiştir"><i class="fas fa-edit"></i></button>
-                <button class="media-action-btn del" onclick="deleteConfirm('image',${img.id},'Bu resmi silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="media-action-btn edit" onclick="openImgEdit(${img.id})" title="Düzenle/De�Yi�Ytir"><i class="fas fa-edit"></i></button>
+                <button class="media-action-btn del" onclick="deleteConfirm('image',${img.id},'Bu resmi silmek istedi�Yinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
             <div class="media-check"><i class="fas fa-check"></i></div>
         </div>`).join('');
             document.getElementById('bulkDeleteBtn').style.display = selectedImages.size ? 'flex' : 'none';
         }
 
-        function handleFileUpload(event) {
+        async function handleFileUpload(event) {
             const files = Array.from(event.target.files);
             if (!files.length) return;
             const progress = document.getElementById('uploadProgress');
@@ -2934,48 +3007,35 @@
             progress.style.display = 'block'; fill.style.width = '0%';
             let done = 0;
             let errors = 0;
-            
-            files.forEach((file, i) => {
-                if (!file.type.startsWith('image/')) { 
-                    done++; 
+
+            for (const file of files) {
+                try {
+                    if (!file.type.startsWith('image/')) throw new Error('invalid type');
+                    const url = await uploadImageToServer(file);
+                    const images = getData(KEYS.images) || [];
+                    const newId = Math.max(0, ...images.map(x => x.id)) + 1;
+                    images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                    setData(KEYS.images, images);
+                } catch (err) {
                     errors++;
-                    return; 
                 }
-                const reader = new FileReader();
-                reader.onerror = () => {
-                    done++;
-                    errors++;
-                    console.error('FileReader error');
-                };
-                reader.onload = e => {
-                    try {
-                        const images = getData(KEYS.images) || [];
-                        const newId = Math.max(0, ...images.map(x => x.id)) + 1;
-                        images.push({ id: newId, name: file.name, url: e.target.result, size: formatSize(file.size), date: today() });
-                        setData(KEYS.images, images);
-                    } catch (err) {
-                        errors++;
-                    }
-                    
-                    done++;
-                    const pct = Math.round(done / files.length * 100);
-                    fill.style.width = pct + '%';
-                    ptext.textContent = `Yükleniyor... ${done}/${files.length}`;
-                    
-                    if (done === files.length) {
-                        setTimeout(() => { progress.style.display = 'none'; fill.style.width = '0%'; }, 800);
-                        renderMedia(); updateStats();
-                        if (errors === 0) {
-                            addActivity(`${files.length} resim yüklendi`, 'success');
-                            toast(`${done} resim yüklendi!`, 'success');
-                        } else {
-                            addActivity(`${files.length - errors} resim yüklendi, ${errors} hata`, 'warning');
-                            toast(`${files.length - errors} resim yüklendi, ${errors} dosya yüklenemedi.`, 'warning');
-                        }
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
+
+                done++;
+                const pct = Math.round(done / files.length * 100);
+                fill.style.width = pct + '%';
+                ptext.textContent = `Yükleniyor... ${done}/${files.length}`;
+            }
+
+            setTimeout(() => { progress.style.display = 'none'; fill.style.width = '0%'; }, 800);
+            renderMedia(); updateStats();
+            if (errors === 0) {
+                addActivity(`${files.length} resim yüklendi`, 'success');
+                toast(`${done} resim yüklendi!`, 'success');
+            } else {
+                addActivity(`${files.length - errors} resim yüklendi, ${errors} hata`, 'warning');
+                toast(`${files.length - errors} resim yüklendi, ${errors} dosya yüklenemedi.`, 'warning');
+            }
+
             event.target.value = '';
         }
 
@@ -3032,7 +3092,7 @@
             reader.readAsDataURL(file);
         }
 
-        function saveImageEdit() {
+        async function saveImageEdit() {
             const id = parseInt(document.getElementById('editImgId').value);
             const name = document.getElementById('editImgName').value.trim();
             const urlInput = document.getElementById('editImgUrl').value.trim();
@@ -3050,9 +3110,12 @@
                 toast('Resim güncellendi!', 'success');
             };
             if (fileInput.files.length) {
-                const reader = new FileReader();
-                reader.onload = e => finish(e.target.result);
-                reader.readAsDataURL(fileInput.files[0]);
+                try {
+                    const uploadedUrl = await uploadImageToServer(fileInput.files[0]);
+                    finish(uploadedUrl);
+                } catch (err) {
+                    toast('Resim güncellenemedi.', 'error');
+                }
             } else {
                 finish(urlInput || null);
             }
@@ -3138,7 +3201,7 @@
                     Object.keys(data).forEach(k => {
                         if (data[k]) localStorage.setItem(k, data[k]);
                     });
-                    toast('Veriler başarıyla yüklendi! Sayfa yenileniyor...', 'success');
+                    toast('Veriler ba�Yarıyla yüklendi! Sayfa yenileniyor...', 'success');
                     setTimeout(() => location.reload(), 1500);
                 } catch (err) {
                     toast('Hatalı dosya formatı.', 'error');
@@ -3198,7 +3261,7 @@
         // AUTH
         // ===========================
         function logout() {
-            if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+            if (confirm('�?ıkı�Y yapmak istedi�Yinizden emin misiniz?')) {
                 localStorage.removeItem('adminLoggedIn');
                 localStorage.removeItem('adminUsername');
                 window.location.href = 'admin-login.html';
@@ -3208,7 +3271,7 @@
         // ===========================
         // INIT
         // ===========================
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             // Auth check
             if (!localStorage.getItem('adminLoggedIn')) {
                 window.location.href = 'admin-login.html'; return;
@@ -3217,10 +3280,19 @@
             document.getElementById('sidebarName').textContent = uname;
             document.getElementById('sidebarAvatar').textContent = uname.charAt(0).toUpperCase();
 
+            await loadCloudState();
             initData();
             renderDashboard();
+            scheduleCloudSync();
         });
     </script>
 </body>
 
 </html>
+
+
+
+
+
+
+

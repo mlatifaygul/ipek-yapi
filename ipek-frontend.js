@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    // Admin data helper - admin-data-enhanced.js'den verileri çeker
+    // Admin data helper - admin-data.js'den verileri çeker
     const IPEKData = {
         // Navigation
         getNavigation: function () {
@@ -394,7 +394,7 @@
                     adminLink.id = 'ipek-admin-link';
                     adminLink.style.cssText = 'position: fixed; bottom: 20px; left: 20px; z-index: 9999;';
                     adminLink.innerHTML = `
-                        <a href="admin-panel-enhanced.html" 
+                        <a href="admin-data.html" 
                            style="background: linear-gradient(135deg, #2c3e50, #34495e); 
                                   color: #fff; 
                                   padding: 12px 20px; 
@@ -430,7 +430,7 @@
         load: function () {
             console.log('🚀 IPEK Frontend Integration Loading...');
 
-            // Initialize default data if available (e.g. from admin-data-enhanced.js)
+            // Initialize default data if available (e.g. from admin-data.js)
             // This is crucial for Vercel deployments where localStorage is initially empty
             if (typeof window.initializeEnhancedData === 'function') {
                 window.initializeEnhancedData();
