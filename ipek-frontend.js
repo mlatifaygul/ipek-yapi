@@ -69,7 +69,7 @@
             if (hasSubItems) {
                 return `
                     <li class="nav-item dropdown">
-                        <a href="${item.url}" class="nav-link">
+                        <a href="${item.url}" class="nav-link" onclick="if(window.innerWidth <= 1024) { event.preventDefault(); this.parentElement.classList.toggle('active'); return false; }">
                             ${item.icon ? `<i class="${item.icon}"></i> ` : ''}
                             ${item.name} 
                             <i class="fas fa-chevron-down"></i>
@@ -384,35 +384,10 @@
         }
     };
 
-    // Admin Link Helper
+    // Admin Link Helper removed as per request
     const AdminHelper = {
         showAdminLink: function () {
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
-                const existingLink = document.getElementById('ipek-admin-link');
-                if (!existingLink) {
-                    const adminLink = document.createElement('div');
-                    adminLink.id = 'ipek-admin-link';
-                    adminLink.style.cssText = 'position: fixed; bottom: 20px; left: 20px; z-index: 9999;';
-                    adminLink.innerHTML = `
-                        <a href="admin-data.html" 
-                           style="background: linear-gradient(135deg, #2c3e50, #34495e); 
-                                  color: #fff; 
-                                  padding: 12px 20px; 
-                                  border-radius: 8px; 
-                                  text-decoration: none; 
-                                  font-size: 14px; 
-                                  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
-                                  display: inline-flex;
-                                  align-items: center;
-                                  gap: 8px;
-                                  font-weight: 500;
-                                  transition: all 0.3s ease;">
-                            <i class="fas fa-cog"></i> Admin Panel
-                        </a>
-                    `;
-                    document.body.appendChild(adminLink);
-                }
-            }
+            // Disabled
         }
     };
 
@@ -446,8 +421,7 @@
                 // Load footer
                 FooterBuilder.build();
 
-                // Show admin link if logged in
-                AdminHelper.showAdminLink();
+                // Admin link removed
 
                 console.log('✅ IPEK Frontend Integration Loaded Successfully');
             } catch (error) {

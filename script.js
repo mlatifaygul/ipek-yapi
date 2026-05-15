@@ -1,4 +1,4 @@
-﻿// Header scroll effect
+// Header scroll effect
 window.addEventListener('scroll', () => {
     const header = document.querySelector('.header');
     if (window.scrollY > 50) {
@@ -14,24 +14,36 @@ const navMenu = document.querySelector('.nav-menu');
 
 if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
-<<<<<<< HEAD
         const willOpen = !navMenu.classList.contains('active');
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
+
+        // Prevent background scrolling when menu is open
+        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
 
         if (!willOpen) {
             document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
         }
     });
-}
 
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    if (!hamburger || !navMenu) return;
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
-    document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
-}));
+    // Close mobile menu when clicking a standard link
+    navMenu.addEventListener('click', (e) => {
+        const link = e.target.closest('.nav-link');
+        if (link) {
+            // Check if it's a dropdown toggle link
+            const parentLi = link.closest('.nav-item.dropdown');
+            if (parentLi && window.innerWidth <= 1024) {
+                // Dropdown toggling is handled by the inline onclick attribute
+                return;
+            }
+
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+            document.querySelectorAll('.nav-item.dropdown.open').forEach(item => item.classList.remove('open'));
+        }
+    });
+}
 
 // ==========================================
 // DYNAMIC CONTENT LOADING SYSTEM
@@ -82,10 +94,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize defaults if localStorage is empty (important for Vercel deployment)
     checkAndInitData();
-    
+
     loadDynamicNav();
     loadDynamicSettings();
-    
+
     // Run content loading
     loadDynamicContent();
 });
@@ -111,13 +123,22 @@ function loadDynamicNav() {
 
         return `
             <li class="nav-item dropdown">
-                <a href="${item.url || '#'}" class="nav-link">${item.name || ''} <i class="fas fa-chevron-down"></i></a>
+                <a href="${item.url || '#'}" class="nav-link" onclick="if(window.innerWidth <= 1024) { event.preventDefault(); this.parentElement.classList.toggle('active'); return false; }">${item.name || ''} <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
                     ${item.subItems.map(sub => `<a href="${sub.url || '#'}">${sub.name || ''}</a>`).join('')}
                 </div>
             </li>
         `;
-    }).join('');
+    }).join('') + `
+        <li class="mobile-menu-footer">
+            <div class="mobile-logo">İPEK<span>.</span></div>
+            <div class="mobile-social">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </li>
+    `;
 }
 
 function loadDynamicSettings() {
@@ -139,16 +160,20 @@ function checkAndInitData() {
         // Default Nav
         const defaultNav = [
             { id: 1, name: 'Ana Sayfa', url: 'index.html', order: 1, active: true, subItems: [] },
-            { id: 2, name: 'Biz Kimiz', url: 'biz-kimiz.html', order: 2, active: true, subItems: [
-                { id: 21, name: 'BİZ KİMİZ', url: 'biz-kimiz.html' },
-                { id: 22, name: 'Manifesto', url: 'biz-kimiz.html#manifesto' },
-                { id: 23, name: 'Tarihçe', url: 'biz-kimiz.html#tarihce' }
-            ]},
-            { id: 3, name: 'Projeler', url: 'projeler.html', order: 3, active: true, subItems: [
-                { id: 31, name: 'İpek Reserve', url: 'projeler.html' },
-                { id: 32, name: 'İpek Sapanca', url: 'projeler.html' },
-                { id: 33, name: 'İpek Arsa', url: 'projeler.html' }
-            ]},
+            {
+                id: 2, name: 'Biz Kimiz', url: 'biz-kimiz.html', order: 2, active: true, subItems: [
+                    { id: 21, name: 'BİZ KİMİZ', url: 'biz-kimiz.html' },
+                    { id: 22, name: 'Manifesto', url: 'biz-kimiz.html#manifesto' },
+                    { id: 23, name: 'Tarihçe', url: 'biz-kimiz.html#tarihce' }
+                ]
+            },
+            {
+                id: 3, name: 'Projeler', url: 'projeler.html', order: 3, active: true, subItems: [
+                    { id: 31, name: 'İpek Reserve', url: 'projeler.html' },
+                    { id: 32, name: 'İpek Sapanca', url: 'projeler.html' },
+                    { id: 33, name: 'İpek Arsa', url: 'projeler.html' }
+                ]
+            },
             { id: 5, name: 'İletişim', url: 'iletisim.html', order: 5, active: true, subItems: [] }
         ];
         localStorage.setItem(DATA_KEYS.nav, JSON.stringify(defaultNav));
@@ -541,46 +566,7 @@ function filterProjects(category) {
     });
 }
 
-// Search functionality
-function initializeSearch() {
-    const searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.placeholder = 'Projelerde ara...';
-    searchInput.style.cssText = `
-        padding: 10px 15px;
-        border: 1px solid #ddd;
-        border-radius: 25px;
-        margin: 20px auto;
-        display: block;
-        max-width: 400px;
-        width: 100%;
-        font-size: 14px;
-    `;
 
-    const featuredProjects = document.querySelector('.featured-projects .container');
-    if (featuredProjects) {
-        featuredProjects.insertBefore(searchInput, featuredProjects.firstChild);
-
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const projects = document.querySelectorAll('.project-card');
-
-            projects.forEach(project => {
-                const title = project.querySelector('h3').textContent.toLowerCase();
-                const description = project.querySelector('p').textContent.toLowerCase();
-
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    project.style.display = 'block';
-                } else {
-                    project.style.display = 'none';
-                }
-            });
-        });
-    }
-}
-
-// Initialize search when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeSearch);
 
 // Performance optimization - Debounce function
 function debounce(func, wait) {
