@@ -58,6 +58,59 @@ const DATA_KEYS = {
     cards: 'ipek_cards',
     sections: 'ipek_sections'
 };
+const SITE_PAGES = [
+    { file: 'index.html', title: 'Ana Sayfa' },
+    { file: 'biz-kimiz.html', title: 'Biz Kimiz' },
+    { file: 'biz-kimiz-new.html', title: 'Biz Kimiz Yeni' },
+    { file: 'projeler.html', title: 'Projeler' },
+    { file: 'ipek-kesifleri.html', title: 'İpek Keşifleri' },
+    { file: 'ipek-kesifleri-new.html', title: 'İpek Keşifleri Yeni' },
+    { file: 'iletisim.html', title: 'İletişim' },
+    { file: 'iletisim-new.html', title: 'İletişim Yeni' },
+    { file: 'ipekli-olmak.html', title: 'İpekli Olmak' },
+    { file: 'dynamic-index.html', title: 'Dinamik Ana Sayfa' }
+];
+const DEFAULT_PAGE_META = {
+    'index.html': { description: 'İPEK - İnce Düşünülmüş Yaşam Alanları', keywords: 'ipek,inşaat,konut' },
+    'biz-kimiz.html': { description: 'İPEK Hakkımızda', keywords: 'ipek,hakkımızda' },
+    'biz-kimiz-new.html': { description: 'İPEK Hakkımızda - Yeni', keywords: 'ipek,hakkımızda,yeni' },
+    'projeler.html': { description: 'İPEK Projeleri', keywords: 'ipek,projeler' },
+    'ipek-kesifleri.html': { description: 'İPEK Keşifleri', keywords: 'ipek,keşifler' },
+    'ipek-kesifleri-new.html': { description: 'İPEK Keşifleri - Yeni', keywords: 'ipek,keşifler,yeni' },
+    'iletisim.html': { description: 'İPEK İletişim', keywords: 'ipek,iletişim' },
+    'iletisim-new.html': { description: 'İPEK İletişim - Yeni', keywords: 'ipek,iletişim,yeni' },
+    'ipekli-olmak.html': { description: 'İPEK Kariyer', keywords: 'ipek,kariyer,ik' },
+    'dynamic-index.html': { description: 'İPEK Dinamik Ana Sayfa', keywords: 'ipek,dinamik,anasayfa' }
+};
+const DEFAULT_SECTION_PRESETS = [
+    { key: 'home-hero', name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Yaşam+Alanları', order: 1 },
+    { key: 'home-featured', name: 'Ana Sayfa Öne Çıkan Projeler', page: 'index.html', type: 'content', title: 'Yaşam Alanlarımızı Keşfedin', subtitle: 'Estetik, konfor ve fonksiyonelliğin harmanlandığı, her detayı titizlikle planlanmış projelerimizle hayatınıza değer katıyoruz.', content: '', bgImage: '', order: 2 },
+    { key: 'home-arsa', name: 'Ana Sayfa İpek Arsa', page: 'index.html', type: 'content', title: 'Birikiminizle Birlikte Hayallerinizi Büyütün.', subtitle: 'Hayalinizdeki İpek Arsa\'ya Şimdi Sahip Olun', content: '', bgImage: '', order: 3 },
+    { key: 'home-cta', name: 'Ana Sayfa CTA', page: 'index.html', type: 'banner', title: '24 ODALI 1+1 EV : FOLDHOME', subtitle: 'Yenilikçi yaşam konsepti ile tanışın', content: '', bgImage: '', order: 4 },
+    { key: 'home-news', name: 'Ana Sayfa Haberler', page: 'index.html', type: 'content', title: 'Haberler ve Duyurular', subtitle: '', content: '', bgImage: '', order: 5 },
+    { key: 'home-contact', name: 'Ana Sayfa İletişim', page: 'index.html', type: 'content', title: 'Size Ulaşalım', subtitle: 'Projelerimiz hakkında daha fazla bilgi için bizimle iletişime geçin.', content: '', bgImage: '', order: 6 },
+    { key: 'about-hero', name: 'Biz Kimiz Hero', page: 'biz-kimiz.html', type: 'hero', title: '2010 Yılından Beri İnce Düşünülmüş Yaşam Alanları', subtitle: 'Metrekarelerle değil, santimetrekarelerle çalışarak hayata geçirdiğimiz projelerimizle Türkiye\'nin lider inşaat şirketlerinden biri olmayı sürdürüyoruz.', content: '', bgImage: '', order: 1 },
+    { key: 'about-vision', name: 'Biz Kimiz Vizyon', page: 'biz-kimiz.html', type: 'content', title: 'Vizyonumuz', subtitle: 'Müşterilerimize sadece binalar değil, aynı zamanda yaşam kalitesini artıran, estetik ve fonksiyonelliği bir araya getiren yaşam alanları sunmak.', content: '', bgImage: '', order: 2 },
+    { key: 'about-manifesto', name: 'Biz Kimiz Manifesto', page: 'biz-kimiz.html', type: 'content', title: 'Manifesto', subtitle: 'Biz İPEK olarak, inşaatı sadece bir sektör değil, bir sanat ve bir sorumluluk olarak görüyoruz.', content: '', bgImage: '', order: 3 },
+    { key: 'about-history', name: 'Biz Kimiz Tarihçe', page: 'biz-kimiz.html', type: 'content', title: 'Tarihçe', subtitle: '', content: '', bgImage: '', order: 4 },
+    { key: 'discoveries-hero', name: 'Keşifler Hero', page: 'ipek-kesifleri.html', type: 'hero', title: 'İpek Keşifleri', subtitle: 'Yaşam alanlarındaki yenilikçi yaklaşımımız, sürdürülebilirlik vizyonumuz ve sektöre yön veren projelerimiz hakkında her şey.', content: '', bgImage: '', order: 1 },
+    { key: 'discoveries-featured', name: 'Keşifler Öne Çıkan', page: 'ipek-kesifleri.html', type: 'content', title: 'FoldHome: 24 Odalı 1+1 Ev Konsepti', subtitle: 'Dünyada bir ilk olan FoldHome konsepti ile 1+1 dairenizde 24 farklı odaya sahip olabilirsiniz.', content: '', bgImage: '', order: 2 },
+    { key: 'discoveries-categories', name: 'Keşifler Kategoriler', page: 'ipek-kesifleri.html', type: 'content', title: 'Keşif Kategorileri', subtitle: '', content: '', bgImage: '', order: 3 },
+    { key: 'discoveries-grid', name: 'Keşifler Liste Başlığı', page: 'ipek-kesifleri.html', type: 'content', title: 'Tüm Keşifler', subtitle: '', content: '', bgImage: '', order: 4 },
+    { key: 'discoveries-newsletter', name: 'Keşifler Bülten', page: 'ipek-kesifleri.html', type: 'content', title: 'Keşiflerden Haberdar Olun', subtitle: 'En yeni keşifler, projeler ve İPEK dünyasından haberler için bültenimize abone olun.', content: '', bgImage: '', order: 5 },
+    { key: 'contact-hero', name: 'İletişim Hero', page: 'iletisim.html', type: 'hero', title: 'İletişim', subtitle: 'Projelerimiz hakkında daha fazla bilgi almak, sorularınızı sormak veya bizimle iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.', content: '', bgImage: '', order: 1 },
+    { key: 'contact-form', name: 'İletişim Form Alanı', page: 'iletisim.html', type: 'content', title: 'Bize Ulaşın', subtitle: '', content: '', bgImage: '', order: 2 },
+    { key: 'contact-map', name: 'İletişim Harita', page: 'iletisim.html', type: 'content', title: 'Merkez Ofisimiz', subtitle: 'Maslak\'taki merkez ofisimizi ziyaret edebilirsiniz. Randevu almanızı öneririz.', content: '', bgImage: '', order: 3 },
+    { key: 'contact-offices', name: 'İletişim Ofisler', page: 'iletisim.html', type: 'content', title: 'Satış Ofislerimiz', subtitle: '', content: '', bgImage: '', order: 4 },
+    { key: 'contact-faq', name: 'İletişim SSS', page: 'iletisim.html', type: 'content', title: 'Sıkça Sorulan Sorular', subtitle: '', content: '', bgImage: '', order: 5 },
+    { key: 'careers-hero', name: 'Kariyer Hero', page: 'ipekli-olmak.html', type: 'hero', title: 'İpek\'li Olmak', subtitle: 'Kariyerinize yön verecek, sizi geleceğe taşıyacak bir iş ortamında yer alın. İPEK ailesinin bir parçası olun.', content: '', bgImage: '', order: 1 },
+    { key: 'careers-why', name: 'Kariyer Neden İPEK', page: 'ipekli-olmak.html', type: 'content', title: 'Neden İPEK?', subtitle: '', content: '', bgImage: '', order: 2 },
+    { key: 'careers-positions', name: 'Kariyer Pozisyonlar', page: 'ipekli-olmak.html', type: 'content', title: 'Açık Pozisyonlar', subtitle: '', content: '', bgImage: '', order: 3 },
+    { key: 'careers-culture', name: 'Kariyer Kültür', page: 'ipekli-olmak.html', type: 'content', title: 'İPEK Kültürü', subtitle: 'Birlikte Daha İyisi', content: 'İPEK olarak çalışma kültürümüzü; inovasyon, iş birliği ve mükemmeliyet üzerine kurduk.', bgImage: '', order: 4 },
+    { key: 'careers-process', name: 'Kariyer Başvuru Süreci', page: 'ipekli-olmak.html', type: 'content', title: 'Başvuru Süreci', subtitle: '', content: '', bgImage: '', order: 5 },
+    { key: 'careers-testimonials', name: 'Kariyer Yorumlar', page: 'ipekli-olmak.html', type: 'content', title: 'İPEK\'liler Ne Diyor?', subtitle: '', content: '', bgImage: '', order: 6 },
+    { key: 'careers-cta', name: 'Kariyer CTA', page: 'ipekli-olmak.html', type: 'banner', title: 'Kariyerinize İPEK\'te Başlayın', subtitle: 'Türkiye\'nin lider inşaat şirketinde yerinizi alın ve geleceği birlikte inşa edin.', content: '', bgImage: '', order: 7 }
+];
 
 const CLOUD_STATE_ENDPOINT = '/api/state';
 let cloudStateHydrated = false;
@@ -71,6 +124,135 @@ function getLocalData(key) {
         return null;
     }
 }
+
+function setText(selector, value) {
+    if (!value) return;
+    const element = document.querySelector(selector);
+    if (element) element.textContent = value;
+}
+
+function setImage(selector, url) {
+    if (!url) return;
+    const element = document.querySelector(selector);
+    if (element) element.src = url;
+}
+
+function setHtml(selector, html) {
+    if (!html) return;
+    const element = document.querySelector(selector);
+    if (element) element.innerHTML = html;
+}
+
+const SECTION_BINDINGS = {
+    'home-hero': section => {
+        setText('#hero-title', section.title);
+        setImage('#hero-img', section.bgImage);
+    },
+    'home-featured': section => {
+        setText('.featured-projects .section-title', section.title);
+        setText('.featured-projects .section-subtitle', section.subtitle);
+    },
+    'home-arsa': section => {
+        setText('.ipek-arsa .arsa-header h2', section.title);
+        setText('.ipek-arsa .arsa-header p', section.subtitle);
+        setHtml('.ipek-arsa .arsa-grid', section.content);
+    },
+    'home-cta': section => {
+        setText('.cta-section .cta-content h2', section.title);
+        setText('.cta-section .cta-content p', section.subtitle);
+    },
+    'home-news': section => {
+        setText('.news-section .section-title', section.title);
+        setHtml('.news-section .news-grid', section.content);
+    },
+    'home-contact': section => {
+        setText('.contact-section .contact-content h2', section.title);
+        setText('.contact-section .contact-content > p', section.subtitle);
+    },
+    'about-hero': section => {
+        setText('.about-page .hero-section .hero-content h1', section.title);
+        setText('.about-page .hero-section .hero-content p', section.subtitle);
+    },
+    'about-vision': section => {
+        setText('.about-page .content-section:first-of-type h2', section.title);
+        setText('.about-page .content-section:first-of-type .section-content > p', section.subtitle);
+        setHtml('.about-page .content-section:first-of-type .values-grid', section.content);
+    },
+    'about-manifesto': section => {
+        setText('#manifesto h2', section.title);
+        setText('#manifesto .section-content > p', section.subtitle);
+    },
+    'about-history': section => {
+        setText('#tarihce h2', section.title);
+        setHtml('#tarihce .timeline', section.content);
+    },
+    'discoveries-hero': section => {
+        setText('.discoveries-page .hero-section .hero-content h1', section.title);
+        setText('.discoveries-page .hero-section .hero-content p', section.subtitle);
+    },
+    'discoveries-featured': section => {
+        setText('.featured-discovery .featured-title', section.title);
+        setText('.featured-discovery .featured-description', section.subtitle);
+    },
+    'discoveries-categories': section => {
+        setText('.categories-section .section-title', section.title);
+        setHtml('.categories-section .categories-grid', section.content);
+    },
+    'discoveries-grid': section => {
+        setText('.discoveries-section .section-title', section.title);
+        setHtml('.discoveries-section .discoveries-grid', section.content);
+    },
+    'discoveries-newsletter': section => {
+        setText('.newsletter-section h2', section.title);
+        setText('.newsletter-section p', section.subtitle);
+    },
+    'contact-hero': section => {
+        setText('.contact-page .hero-section .hero-content h1', section.title);
+        setText('.contact-page .hero-section .hero-content p', section.subtitle);
+    },
+    'contact-form': section => setText('.contact-form-section .form-title', section.title),
+    'contact-map': section => {
+        setText('.map-overlay h3', section.title);
+        setText('.map-overlay p', section.subtitle);
+    },
+    'contact-offices': section => {
+        setText('.offices-section .section-title', section.title);
+        setHtml('.offices-section .offices-grid', section.content);
+    },
+    'contact-faq': section => {
+        setText('.faq-section .section-title', section.title);
+        setHtml('.faq-section .faq-container', section.content);
+    },
+    'careers-hero': section => {
+        setText('.careers-page .hero-section .hero-content h1', section.title);
+        setText('.careers-page .hero-section .hero-content p', section.subtitle);
+    },
+    'careers-why': section => {
+        setText('.why-ipek-section .section-title', section.title);
+        setHtml('.why-ipek-section .beipekits-grid', section.content);
+    },
+    'careers-positions': section => {
+        setText('.open-positions .section-title', section.title);
+        setHtml('.open-positions .positions-grid', section.content);
+    },
+    'careers-culture': section => {
+        setText('.culture-section > .container > .section-title', section.title);
+        setText('.culture-text h2', section.subtitle);
+        setText('.culture-text > p', section.content);
+    },
+    'careers-process': section => {
+        setText('.application-process .section-title', section.title);
+        setHtml('.application-process .process-steps', section.content);
+    },
+    'careers-testimonials': section => {
+        setText('.testimonials .section-title', section.title);
+        setHtml('.testimonials .testimonials-grid', section.content);
+    },
+    'careers-cta': section => {
+        setText('.careers-page .cta-section h2', section.title);
+        setText('.careers-page .cta-section p', section.subtitle);
+    }
+};
 
 async function hydrateCloudState() {
     if (cloudStateHydrated) return;
@@ -152,6 +334,23 @@ function loadDynamicSettings() {
     if (metaDesc && settings.siteDescription) {
         metaDesc.setAttribute('content', settings.siteDescription);
     }
+
+    const contactPhone = document.querySelector('.contact-info-section .info-card:nth-child(1) a');
+    if (contactPhone && settings.contactPhone) {
+        contactPhone.textContent = settings.contactPhone;
+        contactPhone.href = `tel:${settings.contactPhone.replace(/\s+/g, '')}`;
+    }
+
+    const contactEmail = document.querySelector('.contact-info-section .info-card:nth-child(2) a');
+    if (contactEmail && settings.contactEmail) {
+        contactEmail.textContent = settings.contactEmail;
+        contactEmail.href = `mailto:${settings.contactEmail}`;
+    }
+
+    const contactAddress = document.querySelector('.contact-info-section .info-card:nth-child(3) p');
+    if (contactAddress && settings.contactAddress) {
+        contactAddress.textContent = settings.contactAddress;
+    }
 }
 
 function checkAndInitData() {
@@ -200,6 +399,56 @@ function checkAndInitData() {
         };
         localStorage.setItem(DATA_KEYS.settings, JSON.stringify(defaultSettings));
     }
+    ensureDynamicSeedData();
+}
+
+function ensureDynamicSeedData() {
+    const pages = getLocalData(DATA_KEYS.pages) || [];
+    const pageMap = new Map(pages.map(page => [page.file, page]));
+    let pagesChanged = false;
+
+    SITE_PAGES.forEach(page => {
+        if (!pageMap.has(page.file)) {
+            pages.push({
+                file: page.file,
+                title: page.title,
+                description: DEFAULT_PAGE_META[page.file]?.description || page.title,
+                keywords: DEFAULT_PAGE_META[page.file]?.keywords || 'ipek',
+                active: true,
+                updated: new Date().toISOString().split('T')[0]
+            });
+            pagesChanged = true;
+        }
+    });
+
+    if (pagesChanged) {
+        localStorage.setItem(DATA_KEYS.pages, JSON.stringify(pages));
+    }
+
+    const sections = getLocalData(DATA_KEYS.sections) || [];
+    const sectionKeys = new Set(sections.map(section => section.key).filter(Boolean));
+    let sectionsChanged = false;
+
+    DEFAULT_SECTION_PRESETS.forEach(section => {
+        if (!sectionKeys.has(section.key)) {
+            sections.push(section);
+            sectionsChanged = true;
+        }
+    });
+
+    if (sectionsChanged) {
+        localStorage.setItem(DATA_KEYS.sections, JSON.stringify(sections));
+    }
+}
+
+function applyManagedSections(currentPage, sections) {
+    sections
+        .filter(section => section.page === currentPage && section.key)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .forEach(section => {
+            const apply = SECTION_BINDINGS[section.key];
+            if (typeof apply === 'function') apply(section);
+        });
 }
 
 
@@ -207,7 +456,11 @@ function loadDynamicContent() {
     const sections = getLocalData(DATA_KEYS.sections) || [];
     const cards = getLocalData(DATA_KEYS.cards) || [];
     const projects = getLocalData(DATA_KEYS.projects) || [];
-    const currentPage = location.pathname.split('/').pop() || 'index.html';
+    let currentPage = location.pathname.split('/').pop() || 'index.html';
+    if (currentPage && !currentPage.includes('.')) {
+        currentPage += '.html';
+    }
+    applyManagedSections(currentPage, sections);
 
     const heroSection = sections.find(s => s.type === 'hero' && (s.page === 'index.html' || s.page === currentPage));
     if (heroSection) {

@@ -1781,6 +1781,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="sectionId">
+                <input type="hidden" id="sectionKey">
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Bölüm Adı (Dahili) <span>*</span></label>
@@ -2147,10 +2148,129 @@
         const CLOUD_STATE_ENDPOINT = '/api/state';
         const CLOUD_UPLOAD_ENDPOINT = '/api/upload';
         const MAX_UPLOAD_SIZE_BYTES = 3 * 1024 * 1024;
+        const SITE_PAGES = [
+            { file: 'index.html', title: 'Ana Sayfa' },
+            { file: 'biz-kimiz.html', title: 'Biz Kimiz' },
+            { file: 'biz-kimiz-new.html', title: 'Biz Kimiz Yeni' },
+            { file: 'projeler.html', title: 'Projeler' },
+            { file: 'ipek-kesifleri.html', title: 'İpek Keşifleri' },
+            { file: 'ipek-kesifleri-new.html', title: 'İpek Keşifleri Yeni' },
+            { file: 'iletisim.html', title: 'İletişim' },
+            { file: 'iletisim-new.html', title: 'İletişim Yeni' },
+            { file: 'ipekli-olmak.html', title: 'İpekli Olmak' },
+            { file: 'dynamic-index.html', title: 'Dinamik Ana Sayfa' }
+        ];
+        const DEFAULT_PAGE_META = {
+            'index.html': { description: 'İPEK - İnce Düşünülmüş Yaşam Alanları', keywords: 'ipek,inşaat,konut' },
+            'biz-kimiz.html': { description: 'İPEK Hakkımızda', keywords: 'ipek,hakkımızda' },
+            'biz-kimiz-new.html': { description: 'İPEK Hakkımızda - Yeni', keywords: 'ipek,hakkımızda,yeni' },
+            'projeler.html': { description: 'İPEK Projeleri', keywords: 'ipek,projeler' },
+            'ipek-kesifleri.html': { description: 'İPEK Keşifleri', keywords: 'ipek,keşifler' },
+            'ipek-kesifleri-new.html': { description: 'İPEK Keşifleri - Yeni', keywords: 'ipek,keşifler,yeni' },
+            'iletisim.html': { description: 'İPEK İletişim', keywords: 'ipek,iletişim' },
+            'iletisim-new.html': { description: 'İPEK İletişim - Yeni', keywords: 'ipek,iletişim,yeni' },
+            'ipekli-olmak.html': { description: 'İPEK Kariyer', keywords: 'ipek,kariyer,ik' },
+            'dynamic-index.html': { description: 'İPEK Dinamik Ana Sayfa', keywords: 'ipek,dinamik,anasayfa' }
+        };
         let cloudSyncTimer = null;
         let isCloudSyncing = false;
 
         function getData(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        function pageTitle(file) {
+            return SITE_PAGES.find(page => page.file === file)?.title || file;
+        }
+        function getDefaultPages() {
+            return SITE_PAGES.map(page => ({
+                file: page.file,
+                title: page.title,
+                description: DEFAULT_PAGE_META[page.file]?.description || page.title,
+                keywords: DEFAULT_PAGE_META[page.file]?.keywords || 'ipek',
+                active: true,
+                updated: today()
+            }));
+        }
+        function getDefaultSectionPresets() {
+            return [
+                { key: 'home-hero', name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Yaşam+Alanları', order: 1 },
+                { key: 'home-featured', name: 'Ana Sayfa Öne Çıkan Projeler', page: 'index.html', type: 'content', title: 'Yaşam Alanlarımızı Keşfedin', subtitle: 'Estetik, konfor ve fonksiyonelliğin harmanlandığı, her detayı titizlikle planlanmış projelerimizle hayatınıza değer katıyoruz.', content: '', bgImage: '', order: 2 },
+                { key: 'home-arsa', name: 'Ana Sayfa İpek Arsa', page: 'index.html', type: 'content', title: 'Birikiminizle Birlikte Hayallerinizi Büyütün.', subtitle: 'Hayalinizdeki İpek Arsa\'ya Şimdi Sahip Olun', content: '', bgImage: '', order: 3 },
+                { key: 'home-cta', name: 'Ana Sayfa CTA', page: 'index.html', type: 'banner', title: '24 ODALI 1+1 EV : FOLDHOME', subtitle: 'Yenilikçi yaşam konsepti ile tanışın', content: '', bgImage: '', order: 4 },
+                { key: 'home-news', name: 'Ana Sayfa Haberler', page: 'index.html', type: 'content', title: 'Haberler ve Duyurular', subtitle: '', content: '', bgImage: '', order: 5 },
+                { key: 'home-contact', name: 'Ana Sayfa İletişim', page: 'index.html', type: 'content', title: 'Size Ulaşalım', subtitle: 'Projelerimiz hakkında daha fazla bilgi için bizimle iletişime geçin.', content: '', bgImage: '', order: 6 },
+                { key: 'about-hero', name: 'Biz Kimiz Hero', page: 'biz-kimiz.html', type: 'hero', title: '2010 Yılından Beri İnce Düşünülmüş Yaşam Alanları', subtitle: 'Metrekarelerle değil, santimetrekarelerle çalışarak hayata geçirdiğimiz projelerimizle Türkiye\'nin lider inşaat şirketlerinden biri olmayı sürdürüyoruz.', content: '', bgImage: '', order: 1 },
+                { key: 'about-vision', name: 'Biz Kimiz Vizyon', page: 'biz-kimiz.html', type: 'content', title: 'Vizyonumuz', subtitle: 'Müşterilerimize sadece binalar değil, aynı zamanda yaşam kalitesini artıran, estetik ve fonksiyonelliği bir araya getiren yaşam alanları sunmak.', content: '', bgImage: '', order: 2 },
+                { key: 'about-manifesto', name: 'Biz Kimiz Manifesto', page: 'biz-kimiz.html', type: 'content', title: 'Manifesto', subtitle: 'Biz İPEK olarak, inşaatı sadece bir sektör değil, bir sanat ve bir sorumluluk olarak görüyoruz.', content: '', bgImage: '', order: 3 },
+                { key: 'about-history', name: 'Biz Kimiz Tarihçe', page: 'biz-kimiz.html', type: 'content', title: 'Tarihçe', subtitle: '', content: '', bgImage: '', order: 4 },
+                { key: 'discoveries-hero', name: 'Keşifler Hero', page: 'ipek-kesifleri.html', type: 'hero', title: 'İpek Keşifleri', subtitle: 'Yaşam alanlarındaki yenilikçi yaklaşımımız, sürdürülebilirlik vizyonumuz ve sektöre yön veren projelerimiz hakkında her şey.', content: '', bgImage: '', order: 1 },
+                { key: 'discoveries-featured', name: 'Keşifler Öne Çıkan', page: 'ipek-kesifleri.html', type: 'content', title: 'FoldHome: 24 Odalı 1+1 Ev Konsepti', subtitle: 'Dünyada bir ilk olan FoldHome konsepti ile 1+1 dairenizde 24 farklı odaya sahip olabilirsiniz.', content: '', bgImage: '', order: 2 },
+                { key: 'discoveries-categories', name: 'Keşifler Kategoriler', page: 'ipek-kesifleri.html', type: 'content', title: 'Keşif Kategorileri', subtitle: '', content: '', bgImage: '', order: 3 },
+                { key: 'discoveries-grid', name: 'Keşifler Liste Başlığı', page: 'ipek-kesifleri.html', type: 'content', title: 'Tüm Keşifler', subtitle: '', content: '', bgImage: '', order: 4 },
+                { key: 'discoveries-newsletter', name: 'Keşifler Bülten', page: 'ipek-kesifleri.html', type: 'content', title: 'Keşiflerden Haberdar Olun', subtitle: 'En yeni keşifler, projeler ve İPEK dünyasından haberler için bültenimize abone olun.', content: '', bgImage: '', order: 5 },
+                { key: 'contact-hero', name: 'İletişim Hero', page: 'iletisim.html', type: 'hero', title: 'İletişim', subtitle: 'Projelerimiz hakkında daha fazla bilgi almak, sorularınızı sormak veya bizimle iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.', content: '', bgImage: '', order: 1 },
+                { key: 'contact-form', name: 'İletişim Form Alanı', page: 'iletisim.html', type: 'content', title: 'Bize Ulaşın', subtitle: '', content: '', bgImage: '', order: 2 },
+                { key: 'contact-map', name: 'İletişim Harita', page: 'iletisim.html', type: 'content', title: 'Merkez Ofisimiz', subtitle: 'Maslak\'taki merkez ofisimizi ziyaret edebilirsiniz. Randevu almanızı öneririz.', content: '', bgImage: '', order: 3 },
+                { key: 'contact-offices', name: 'İletişim Ofisler', page: 'iletisim.html', type: 'content', title: 'Satış Ofislerimiz', subtitle: '', content: '', bgImage: '', order: 4 },
+                { key: 'contact-faq', name: 'İletişim SSS', page: 'iletisim.html', type: 'content', title: 'Sıkça Sorulan Sorular', subtitle: '', content: '', bgImage: '', order: 5 },
+                { key: 'careers-hero', name: 'Kariyer Hero', page: 'ipekli-olmak.html', type: 'hero', title: 'İpek\'li Olmak', subtitle: 'Kariyerinize yön verecek, sizi geleceğe taşıyacak bir iş ortamında yer alın. İPEK ailesinin bir parçası olun.', content: '', bgImage: '', order: 1 },
+                { key: 'careers-why', name: 'Kariyer Neden İPEK', page: 'ipekli-olmak.html', type: 'content', title: 'Neden İPEK?', subtitle: '', content: '', bgImage: '', order: 2 },
+                { key: 'careers-positions', name: 'Kariyer Pozisyonlar', page: 'ipekli-olmak.html', type: 'content', title: 'Açık Pozisyonlar', subtitle: '', content: '', bgImage: '', order: 3 },
+                { key: 'careers-culture', name: 'Kariyer Kültür', page: 'ipekli-olmak.html', type: 'content', title: 'İPEK Kültürü', subtitle: 'Birlikte Daha İyisi', content: 'İPEK olarak çalışma kültürümüzü; inovasyon, iş birliği ve mükemmeliyet üzerine kurduk.', bgImage: '', order: 4 },
+                { key: 'careers-process', name: 'Kariyer Başvuru Süreci', page: 'ipekli-olmak.html', type: 'content', title: 'Başvuru Süreci', subtitle: '', content: '', bgImage: '', order: 5 },
+                { key: 'careers-testimonials', name: 'Kariyer Yorumlar', page: 'ipekli-olmak.html', type: 'content', title: 'İPEK\'liler Ne Diyor?', subtitle: '', content: '', bgImage: '', order: 6 },
+                { key: 'careers-cta', name: 'Kariyer CTA', page: 'ipekli-olmak.html', type: 'banner', title: 'Kariyerinize İPEK\'te Başlayın', subtitle: 'Türkiye\'nin lider inşaat şirketinde yerinizi alın ve geleceği birlikte inşa edin.', content: '', bgImage: '', order: 7 }
+            ];
+        }
+        function syncPageOptions() {
+            const configs = [
+                { id: 'sectionPageFilter', includeAll: true },
+                { id: 'cardPageFilter', includeAll: true },
+                { id: 'sectionPage', includeAll: false },
+                { id: 'cardPage', includeAll: false }
+            ];
+            configs.forEach(({ id, includeAll }) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const current = el.value;
+                let options = includeAll ? '<option value="">Tüm Sayfalar</option>' : '';
+                options += SITE_PAGES.map(page => `<option value="${escapeHtml(page.file)}">${escapeHtml(page.title)}</option>`).join('');
+                el.innerHTML = options;
+                if ([...el.options].some(option => option.value === current)) {
+                    el.value = current;
+                }
+            });
+        }
+        function ensureSitePages() {
+            const existingPages = getData(KEYS.pages) || [];
+            const pageMap = new Map(existingPages.map(page => [page.file, page]));
+            let changed = false;
+            getDefaultPages().forEach(defaultPage => {
+                if (!pageMap.has(defaultPage.file)) {
+                    existingPages.push(defaultPage);
+                    changed = true;
+                }
+            });
+            if (changed) setData(KEYS.pages, existingPages);
+        }
+        function ensureSectionPresets() {
+            const existingSections = getData(KEYS.sections) || [];
+            const keys = new Set(existingSections.map(section => section.key).filter(Boolean));
+            let changed = false;
+            getDefaultSectionPresets().forEach(section => {
+                if (!keys.has(section.key)) {
+                    existingSections.push(section);
+                    changed = true;
+                }
+            });
+            if (changed) setData(KEYS.sections, existingSections);
+        }
         function setData(key, val) { 
             try {
                 localStorage.setItem(key, JSON.stringify(val));
@@ -2297,6 +2417,9 @@
                 { id: 1, name: 'Ana Sayfa Hero', page: 'index.html', type: 'hero', title: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.', subtitle: '', content: '', bgImage: 'https://via.placeholder.com/800x600/2c3e50/ffffff?text=İPEK+Yaşam+Alanları', order: 1 }
             ]);
             if (!getData(KEYS.activities)) setData(KEYS.activities, [{ id: 1, text: 'Admin paneli oluşturuldu', time: new Date().toISOString(), type: 'info' }]);
+            ensureSitePages();
+            ensureSectionPresets();
+            syncPageOptions();
         }
 
         function today() { return new Date().toISOString().split('T')[0]; }
@@ -2478,16 +2601,16 @@
             const tbody = document.getElementById('pagesTableBody');
             tbody.innerHTML = pages.map(p => `
         <tr>
-            <td><strong>${p.title}</strong></td>
-            <td><code style="background:var(--surface2);padding:2px 8px;border-radius:4px;font-size:11px;">${p.file}</code></td>
-            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2);font-size:12px;">${p.description || '-'}</td>
+            <td><strong>${escapeHtml(p.title)}</strong></td>
+            <td><code style="background:var(--surface2);padding:2px 8px;border-radius:4px;font-size:11px;">${escapeHtml(p.file)}</code></td>
+            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2);font-size:12px;">${escapeHtml(p.description || '-')}</td>
             <td><span class="badge ${p.active !== false ? 'badge-active' : 'badge-inactive'}">${p.active !== false ? 'Aktif' : 'Pasif'}</span></td>
-            <td style="color:var(--text2);font-size:12px;">${p.updated || '-'}</td>
+            <td style="color:var(--text2);font-size:12px;">${escapeHtml(p.updated || '-')}</td>
             <td>
                 <div style="display:flex;gap:6px;">
-                    <a href="${p.file}" target="_blank" class="btn btn-icon view" title="Görüntüle"><i class="fas fa-eye"></i></a>
-                    <button class="btn btn-icon edit" onclick="editPage('${p.file}')" title="Düzenle"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-icon del" onclick="deleteConfirm('page','${p.file}','${p.title} sayfasını silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                    <a href="${escapeHtml(p.file)}" target="_blank" class="btn btn-icon view" title="Görüntüle"><i class="fas fa-eye"></i></a>
+                    <button class="btn btn-icon edit" data-file="${escapeHtml(p.file)}" onclick="editPage(this.dataset.file)" title="Düzenle"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-icon del" data-file="${escapeHtml(p.file)}" data-text="${escapeHtml(`${p.title} sayfasını silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('page',this.dataset.file,this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`).join('');
@@ -2523,6 +2646,10 @@
             if (!title || !file) { toast('Başlık ve dosya adı zorunludur.', 'error'); return; }
             const origFile = document.getElementById('pageModalFile').value;
             const pages = getData(KEYS.pages) || [];
+            if (!origFile && pages.some(p => p.file === file)) {
+                toast('Bu dosya adına sahip bir sayfa zaten var.', 'error');
+                return;
+            }
             const data = { title, file, description: document.getElementById('pmDescription').value, keywords: document.getElementById('pmKeywords').value, active: document.getElementById('pmStatus').value === 'active', updated: today() };
             if (origFile) {
                 const idx = pages.findIndex(p => p.file === origFile);
@@ -2554,21 +2681,22 @@
             el.innerHTML = sections.map(s => `
         <div class="content-item">
             <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
-            ${s.bgImage ? `<img class="ci-thumb" src="${s.bgImage}" style="width:80px;height:50px;object-fit:cover;">` : `<div class="ci-thumb-placeholder"><i class="fas fa-layer-group"></i></div>`}
+            ${s.bgImage ? `<img class="ci-thumb" src="${escapeHtml(s.bgImage)}" style="width:80px;height:50px;object-fit:cover;">` : `<div class="ci-thumb-placeholder"><i class="fas fa-layer-group"></i></div>`}
             <div class="ci-info">
-                <div class="ci-name">${s.name}</div>
-                <div class="ci-meta">${s.page} • Tip: ${s.type} • Sıra: ${s.order}</div>
-                <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${s.title}</div>
+                <div class="ci-name">${escapeHtml(s.name)}</div>
+                <div class="ci-meta">${escapeHtml(pageTitle(s.page))} • Tip: ${escapeHtml(s.type)} • Sıra: ${escapeHtml(s.order)}</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(s.title)}</div>
             </div>
             <div style="display:flex;gap:6px;">
                 <button class="btn btn-icon edit" onclick="editSection(${s.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-icon del" onclick="deleteConfirm('section',${s.id},'${s.name} bölümünü silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-icon del" data-text="${escapeHtml(`${s.name} bölümünü silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('section',${s.id},this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`).join('');
         }
 
         function openSectionModal(id = null) {
             document.getElementById('sectionId').value = id || '';
+            document.getElementById('sectionKey').value = '';
             document.getElementById('sectionModalTitle').textContent = id ? 'Bölümü Düzenle' : 'Yeni Bölüm Ekle';
             ['sectionName', 'sectionTitle', 'sectionSubtitle', 'sectionBgImage'].forEach(f => document.getElementById(f).value = '');
             document.getElementById('sectionContent').value = '';
@@ -2582,6 +2710,7 @@
                 const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
                 const s = sections.find(x => x.id === id);
                 if (s) {
+                    document.getElementById('sectionKey').value = s.key || '';
                     document.getElementById('sectionName').value = s.name || '';
                     document.getElementById('sectionTitle').value = s.title || '';
                     document.getElementById('sectionSubtitle').value = s.subtitle || '';
@@ -2605,6 +2734,7 @@
             const id = parseInt(document.getElementById('sectionId').value) || null;
             const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
             const data = { 
+                key: document.getElementById('sectionKey').value || undefined,
                 name, 
                 page, 
                 order: parseInt(document.getElementById('sectionOrder').value) || 1, 
@@ -2622,14 +2752,14 @@
                 sections.push({ id: newId, ...data });
             }
             setData(KEYS.sections, sections);
-            addActivity(`Bölüm "${name}" güncellendi`, 'success');
+            addActivity(`Bölüm "${name}" ${id ? 'güncellendi' : 'eklendi'}`, 'success');
             closeModal('sectionModal'); renderSections();
-            toast(`Bölüm kaydedildi!`, 'success');
+            toast(`Bölüm ${id ? 'güncellendi' : 'eklendi'}!`, 'success');
         }
 
         function deleteSection(id) {
             const sections = (getData(KEYS.sections) || []).filter(s => s.id !== id);
-            setData(KEYS.sections, sections); renderSections(); toast('Bölüm silindi', 'info');
+            setData(KEYS.sections, sections); renderSections(); updateStats(); toast('Bölüm silindi', 'info');
         }
 
         function switchSectionImgTab(tab, el) {
@@ -2647,9 +2777,9 @@
             const el = document.getElementById('sectionLibraryGrid');
             el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
         ${images.map(img => `
-        <div onclick="selectSectionLibraryImg('${img.url}','${img.name}')" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;" 
-             title="${img.name}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-            <img src="${img.url}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+        <div data-url="${escapeHtml(img.url)}" data-name="${escapeHtml(img.name)}" onclick="selectSectionLibraryImg(this.dataset.url,this.dataset.name)" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;" 
+             title="${escapeHtml(img.name)}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="${escapeHtml(img.url)}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
         </div>`).join('')}
     </div>`;
         }
@@ -2700,18 +2830,18 @@
             el.innerHTML = cards.map(c => `
         <div class="content-item">
             <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
-            ${c.image ? `<img class="ci-thumb" src="${c.image}" alt="${c.title}" onerror="this.style.display='none'">` :
+            ${c.image ? `<img class="ci-thumb" src="${escapeHtml(c.image)}" alt="${escapeHtml(c.title)}" onerror="this.style.display='none'">` :
                     `<div class="ci-thumb-placeholder"><i class="fas fa-image"></i></div>`}
             <div class="ci-info" style="flex:1;min-width:0;">
-                <div class="ci-name">${c.title}</div>
-                <div class="ci-meta">${c.page} • Sıra:${c.order} ${c.price ? '• ' + c.price : ''}</div>
-                ${c.description ? `<div style="font-size:12px;color:var(--text2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.description}</div>` : ''}
-                ${c.features ? `<div style="font-size:11px;color:var(--accent);margin-top:4px;">${c.features}</div>` : ''}
+                <div class="ci-name">${escapeHtml(c.title)}</div>
+                <div class="ci-meta">${escapeHtml(pageTitle(c.page))} • Sıra:${escapeHtml(c.order)} ${c.price ? '• ' + escapeHtml(c.price) : ''}</div>
+                ${c.description ? `<div style="font-size:12px;color:var(--text2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(c.description)}</div>` : ''}
+                ${c.features ? `<div style="font-size:11px;color:var(--accent);margin-top:4px;">${escapeHtml(c.features)}</div>` : ''}
             </div>
             ${c.status ? `<span class="ci-badge ${c.status === 'Satışta' ? 'satis' : c.status === 'İnşaat Devam Ediyor' ? 'insaat' : 'active'}">${c.status}</span>` : ''}
             <div style="display:flex;gap:6px;flex-shrink:0;">
                 <button class="btn btn-icon edit" onclick="editCard(${c.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-icon del" onclick="deleteConfirm('card',${c.id},'${c.title} kartını silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-icon del" data-text="${escapeHtml(`${c.title} kartını silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('card',${c.id},this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`).join('');
         }
@@ -2795,10 +2925,10 @@
             const el = document.getElementById('cardLibraryGrid');
             el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
         ${images.map(img => `
-        <div onclick="selectCardLibraryImg('${img.url}','${img.name}')" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;" 
-             title="${img.name}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-            <img src="${img.url}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
-            <div style="padding:4px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${img.name}</div>
+        <div data-url="${escapeHtml(img.url)}" data-name="${escapeHtml(img.name)}" onclick="selectCardLibraryImg(this.dataset.url,this.dataset.name)" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;" 
+             title="${escapeHtml(img.name)}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="${escapeHtml(img.url)}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+            <div style="padding:4px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(img.name)}</div>
         </div>`).join('')}
     </div>`;
         }
@@ -2845,17 +2975,17 @@
             const tbody = document.getElementById('projectsTableBody');
             tbody.innerHTML = projects.map(p => `
         <tr>
-            <td>${p.image ? `<img src="${p.image}" style="width:60px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" onerror="this.style.display='none'">` :
+            <td>${p.image ? `<img src="${escapeHtml(p.image)}" style="width:60px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" onerror="this.style.display='none'">` :
                     `<div style="width:60px;height:42px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text3);"><i class="fas fa-image"></i></div>`}</td>
-            <td><strong>${p.name}</strong></td>
-            <td style="color:var(--text2);font-size:12px;">${p.category}</td>
-            <td style="color:var(--text2);font-size:12px;">${p.location}</td>
+            <td><strong>${escapeHtml(p.name)}</strong></td>
+            <td style="color:var(--text2);font-size:12px;">${escapeHtml(p.category)}</td>
+            <td style="color:var(--text2);font-size:12px;">${escapeHtml(p.location)}</td>
             <td><span class="ci-badge ${p.status === 'Yaşam Başladı' ? 'active' : p.status === 'Satışta' ? 'satis' : 'insaat'}" style="font-size:11px;">${p.status}</span></td>
-            <td style="color:var(--text2);font-size:12px;">${p.price || '-'}</td>
+            <td style="color:var(--text2);font-size:12px;">${escapeHtml(p.price || '-')}</td>
             <td>
                 <div style="display:flex;gap:6px;">
                     <button class="btn btn-icon edit" onclick="editProject(${p.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-icon del" onclick="deleteConfirm('project',${p.id},'${p.name} projesini silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-icon del" data-text="${escapeHtml(`${p.name} projesini silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('project',${p.id},this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>`).join('');
@@ -2936,10 +3066,10 @@
             const el = document.getElementById('projLibraryGrid');
             el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
         ${images.map(img => `
-        <div onclick="selectProjLibraryImg('${img.url}','${img.name}')" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;"
+        <div data-url="${escapeHtml(img.url)}" data-name="${escapeHtml(img.name)}" onclick="selectProjLibraryImg(this.dataset.url,this.dataset.name)" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;"
              onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-            <img src="${img.url}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
-            <div style="padding:4px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${img.name}</div>
+            <img src="${escapeHtml(img.url)}" style="width:100%;height:60px;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+            <div style="padding:4px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(img.name)}</div>
         </div>`).join('')}
     </div>`;
         }
@@ -2990,15 +3120,15 @@
             const grid = document.getElementById('mediaGrid');
             if (!filtered.length) { grid.innerHTML = '<p style="color:var(--text2);font-size:13px;grid-column:1/-1;text-align:center;padding:40px;">Resim bulunamadı.</p>'; return; }
             grid.innerHTML = filtered.map(img => `
-        <div class="media-item ${selectedImages.has(img.id) ? 'selected' : ''}" id="mitem-${img.id}">
-            <img class="media-thumb" src="${img.url}" alt="${img.name}" onerror="this.parentElement.querySelector('.media-thumb-placeholder').style.display='flex';this.style.display='none'">
+        <div class="media-item ${selectedImages.has(img.id) ? 'selected' : ''}" id="mitem-${img.id}" data-id="${img.id}">
+            <img class="media-thumb" src="${escapeHtml(img.url)}" alt="${escapeHtml(img.name)}" onerror="this.parentElement.querySelector('.media-thumb-placeholder').style.display='flex';this.style.display='none'">
             <div class="media-thumb-placeholder" style="display:none;"><i class="fas fa-image" style="font-size:28px;"></i></div>
             <div class="media-info">
-                <div class="media-name" title="${img.name}">${img.name}</div>
-                <div class="media-size">${img.size || '—'} • ${img.date || ''}</div>
+                <div class="media-name" title="${escapeHtml(img.name)}">${escapeHtml(img.name)}</div>
+                <div class="media-size">${escapeHtml(img.size || '—')} • ${escapeHtml(img.date || '')}</div>
             </div>
             <div class="media-actions">
-                <button class="media-action-btn copy" onclick="copyUrl('${img.url}')" title="URL Kopyala"><i class="fas fa-copy"></i></button>
+                <button class="media-action-btn copy" data-url="${escapeHtml(img.url)}" onclick="copyUrl(this.dataset.url)" title="URL Kopyala"><i class="fas fa-copy"></i></button>
                 <button class="media-action-btn edit" onclick="openImgEdit(${img.id})" title="Düzenle/Değiştir"><i class="fas fa-edit"></i></button>
                 <button class="media-action-btn del" onclick="deleteConfirm('image',${img.id},'Bu resmi silmek istediğinizden emin misiniz?')" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
@@ -3159,6 +3289,16 @@
             const dt = e.dataTransfer;
             if (dt.files.length) handleFileUpload({ target: { files: dt.files }, });
         });
+        document.getElementById('mediaGrid').addEventListener('click', e => {
+            if (e.target.closest('.media-actions')) return;
+            const item = e.target.closest('.media-item');
+            if (!item) return;
+            const id = Number(item.dataset.id);
+            if (!id) return;
+            if (selectedImages.has(id)) selectedImages.delete(id);
+            else selectedImages.add(id);
+            renderMedia();
+        });
 
         // ===========================
         // SETTINGS
@@ -3235,6 +3375,7 @@
             _confirmCb = () => {
                 if (type === 'nav') deleteNav(id);
                 else if (type === 'page') deletePage(id);
+                else if (type === 'section') deleteSection(id);
                 else if (type === 'card') deleteCard(id);
                 else if (type === 'project') deleteProject(id);
                 else if (type === 'image') deleteImage(id);
