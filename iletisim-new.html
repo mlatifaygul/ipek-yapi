@@ -596,46 +596,7 @@
 
                     <!-- Contact Info Section (Right) -->
                     <div class="contact-info-section">
-                        <!-- Contact Form -->
-                        <div class="contact-form-card">
-                            <h2 class="form-title">Bize Ulaşın</h2>
-                            <form class="contact-form" id="contactForm">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="firstName">Adınız</label>
-                                        <input type="text" id="firstName" name="firstName" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastName">Soyadınız</label>
-                                        <input type="text" id="lastName" name="lastName" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">E-posta</label>
-                                    <input type="email" id="email" name="email" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Telefon</label>
-                                    <input type="tel" id="phone" name="phone" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="subject">Konu</label>
-                                    <select id="subject" name="subject" required>
-                                        <option value="">Konu Seçin</option>
-                                        <option value="proje">Proje Bilgisi</option>
-                                        <option value="satış">Satış</option>
-                                        <option value="yatirim">Yatırım</option>
-                                        <option value="ik">İnsan Kaynakları</option>
-                                        <option value="diger">Diğer</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="message">Mesajınız</label>
-                                    <textarea id="message" name="message" required></textarea>
-                                </div>
-                                <button type="submit" class="submit-btn">Mesajı Gönder</button>
-                            </form>
-                        </div>
+
 
                         <!-- Contact Info Cards -->
                         <div class="info-cards">
@@ -805,7 +766,7 @@
             <i class="fab fa-whatsapp"></i>
         </button>
         <button class="quick-contact-btn primary"
-            onclick="document.getElementById('contactForm').scrollIntoView({behavior: 'smooth'})">
+            onclick="window.location.href='mailto:info@ipek.com.tr'">
             <i class="fas fa-envelope"></i>
         </button>
     </div>
@@ -815,8 +776,10 @@
     <script src="script.js"></script>
     <script>
         // Contact form handling
-        document.getElementById('contactForm').addEventListener('submit', function (e) {
-            e.preventDefault();
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
@@ -853,7 +816,8 @@
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }, 2000);
-        });
+            });
+        }
 
         // FAQ functionality
         document.querySelectorAll('.faq-question').forEach(question => {
@@ -874,9 +838,11 @@
         });
 
         // Phone number formatting
-        document.getElementById('phone').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\s/g, '');
-            let formattedValue = '';
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = '';
 
             if (value.length > 0) {
                 if (value.startsWith('0')) {
@@ -904,7 +870,8 @@
             }
 
             e.target.value = formattedValue;
-        });
+            });
+        }
 
         // Map buttons functionality
         document.querySelectorAll('.map-btn').forEach(btn => {

@@ -360,6 +360,368 @@
                 width: 100%;
             }
         }
+
+        /* Premium Project Detail Modal Styles */
+        .project-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .project-detail-modal.active {
+            display: flex;
+        }
+
+        .project-detail-modal .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 27, 39, 0.75);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .project-detail-modal .modal-wrapper {
+            position: relative;
+            background: #fff;
+            width: 100%;
+            max-width: 1100px;
+            height: auto;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .project-detail-modal .modal-close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #2c3e50;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 15;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .project-detail-modal .modal-close-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        .project-detail-modal .modal-body {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            height: 100%;
+            min-height: 500px;
+        }
+
+        @media (max-width: 900px) {
+            .project-detail-modal {
+                padding: 1rem;
+            }
+            .project-detail-modal .modal-body {
+                grid-template-columns: 1fr;
+            }
+            .project-detail-modal .modal-wrapper {
+                max-height: 95vh;
+            }
+        }
+
+        /* Gallery Column */
+        .modal-gallery-column {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            border-right: 1px solid #eee;
+        }
+
+        .modal-active-image-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 66.67%; /* 3:2 Aspect Ratio */
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a2a3a;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-active-image-wrap img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.85);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            color: #2c3e50;
+        }
+
+        .gallery-nav-btn:hover {
+            background: #fff;
+            color: #3498db;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-nav-btn.prev {
+            left: 1rem;
+        }
+
+        .gallery-nav-btn.next {
+            right: 1rem;
+        }
+
+        .modal-thumbs-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+
+        .modal-thumb-item {
+            aspect-ratio: 4/3;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+
+        .modal-thumb-item:hover,
+        .modal-thumb-item.active {
+            opacity: 1;
+            border-color: #3498db;
+        }
+
+        .modal-thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Details Column */
+        .modal-details-column {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 900px) {
+            .modal-details-column {
+                padding: 1.5rem;
+            }
+        }
+
+        .modal-header-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .modal-header-info h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .modal-proj-location {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .modal-proj-location i {
+            color: #e74c3c;
+        }
+
+        .modal-tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            gap: 1.5rem;
+        }
+
+        .modal-tab-btn {
+            background: none;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .modal-tab-btn:hover,
+        .modal-tab-btn.active {
+            color: #2c3e50;
+        }
+
+        .modal-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #2c3e50;
+        }
+
+        .modal-tab-content {
+            display: none;
+        }
+
+        .modal-tab-content.active {
+            display: block;
+        }
+
+        .modal-proj-desc {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-proj-features-wrap h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 0.8rem 0;
+        }
+
+        /* Specs Grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f1f2f6;
+        }
+
+        .spec-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spec-label i {
+            width: 18px;
+        }
+
+        .spec-value {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        /* Action Box */
+        .modal-action-box {
+            background: #f1f2f6;
+            border-radius: 12px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .modal-action-box p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .modal-cta-btn {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .modal-cta-btn:hover {
+            background: #219653;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
     </style>
 </head>
 
@@ -543,6 +905,238 @@
                 });
             }
         });
+    </script>
+
+    <!-- Project Details Modal -->
+    <div id="projectDetailModal" class="project-detail-modal">
+        <div class="modal-overlay" onclick="closeProjectDetail()"></div>
+        <div class="modal-wrapper">
+            <button class="modal-close-btn" onclick="closeProjectDetail()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <div class="modal-gallery-column">
+                    <div class="modal-active-image-wrap">
+                        <img id="modalActiveImg" src="" alt="Active Project Image">
+                        <button class="gallery-nav-btn prev" onclick="prevGalleryImage()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="gallery-nav-btn next" onclick="nextGalleryImage()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="modal-thumbs-grid" id="modalThumbsGrid">
+                        <!-- Thumbnails loaded dynamically -->
+                    </div>
+                </div>
+                <div class="modal-details-column">
+                    <div class="modal-header-info">
+                        <span id="modalProjStatus" class="project-status"></span>
+                        <h2 id="modalProjName">Proje Adı</h2>
+                        <p class="modal-proj-location">
+                            <i class="fas fa-map-marker-alt"></i> <span id="modalProjLocation">Lokasyon</span>
+                        </p>
+                    </div>
+                    <div class="modal-tabs">
+                        <button class="modal-tab-btn active" onclick="switchDetailTab('about')">Hakkında</button>
+                        <button class="modal-tab-btn" onclick="switchDetailTab('specs')">Detaylar</button>
+                    </div>
+                    <div id="tab-about" class="modal-tab-content active">
+                        <p id="modalProjDesc" class="modal-proj-desc">Proje açıklaması buraya gelecek.</p>
+                        <div class="modal-proj-features-wrap">
+                            <h4>Öne Çıkan Özellikler</h4>
+                            <div id="modalProjFeatures" class="project-features">
+                                <!-- Feature tags -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-specs" class="modal-tab-content">
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <span class="spec-label"><i class="fas fa-tag"></i> Kategori</span>
+                                <span class="spec-value" id="modalProjCategory">Konut</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label"><i class="fas fa-money-bill-wave"></i> Fiyat Aralığı</span>
+                                <span class="spec-value" id="modalProjPrice">Fiyat Belirtilmedi</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label"><i class="fas fa-calendar-alt"></i> Teslim Tarihi</span>
+                                <span class="spec-value" id="modalProjDelivery">Hemen Teslim</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-action-box">
+                        <p>Bu proje hakkında daha fazla bilgi almak ister misiniz?</p>
+                        <button class="modal-cta-btn" onclick="openContactWithProject()">
+                            <i class="fas fa-phone-alt"></i> Sizi Arayalım
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Project Detail Modal Logic
+        let activeProjectGallery = [];
+        let activeGalleryIndex = 0;
+
+        function openProjectDetail(id) {
+            const projects = JSON.parse(localStorage.getItem('ipek_projects') || '[]');
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            // Header Info
+            document.getElementById('modalProjName').textContent = project.name || '';
+            document.getElementById('modalProjLocation').textContent = project.location || '';
+            
+            // Status Tag
+            const statusEl = document.getElementById('modalProjStatus');
+            statusEl.textContent = project.status || '';
+            statusEl.className = 'project-status'; // reset
+            if (project.status === 'Yaşam Başladı') {
+                statusEl.classList.add('yasam-basladi');
+            } else if (project.status === 'Satışta') {
+                statusEl.classList.add('satista');
+            } else if (project.status === 'İnşaat Devam Ediyor') {
+                statusEl.classList.add('insaat');
+            }
+
+            // Specs
+            document.getElementById('modalProjCategory').textContent = project.category ? (project.category.charAt(0).toUpperCase() + project.category.slice(1)) : 'Konut';
+            document.getElementById('modalProjPrice').textContent = project.price || 'Fiyat Belirtilmedi';
+            document.getElementById('modalProjDelivery').textContent = project.delivery || 'Hemen Teslim';
+
+            // Description & Features
+            document.getElementById('modalProjDesc').textContent = project.description || '';
+            
+            const featuresContainer = document.getElementById('modalProjFeatures');
+            featuresContainer.innerHTML = '';
+            if (project.features) {
+                project.features.split(',').forEach(f => {
+                    const tag = document.createElement('span');
+                    tag.className = 'feature-tag';
+                    tag.textContent = f.trim();
+                    featuresContainer.appendChild(tag);
+                });
+            }
+
+            // Gallery logic
+            activeProjectGallery = [];
+            if (project.image) {
+                activeProjectGallery.push(project.image);
+            }
+            if (project.gallery) {
+                let galArr = [];
+                if (Array.isArray(project.gallery)) {
+                    galArr = project.gallery;
+                } else if (typeof project.gallery === 'string') {
+                    galArr = project.gallery.split(',').filter(Boolean);
+                }
+                galArr.forEach(url => {
+                    if (url && !activeProjectGallery.includes(url)) {
+                        activeProjectGallery.push(url);
+                    }
+                });
+            }
+
+            // Fallback if empty
+            if (activeProjectGallery.length === 0) {
+                activeProjectGallery.push('https://via.placeholder.com/800x600?text=Resim+Yok');
+            }
+
+            // Render Thumbs
+            const thumbsGrid = document.getElementById('modalThumbsGrid');
+            thumbsGrid.innerHTML = activeProjectGallery.map((url, idx) => `
+                <div class="modal-thumb-item ${idx === 0 ? 'active' : ''}" onclick="setModalActiveImage(${idx})">
+                    <img src="${url}" alt="Thumbnail ${idx + 1}" onerror="this.parentElement.style.display='none'">
+                </div>
+            `).join('');
+
+            // Hide/Show navigation arrows if only 1 image
+            const navBtnPrev = document.querySelector('.gallery-nav-btn.prev');
+            const navBtnNext = document.querySelector('.gallery-nav-btn.next');
+            if (activeProjectGallery.length <= 1) {
+                if (navBtnPrev) navBtnPrev.style.display = 'none';
+                if (navBtnNext) navBtnNext.style.display = 'none';
+                thumbsGrid.style.display = 'none';
+            } else {
+                if (navBtnPrev) navBtnPrev.style.display = 'flex';
+                if (navBtnNext) navBtnNext.style.display = 'flex';
+                thumbsGrid.style.display = 'grid';
+            }
+
+            // Set Active Image
+            setModalActiveImage(0);
+
+            // Open Modal
+            document.getElementById('projectDetailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Reset tab
+            switchDetailTab('about');
+        }
+
+        function closeProjectDetail() {
+            document.getElementById('projectDetailModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function setModalActiveImage(idx) {
+            if (idx < 0 || idx >= activeProjectGallery.length) return;
+            activeGalleryIndex = idx;
+            const activeImg = document.getElementById('modalActiveImg');
+            
+            // Fade effect transition
+            activeImg.style.opacity = '0.3';
+            setTimeout(() => {
+                activeImg.src = activeProjectGallery[idx];
+                activeImg.style.opacity = '1';
+            }, 100);
+
+            // Update thumbs active class
+            const thumbs = document.querySelectorAll('.modal-thumb-item');
+            thumbs.forEach((t, i) => {
+                if (i === idx) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+        }
+
+        function prevGalleryImage() {
+            let nextIdx = activeGalleryIndex - 1;
+            if (nextIdx < 0) nextIdx = activeProjectGallery.length - 1;
+            setModalActiveImage(nextIdx);
+        }
+
+        function nextGalleryImage() {
+            let nextIdx = activeGalleryIndex + 1;
+            if (nextIdx >= activeProjectGallery.length) nextIdx = 0;
+            setModalActiveImage(nextIdx);
+        }
+
+        function switchDetailTab(tab) {
+            // Tabs
+            const tabButtons = document.querySelectorAll('.modal-tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(tab)) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            // Content
+            const tabContents = document.querySelectorAll('.modal-tab-content');
+            tabContents.forEach(content => {
+                if (content.id === `tab-${tab}`) content.classList.add('active');
+                else content.classList.remove('active');
+            });
+        }
+
+        function openContactWithProject() {
+            const projName = document.getElementById('modalProjName').textContent;
+            closeProjectDetail();
+            // Redirect to Contact page with project name query parameter
+            window.location.href = `iletisim.html?project=${encodeURIComponent(projName)}`;
+        }
     </script>
 </body>
 

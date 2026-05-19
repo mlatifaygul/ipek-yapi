@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -1543,7 +1543,7 @@
                                     onchange="handleFileUpload(event)">
                                 <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                                 <div class="upload-text">Resimleri buraya sürükleyin veya tıklayın</div>
-                                <div class="upload-sub">PNG, JPG, GIF, WEBP - Maks. 3MB</div>
+                                <div class="upload-sub">PNG, JPG, GIF, WEBP</div>
                                 <div class="upload-progress" id="uploadProgress">
                                     <div class="progress-bar">
                                         <div class="progress-fill" id="progressFill"></div>
@@ -2045,6 +2045,24 @@
                         </div>
                     </div>
                     <div class="form-group span2">
+                        <label class="form-label">Galeri Resimleri</label>
+                        <div style="background:var(--surface2);padding:16px;border-radius:var(--radius);border:1px solid var(--border);">
+                            <div style="display:flex;gap:10px;margin-bottom:12px;align-items:center;flex-wrap:wrap;">
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="triggerProjGalleryUpload()"><i class="fas fa-upload"></i> Toplu Yükle</button>
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="openProjGalleryLibrary()"><i class="fas fa-images"></i> Kütüphaneden Ekle</button>
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="addProjGalleryUrlRow()"><i class="fas fa-link"></i> URL Ekle</button>
+                                <input type="file" id="projGalleryFileInput" style="display:none;" accept="image/*" multiple onchange="handleProjGalleryUpload(event)">
+                            </div>
+                            <div id="projGalleryLibrarySection" style="display:none;margin-bottom:12px;">
+                                <p style="font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:600;">MEDYA KÜTÜPHANESİ (Eklemek için resme tıklayın)</p>
+                                <div id="projGalleryLibraryGrid"></div>
+                            </div>
+                            <div id="projGalleryPreviewGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(100px, 1fr));gap:10px;">
+                                <!-- Gallery images will show here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group span2">
                         <label class="form-label">Açıklama</label>
                         <textarea class="form-control" id="projectDescription" rows="3"></textarea>
                     </div>
@@ -2147,7 +2165,7 @@
 
         const CLOUD_STATE_ENDPOINT = '/api/state';
         const CLOUD_UPLOAD_ENDPOINT = '/api/upload';
-        const MAX_UPLOAD_SIZE_BYTES = 3 * 1024 * 1024;
+        const MAX_UPLOAD_SIZE_BYTES = 100 * 1024 * 1024; // 100MB
         const SITE_PAGES = [
             { file: 'index.html', title: 'Ana Sayfa' },
             { file: 'biz-kimiz.html', title: 'Biz Kimiz' },
@@ -2943,7 +2961,7 @@
         async function handleCardImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            if (file.size > MAX_UPLOAD_SIZE_BYTES) { toast('Dosya 3MB\'dan büyük olamaz.', 'error'); return; }
+            if (file.size > MAX_UPLOAD_SIZE_BYTES) { toast('Dosya 100MB\'dan büyük olamaz.', 'error'); return; }
             try {
                 const url = await uploadImageToServer(file);
                 document.getElementById('cardImage').value = url;
@@ -2991,6 +3009,93 @@
         </tr>`).join('');
         }
 
+        // ===========================
+        // PROJECT GALLERY FUNCTIONS
+        // ===========================
+        let currentProjectGallery = [];
+
+        function triggerProjGalleryUpload() {
+            document.getElementById('projGalleryFileInput').click();
+        }
+
+        async function handleProjGalleryUpload(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
+            for (const file of files) {
+                try {
+                    const url = await uploadImageToServer(file);
+                    currentProjectGallery.push(url);
+                    // Add to global media library so it is visible in Library tab
+                    const images = getData(KEYS.images) || [];
+                    const newId = Math.max(0, ...images.map(i => i.id)) + 1;
+                    images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                    setData(KEYS.images, images);
+                } catch (err) {
+                    toast('Resim yüklenemedi: ' + file.name, 'error');
+                }
+            }
+            renderProjGalleryPreviews();
+            toast('Galeri resimleri yüklendi!', 'success');
+            event.target.value = '';
+        }
+
+        function openProjGalleryLibrary() {
+            const el = document.getElementById('projGalleryLibrarySection');
+            if (el) {
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                if (el.style.display === 'block') {
+                    renderProjGalleryLibraryGrid();
+                }
+            }
+        }
+
+        function renderProjGalleryLibraryGrid() {
+            const images = getData(KEYS.images) || [];
+            const el = document.getElementById('projGalleryLibraryGrid');
+            if (!el) return;
+            el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(60px, 1fr));gap:6px;max-height:200px;overflow-y:auto;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);">
+                ${images.map(img => `
+                <div data-url="${escapeHtml(img.url)}" data-name="${escapeHtml(img.name)}" onclick="addImgToProjGallery(this.dataset.url,this.dataset.name)" style="cursor:pointer;border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s;aspect-ratio:1;"
+                     title="${escapeHtml(img.name)}" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+                    <img src="${escapeHtml(img.url)}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
+                </div>`).join('')}
+            </div>`;
+        }
+
+        function addImgToProjGallery(url, name) {
+            currentProjectGallery.push(url);
+            renderProjGalleryPreviews();
+            toast(`"${name}" galeriye eklendi`, 'success');
+        }
+
+        function addProjGalleryUrlRow() {
+            const url = prompt('Eklemek istediğiniz resim URL\'sini girin:');
+            if (url && url.trim()) {
+                currentProjectGallery.push(url.trim());
+                renderProjGalleryPreviews();
+            }
+        }
+
+        function removeProjGalleryImg(idx) {
+            currentProjectGallery.splice(idx, 1);
+            renderProjGalleryPreviews();
+        }
+
+        function renderProjGalleryPreviews() {
+            const container = document.getElementById('projGalleryPreviewGrid');
+            if (!container) return;
+            if (currentProjectGallery.length === 0) {
+                container.innerHTML = '<p style="font-size:12px;color:var(--text3);grid-column:1/-1;text-align:center;padding:10px;">Henüz galeri resmi eklenmedi.</p>';
+                return;
+            }
+            container.innerHTML = currentProjectGallery.map((url, idx) => `
+                <div class="gallery-prev-item" style="position:relative;border:1px solid var(--border);border-radius:6px;overflow:hidden;height:80px;background:var(--surface3);">
+                    <img src="${escapeHtml(url)}" style="width:100%;height:100%;object-fit:cover;">
+                    <button type="button" onclick="removeProjGalleryImg(${idx})" style="position:absolute;top:4px;right:4px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
         function openProjectModal(id = null) {
             document.getElementById('projectId').value = id || '';
             document.getElementById('projectModalTitle').textContent = id ? 'Projeyi Düzenle' : 'Yeni Proje Ekle';
@@ -3014,8 +3119,14 @@
                     document.getElementById('projectPrice').value = p.price || '';
                     document.getElementById('projectDelivery').value = p.delivery || '';
                     setProjImgPreview(p.image);
+                    currentProjectGallery = p.gallery ? (Array.isArray(p.gallery) ? [...p.gallery] : (typeof p.gallery === 'string' ? p.gallery.split(',').filter(Boolean) : [])) : [];
                 }
+            } else {
+                currentProjectGallery = [];
             }
+            renderProjGalleryPreviews();
+            const libSection = document.getElementById('projGalleryLibrarySection');
+            if (libSection) libSection.style.display = 'none';
             renderProjLibrary();
             openModal('projectModal');
         }
@@ -3027,7 +3138,7 @@
             if (!name) { toast('Proje adı zorunludur.', 'error'); return; }
             const id = parseInt(document.getElementById('projectId').value) || null;
             const projects = getData(KEYS.projects) || [];
-            const data = { name, category: document.getElementById('projectCategory').value, location: document.getElementById('projectLocation').value, status: document.getElementById('projectStatus').value, description: document.getElementById('projectDescription').value, image: document.getElementById('projectImage').value, features: document.getElementById('projectFeatures').value, price: document.getElementById('projectPrice').value, delivery: document.getElementById('projectDelivery').value };
+            const data = { name, category: document.getElementById('projectCategory').value, location: document.getElementById('projectLocation').value, status: document.getElementById('projectStatus').value, description: document.getElementById('projectDescription').value, image: document.getElementById('projectImage').value, gallery: currentProjectGallery, features: document.getElementById('projectFeatures').value, price: document.getElementById('projectPrice').value, delivery: document.getElementById('projectDelivery').value };
             if (id) {
                 const idx = projects.findIndex(p => p.id === id);
                 if (idx >= 0) projects[idx] = { ...projects[idx], ...data };

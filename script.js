@@ -490,7 +490,7 @@ function loadDynamicContent() {
 
     if (currentPage === 'projeler.html' && projects.length > 0) {
         projectsGrid.innerHTML = projects.map(project => `
-            <div class="project-card" data-category="${project.category || ''}" data-location="${(project.location || '').toLowerCase()}">
+            <div class="project-card" data-id="${project.id}" data-category="${project.category || ''}" data-location="${(project.location || '').toLowerCase()}">
                 <div class="project-image">
                     <img src="${project.image || 'https://via.placeholder.com/400x300'}" alt="${project.name || 'Proje'}">
                     ${project.status ? `<span class="project-status ${project.status === 'Yaşam Başladı' ? 'yasam-basladi' : ''}">${project.status}</span>` : ''}
@@ -504,9 +504,9 @@ function loadDynamicContent() {
                     <div class="project-features">
                         ${(project.features || '').split(',').filter(Boolean).map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
                     </div>
-                    ${project.price ? `<div class="project-price">${project.price}</div>` : ''}
+                    ${project.price ? `<div class="project-price" style="font-weight:600;color:#2c3e50;margin-bottom:1rem;font-size:0.95rem;">${project.price}</div>` : ''}
                     <div class="project-action">
-                        <a href="#" class="discover-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+                        <button class="discover-btn" onclick="openProjectDetail(${project.id})" style="border:none;outline:none;font-family:inherit;">Keşfet <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
             </div>

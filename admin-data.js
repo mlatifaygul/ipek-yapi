@@ -386,7 +386,7 @@ function initializeEnhancedData() {
         localStorage.setItem('ipek_sections', JSON.stringify(defaultSections));
     }
 
-    if (!localStorage.getItem('ipek_projects')) {
+    if (!localStorage.getItem('ipek_projects') || localStorage.getItem('ipek_projects').includes('via.placeholder.com')) {
         const defaultProjects = [
             {
                 id: 1,
@@ -394,11 +394,16 @@ function initializeEnhancedData() {
                 category: 'konut',
                 location: 'Sapanca, Kocaeli',
                 status: 'Yaşam Başladı',
-                description: 'Sapanca\'ya Şimdi İpek\'den Bakın',
-                features: 'Doğa Manzarası, Göl Yakınlığı, Modern Tasarım',
-                image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Sapanca',
-                gallery: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery1,https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery2',
-                price: '₺2.500.000 - ₺5.000.000',
+                description: 'Sapanca\'nın eşsiz göl manzarası ve doğasıyla iç içe, modern mimarinin ve lüksün bir araya geldiği, ince düşünülmüş müstakil villalar.',
+                features: 'Doğa Manzarası, Göl Yakınlığı, Müstakil Havuz, Akıllı Ev, Geniş Bahçe',
+                image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+                gallery: [
+                    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80'
+                ],
+                price: '₺25.000.000 - ₺50.000.000',
                 delivery: '2024-06-01'
             },
             {
@@ -407,11 +412,15 @@ function initializeEnhancedData() {
                 category: 'konut',
                 location: 'Meram, Konya',
                 status: 'İnşaat Devam Ediyor',
-                description: 'Trakya\'nın yıldızı parlıyor',
-                features: 'Merkezi Konum, Modern Altyapı, Yeşil Alanlar',
-                image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Meram',
-                gallery: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery1,https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery2',
-                price: '₺1.800.000 - ₺3.200.000',
+                description: 'Konya Meram\'ın en prestijli bölgesinde, geleneksel aile yaşantısına uygun geniş odaları, yemyeşil peyzaj alanları ve sosyal olanaklarıyla modern bir konut projesi.',
+                features: 'Merkezi Konum, Geniş Peyzaj, Kapalı Otopark, Spor Salonu, Çocuk Oyun Alanı',
+                image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                gallery: [
+                    'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80'
+                ],
+                price: '₺18.000.000 - ₺32.000.000',
                 delivery: '2025-03-01'
             },
             {
@@ -420,11 +429,16 @@ function initializeEnhancedData() {
                 category: 'konut',
                 location: 'Bodrum, Muğla',
                 status: 'Yaşam Başladı',
-                description: 'Premium yaşam alanları',
-                features: 'Deniz Manzarası, Lüks Tasarım, Özel Hizmetler',
-                image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Reserve',
-                gallery: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery1,https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery2',
-                price: '₺8.000.000 - ₺15.000.000',
+                description: 'Bodrum\'un masmavi koylarına hakim bir yamaçta konumlanan, özel plajı, helikopter pisti ve 7/24 concierge hizmetleriyle sınırlı sayıda üretilen ultra lüks malikaneler.',
+                features: 'Kesintisiz Deniz Manzarası, Özel Plaj, Sonsuzluk Havuzu, Akıllı Ev, Güvenlik',
+                image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+                gallery: [
+                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80'
+                ],
+                price: '₺80.000.000 - ₺150.000.000',
                 delivery: '2023-12-01'
             },
             {
@@ -433,11 +447,15 @@ function initializeEnhancedData() {
                 category: 'arsa',
                 location: 'Kaz Dağları, Çanakkale',
                 status: 'Satışta',
-                description: 'Kaz Dağları\'nın Havası Yaşamınızın Bir Parçası Olsun',
-                features: 'Doğa İç İçe, Yatırımlık, Modüler Ev İmkanı',
-                image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Kaz+Dağları',
-                gallery: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery1,https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery2',
-                price: '₺500.000 - ₺1.500.000',
+                description: 'Oksijen deposu Kaz Dağları eteklerinde, imarlı, altyapısı hazır ve hemen teslim, Tiny House veya prefabrik villa yapımına uygun ekolojik arsa parselleri.',
+                features: 'Panoramik Doğa Manzarası, İmar Durumu Hazır, Elektrik/Su Bağlantısı, Ekolojik Yaşam',
+                image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                gallery: [
+                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'
+                ],
+                price: '₺2.500.000 - ₺7.500.000',
                 delivery: '2024-08-01'
             },
             {
@@ -446,11 +464,15 @@ function initializeEnhancedData() {
                 category: 'arsa',
                 location: 'Dikili, İzmir',
                 status: 'Satışta',
-                description: 'Ege\'nin incisinde mükemmel bir yatırım',
-                features: 'Deniz Yakınlığı, Turistik Bölge, Yatırımlık',
-                image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Dikili',
-                gallery: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery1,https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery2',
-                price: '₺600.000 - ₺2.000.000',
+                description: 'Ege Denizi\'nin kıyısında, Dikili merkezine çok yakın konumda yer alan, deniz manzaralı ve geleceğinize değer katacak yüksek prim potansiyeline sahip imarlı arsalar.',
+                features: 'Deniz Yakınlığı, Turizm Bölgesi, Yatırım Potansiyeli, Yol Bağlantısı',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+                gallery: [
+                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80'
+                ],
+                price: '₺3.000.000 - ₺9.000.000',
                 delivery: '2024-10-01'
             },
             {
@@ -459,11 +481,14 @@ function initializeEnhancedData() {
                 category: 'arsa',
                 location: 'Lüleburgaz, Kırklareli',
                 status: 'Satışta',
-                description: 'Trakya\'nın yıldızı parlıyor',
-                features: 'Stratejik Konum, Gelişim Bölgesi, Yatırımlık',
-                image: 'https://via.placeholder.com/400x250/34495e/ffffff?text=İpek+Arsa+Lüleburgaz',
-                gallery: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery1,https://via.placeholder.com/400x250/34495e/ffffff?text=Gallery2',
-                price: '₺400.000 - ₺1.200.000',
+                description: 'İstanbul\'a sadece 1.5 saat mesafede, otoyol çıkışına yakın konumlandırılmış, sanayi ve tarım yatırımı veya çiftlik evi yapımı için stratejik öneme sahip geniş araziler.',
+                features: 'Yol Kenarı, Hızlı Tren Hattına Yakın, Sanayi İmarlı/Tarla, Düz Arazi',
+                image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                gallery: [
+                    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80'
+                ],
+                price: '₺1.500.000 - ₺5.200.000',
                 delivery: '2024-09-01'
             }
         ];

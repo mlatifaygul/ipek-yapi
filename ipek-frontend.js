@@ -235,9 +235,9 @@
                                 `).join('')}
                             </div>
                         ` : ''}
-                        ${project.price ? `<div class="project-price">${project.price}</div>` : ''}
+                        ${project.price ? `<div class="project-price" style="font-weight:600;color:#2c3e50;margin-bottom:1rem;font-size:0.95rem;">${project.price}</div>` : ''}
                         <div class="project-action">
-                            <a href="#" class="discover-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+                            <button class="discover-btn" onclick="openProjectDetail(${project.id})" style="border:none;outline:none;font-family:inherit;">Keşfet <i class="fas fa-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>
