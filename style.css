@@ -246,6 +246,23 @@ img {
     opacity: 1;
 }
 
+/* Admin verisi gelene kadar varsayılan hero metin/görseli gösterme */
+html.ipek-hero-pending .hero .hero-content,
+html.ipek-hero-pending .hero .hero-image {
+    opacity: 0;
+    visibility: hidden;
+}
+
+html.ipek-hero-ready .hero .hero-content {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.45s ease;
+}
+
+html.ipek-hero-ready .hero .hero-image {
+    visibility: visible;
+}
+
 .hero::after {
     content: '';
     position: absolute;

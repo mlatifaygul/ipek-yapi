@@ -1530,11 +1530,8 @@
                     <div class="card-header">
                         <div class="card-title"><i class="fas fa-layer-group"></i> Bölüm Yönetimi</div>
                         <div style="display:flex;gap:10px;align-items:center;">
-                            <select class="form-control" style="width:200px;" id="sectionPageFilter" onchange="renderSections()">
+                            <select class="form-control" style="width:220px;" id="sectionPageFilter" onchange="renderSections()">
                                 <option value="">Tüm Sayfalar</option>
-                                <option value="index.html">Ana Sayfa</option>
-                                <option value="biz-kimiz.html">Biz Kimiz</option>
-                                <option value="projeler.html">Projeler</option>
                             </select>
                             <button class="btn btn-primary btn-sm" onclick="openSectionModal()"><i class="fas fa-plus"></i> Bölüm Ekle</button>
                         </div>
@@ -2530,6 +2527,15 @@
             return `key:${makeSectionKey(section.name, section.page)}`;
         }
 
+        function resolvePresetSectionKey(section) {
+            const preset = getDefaultSectionPresets().find(p =>
+                (section.key && p.key === section.key) ||
+                (p.page === section.page && p.name === section.name)
+            );
+            if (preset) return preset.key;
+            return section.key || makeSectionKey(section.name, section.page);
+        }
+
         function normalizeSections(sections) {
             const list = Array.isArray(sections) ? sections.map(s => ({ ...s })) : [];
             const seenIds = new Set();
@@ -2554,9 +2560,7 @@
                     seenIds.add(section.id);
                 }
 
-                if (!section.key && section.name && section.page) {
-                    section.key = makeSectionKey(section.name, section.page);
-                }
+                section.key = resolvePresetSectionKey(section);
 
                 if (section.key) {
                     if (seenKeys.has(section.key)) return;
@@ -3035,28 +3039,63 @@
         // ===========================
         // SECTIONS
         // ===========================
-        function renderSections() {
-            const filter = document.getElementById('sectionPageFilter').value;
-            let sections = getSectionsData();
-            if (filter) sections = sections.filter(s => s.page === filter);
-            const el = document.getElementById('sectionsList');
-            if (!sections.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:30px;">Bölüm bulunamadı.</p>'; return; }
-            el.innerHTML = sections.map(s => {
-                const ref = sectionRef(s);
-                return `
+        function renderSectionRow(s) {
+            const ref = sectionRef(s);
+            const keyLabel = s.key ? `<span style="font-size:10px;color:var(--accent);margin-left:6px;">${escapeHtml(s.key)}</span>` : '';
+            return `
         <div class="content-item">
             <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
             ${s.bgImage ? `<img class="ci-thumb" src="${escapeHtml(s.bgImage)}" style="width:80px;height:50px;object-fit:cover;">` : `<div class="ci-thumb-placeholder"><i class="fas fa-layer-group"></i></div>`}
             <div class="ci-info">
-                <div class="ci-name">${escapeHtml(s.name)}</div>
-                <div class="ci-meta">${escapeHtml(pageTitle(s.page))} • Tip: ${escapeHtml(s.type)} • Sıra: ${escapeHtml(s.order)}</div>
-                <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(s.title)}</div>
+                <div class="ci-name">${escapeHtml(s.name)}${keyLabel}</div>
+                <div class="ci-meta">Tip: ${escapeHtml(s.type)} • Sıra: ${escapeHtml(s.order)}</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(s.title || '')}</div>
             </div>
             <div style="display:flex;gap:6px;">
                 <button class="btn btn-icon edit" data-ref="${escapeHtml(ref)}" onclick="editSection(this.dataset.ref)" title="Düzenle"><i class="fas fa-edit"></i></button>
                 <button class="btn btn-icon del" data-ref="${escapeHtml(ref)}" data-text="${escapeHtml(`${s.name} bölümünü silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('section',this.dataset.ref,this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
         </div>`;
+        }
+
+        function renderSections() {
+            const filter = document.getElementById('sectionPageFilter').value;
+            let sections = getSectionsData();
+            if (filter) sections = sections.filter(s => s.page === filter);
+            const el = document.getElementById('sectionsList');
+            if (!sections.length) {
+                el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:30px;">Bölüm bulunamadı.</p>';
+                return;
+            }
+
+            const byPage = {};
+            sections.forEach(s => {
+                if (!byPage[s.page]) byPage[s.page] = [];
+                byPage[s.page].push(s);
+            });
+
+            const pageOrder = SITE_PAGES.map(p => p.file);
+            const pages = Object.keys(byPage).sort((a, b) => {
+                const ia = pageOrder.indexOf(a);
+                const ib = pageOrder.indexOf(b);
+                if (ia === -1 && ib === -1) return a.localeCompare(b);
+                if (ia === -1) return 1;
+                if (ib === -1) return -1;
+                return ia - ib;
+            });
+
+            el.innerHTML = pages.map(page => {
+                const items = byPage[page].sort((a, b) => (a.order || 0) - (b.order || 0));
+                return `
+                <div class="section-page-group" style="margin-bottom:22px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);">
+                        <span style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;">
+                            <i class="fas fa-file-alt" style="margin-right:6px;color:var(--accent);"></i>${escapeHtml(pageTitle(page))}
+                        </span>
+                        <span style="font-size:11px;color:var(--text3);">${items.length} bölüm</span>
+                    </div>
+                    ${items.map(renderSectionRow).join('')}
+                </div>`;
             }).join('');
         }
 
@@ -3118,7 +3157,7 @@
                 const idx = findSectionIndex(sections, parsed);
                 if (idx >= 0) {
                     const existing = sections[idx];
-                    data.key = keyInput || existing.key || makeSectionKey(name, page);
+                    data.key = resolvePresetSectionKey({ ...existing, ...data, key: keyInput || existing.key });
                     sections[idx] = { ...existing, ...data };
                     removeDeletedSectionKey(data.key);
                     updated = true;
@@ -3126,7 +3165,7 @@
             }
 
             if (!updated) {
-                data.key = keyInput || makeSectionKey(name, page);
+                data.key = resolvePresetSectionKey({ ...data, key: keyInput });
                 const duplicateIdx = sections.findIndex(s => s.key === data.key);
                 if (duplicateIdx >= 0) {
                     sections[duplicateIdx] = { ...sections[duplicateIdx], ...data };

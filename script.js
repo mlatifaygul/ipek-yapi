@@ -169,6 +169,20 @@ function loadHeroSideImage(imgEl, url) {
     });
 }
 
+function formatHeroTitleHtml(section) {
+    if (!section || !section.title) return '';
+    const subtitle = section.subtitle
+        ? `<br> <span style="font-weight: 300;">${section.subtitle}</span>`
+        : '';
+    return `${section.title}${subtitle}`;
+}
+
+function revealHomeHero() {
+    if (!document.querySelector('.hero')) return;
+    document.documentElement.classList.remove('ipek-hero-pending');
+    document.documentElement.classList.add('ipek-hero-ready');
+}
+
 window.__ipekCloudReady = (async function hydrateCloudStateEarly() {
     try {
         const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
@@ -213,6 +227,55 @@ function setText(selector, value) {
     if (element) element.textContent = value;
 }
 
+function resolveSectionKey(section) {
+    if (!section) return '';
+    const preset = DEFAULT_SECTION_PRESETS.find(p =>
+        (section.key && p.key === section.key) ||
+        (p.page === section.page && p.name === section.name)
+    );
+    if (preset) return preset.key;
+    if (section.key) return section.key;
+    if (section.name && section.page) {
+        return String(section.name)
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '') || 'section';
+    }
+    return '';
+}
+
+function migrateSections(sections) {
+    if (!Array.isArray(sections)) return [];
+    return sections.map(section => {
+        const key = resolveSectionKey(section);
+        return key ? { ...section, key } : section;
+    });
+}
+
+function applyGenericSection(section) {
+    if (!section || !section.key) return false;
+    const root = document.querySelector(`[data-ipek-section="${section.key}"]`);
+    if (!root) return false;
+
+    const titleEl = root.querySelector('[data-ipek-field="title"]');
+    const subtitleEl = root.querySelector('[data-ipek-field="subtitle"]');
+    const contentEl = root.querySelector('[data-ipek-field="content"]');
+
+    if (titleEl && section.title) titleEl.textContent = section.title;
+    if (subtitleEl && section.subtitle) subtitleEl.textContent = section.subtitle;
+    if (contentEl && section.content) contentEl.innerHTML = section.content;
+
+    if (section.bgImage) {
+        root.style.backgroundImage = `linear-gradient(rgba(26, 42, 58, 0.55), rgba(26, 42, 58, 0.55)), url('${section.bgImage}')`;
+        root.style.backgroundSize = 'cover';
+        root.style.backgroundPosition = 'center';
+    }
+
+    return true;
+}
+
 function setImage(selector, url) {
     if (!url) return;
     const element = document.querySelector(selector);
@@ -232,8 +295,7 @@ function setHtml(selector, html) {
 
 const SECTION_BINDINGS = {
     'home-hero': section => {
-        setText('#hero-title', section.title);
-        setImage('#hero-img', section.bgImage);
+        /* Hero tam uygulama loadDynamicContent içinde (tek kaynak) */
     },
     'home-featured': section => {
         setText('.featured-projects .section-title', section.title);
@@ -341,6 +403,17 @@ const SECTION_BINDINGS = {
     }
 };
 
+function applySectionToPage(section) {
+    const resolved = { ...section, key: resolveSectionKey(section) };
+    if (!resolved.key) return;
+
+    const binding = SECTION_BINDINGS[resolved.key];
+    if (typeof binding === 'function') {
+        binding(resolved);
+    }
+    applyGenericSection(resolved);
+}
+
 async function hydrateCloudState() {
     if (window.__ipekCloudReady) {
         await window.__ipekCloudReady;
@@ -363,8 +436,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.IPEKSiteSettings.apply();
     }
 
-    // Run content loading
-    loadDynamicContent();
+    await loadDynamicContent();
+
+    if (document.documentElement.classList.contains('ipek-hero-pending')) {
+        setTimeout(revealHomeHero, 6000);
+    }
 });
 
 function loadDynamicNav() {
@@ -533,46 +609,48 @@ function ensureDynamicSeedData() {
 }
 
 function applyManagedSections(currentPage, sections) {
-    sections
-        .filter(section => section.page === currentPage && section.key)
+    migrateSections(sections)
+        .filter(section => section.page === currentPage)
         .sort((a, b) => (a.order || 0) - (b.order || 0))
-        .forEach(section => {
-            const apply = SECTION_BINDINGS[section.key];
-            if (typeof apply === 'function') apply(section);
-        });
+        .forEach(section => applySectionToPage(section));
 }
 
 
-function loadDynamicContent() {
-    const sections = getLocalData(DATA_KEYS.sections) || [];
+async function loadDynamicContent() {
+    let sections = migrateSections(getLocalData(DATA_KEYS.sections) || []);
+    const stored = getLocalData(DATA_KEYS.sections) || [];
+    if (JSON.stringify(stored) !== JSON.stringify(sections)) {
+        localStorage.setItem(DATA_KEYS.sections, JSON.stringify(sections));
+    }
     const cards = getLocalData(DATA_KEYS.cards) || [];
     const projects = getLocalData(DATA_KEYS.projects) || [];
     let currentPage = location.pathname.split('/').pop() || 'index.html';
     if (currentPage && !currentPage.includes('.')) {
         currentPage += '.html';
     }
-    applyManagedSections(currentPage, sections);
 
     const heroSection = getHeroSectionForPage(sections, currentPage);
-    if (heroSection) {
-        const heroTitle = document.getElementById('hero-title');
-        if (heroTitle) heroTitle.innerHTML = `${heroSection.title} <br> <span style="font-weight: 300;">${heroSection.subtitle || ''}</span>`;
+    const heroEl = document.querySelector('.hero');
+    const heroTitle = document.getElementById('hero-title');
 
-        const heroEl = document.querySelector('.hero');
-        if (heroSection.bgImage && heroEl) {
-            applyHeroBackground(heroEl, heroSection.bgImage);
-        } else if (heroEl) {
+    if (heroSection && heroTitle) {
+        heroTitle.innerHTML = formatHeroTitleHtml(heroSection);
+    }
+
+    if (heroSection && heroEl) {
+        if (heroSection.bgImage) {
+            await applyHeroBackground(heroEl, heroSection.bgImage);
+        } else {
             heroEl.style.backgroundImage = '';
             heroEl.classList.remove('has-bg-image', 'hero-bg-ready');
         }
-
-        const heroImg = document.getElementById('hero-img');
-        if (heroImg && heroSection.bgImage) {
-            loadHeroSideImage(heroImg, heroSection.bgImage);
-        } else if (heroImg && heroImg.dataset.fallback) {
-            loadHeroSideImage(heroImg, heroImg.dataset.fallback);
-        }
     }
+
+    if (currentPage === 'index.html') {
+        revealHomeHero();
+    }
+
+    applyManagedSections(currentPage, sections);
 
     const projectsGrid = document.getElementById('projects-grid') || document.getElementById('projectsGrid');
     if (!projectsGrid) return;
