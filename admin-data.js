@@ -535,12 +535,26 @@ function initializeEnhancedData() {
         const defaultSettings = {
             siteTitle: 'İPEK - İnce Düşünülmüş Yaşam Alanları',
             siteDescription: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.',
+            metaKeywords: 'ipek, inşaat, konut, arsa, proje',
+            seoRobots: 'index,follow',
+            ogImageUrl: '',
+            canonicalBaseUrl: '',
+            brandName: 'İPEK',
+            brandAccent: '.',
+            logoUrl: '',
+            logoAlt: 'İPEK Logo',
+            logoLink: 'index.html',
+            faviconUrl: '',
+            primaryColor: '#bfa67a',
+            primaryDarkColor: '#a88d5e',
+            secondaryColor: '#1a2a3a',
+            textColor: '#2d3436',
+            headerBgColor: 'rgba(255, 255, 255, 0.95)',
+            customCss: '',
             contactEmail: 'info@ipek.com.tr',
             contactPhone: '+90 212 555 00 00',
             contactAddress: 'Maslak, Büyükdere Cad. No:123, Sarıyer/İstanbul',
-            googleAnalytics: 'UA-XXXXXXX-X',
-            metaKeywords: 'ipek, inşaat, konut, arsa, proje, yaşam alanları, metrekare, santimetrekare',
-            faviconUrl: 'https://via.placeholder.com/32x32/2c3e50/ffffff?text=N'
+            googleAnalytics: ''
         };
         localStorage.setItem('ipek_settings', JSON.stringify(defaultSettings));
     }

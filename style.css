@@ -224,6 +224,28 @@ img {
     overflow: hidden;
 }
 
+.hero.has-bg-image {
+    background-color: #1a2a3a;
+}
+
+.hero.has-bg-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: linear-gradient(rgba(26, 42, 58, 0.72), rgba(26, 42, 58, 0.72)), var(--hero-bg-url, none);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    will-change: opacity;
+}
+
+.hero.hero-bg-ready::before {
+    opacity: 1;
+}
+
 .hero::after {
     content: '';
     position: absolute;
@@ -319,7 +341,21 @@ img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 6s ease;
+    transition: transform 6s ease, opacity 0.55s ease;
+    opacity: 0;
+}
+
+.hero-image img.is-loaded {
+    opacity: 1;
+}
+
+#hero-img {
+    opacity: 0;
+    transition: opacity 0.55s ease;
+}
+
+#hero-img.is-loaded {
+    opacity: 1;
 }
 
 .hero:hover .hero-image img {

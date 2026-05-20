@@ -1664,26 +1664,144 @@
                     </div>
                     <form id="settingsForm" onsubmit="saveSettings(event)">
                         <div style="margin-bottom:24px;">
-                            <p
-                                style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">
-                                Genel Bilgiler</p>
+                            <p style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">Marka &amp; Header (Sol Üst)</p>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Marka Adı</label>
+                                    <input class="form-control" type="text" id="brandName" placeholder="İPEK" oninput="updateSettingsPreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Vurgu Karakteri</label>
+                                    <input class="form-control" type="text" id="brandAccent" placeholder="." maxlength="3" oninput="updateSettingsPreview()">
+                                    <small style="font-size:11px;color:var(--text3);">Logo metninde renkli gösterilir (örn. nokta)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Logo Linki</label>
+                                    <input class="form-control" type="text" id="logoLink" placeholder="index.html">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Logo Alt Metni</label>
+                                    <input class="form-control" type="text" id="logoAlt" placeholder="İPEK Logo">
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Logo URL</label>
+                                    <input class="form-control" type="url" id="logoUrl" placeholder="https://..." oninput="updateSettingsPreview()">
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Logo Yükle</label>
+                                    <div class="upload-zone" style="padding:16px;">
+                                        <input type="file" accept="image/*" onchange="handleSettingsLogoUpload(event)">
+                                        <div style="font-size:12px;color:var(--text2);margin-top:6px;">PNG/SVG önerilir</div>
+                                    </div>
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Önizleme</label>
+                                    <div id="settingsBrandPreview" style="padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);min-height:70px;display:flex;align-items:center;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div style="margin-bottom:24px;">
+                            <p style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">Sekme İkonu (Favicon)</p>
                             <div class="form-grid">
                                 <div class="form-group span2">
-                                    <label class="form-label">Site Başlığı <span>*</span></label>
-                                    <input class="form-control" type="text" id="siteTitle">
+                                    <label class="form-label">Favicon URL</label>
+                                    <input class="form-control" type="url" id="faviconUrl" placeholder="https://..." oninput="updateSettingsPreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Favicon Yükle</label>
+                                    <div class="upload-zone" style="padding:16px;">
+                                        <input type="file" accept="image/*,.ico" onchange="handleSettingsFaviconUpload(event)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Önizleme</label>
+                                    <div id="settingsFaviconPreview" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);min-height:48px;display:flex;align-items:center;gap:10px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div style="margin-bottom:24px;">
+                            <p style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">SEO</p>
+                            <div class="form-grid">
+                                <div class="form-group span2">
+                                    <label class="form-label">Site Başlığı (Sekme) <span>*</span></label>
+                                    <input class="form-control" type="text" id="siteTitle" placeholder="İPEK - İnce Düşünülmüş Yaşam Alanları">
                                 </div>
                                 <div class="form-group span2">
-                                    <label class="form-label">Site Açıklaması</label>
+                                    <label class="form-label">Meta Açıklama</label>
                                     <textarea class="form-control" id="siteDescription" rows="3"></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group span2">
                                     <label class="form-label">Meta Keywords</label>
-                                    <input class="form-control" type="text" id="metaKeywords"
-                                        placeholder="ipek, inşaat, konut">
+                                    <input class="form-control" type="text" id="metaKeywords" placeholder="ipek, inşaat, konut">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Favicon URL</label>
-                                    <input class="form-control" type="url" id="faviconUrl">
+                                    <label class="form-label">Robots</label>
+                                    <select class="form-control" id="seoRobots">
+                                        <option value="index,follow">index, follow</option>
+                                        <option value="noindex,nofollow">noindex, nofollow</option>
+                                        <option value="index,nofollow">index, nofollow</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Open Graph Görsel URL</label>
+                                    <input class="form-control" type="url" id="ogImageUrl" placeholder="https://...">
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Canonical Base URL</label>
+                                    <input class="form-control" type="url" id="canonicalBaseUrl" placeholder="https://siteniz.com">
+                                    <small style="font-size:11px;color:var(--text3);">Sayfa dosya adı sonuna eklenir (ör. /index.html)</small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div style="margin-bottom:24px;">
+                            <p style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">Tema Renkleri &amp; CSS</p>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Ana Renk (Primary)</label>
+                                    <div style="display:flex;gap:8px;align-items:center;">
+                                        <input type="color" id="primaryColorPicker" style="width:44px;height:38px;border:none;background:none;cursor:pointer;" oninput="syncColorField('primaryColor',this.value)">
+                                        <input class="form-control" type="text" id="primaryColor" placeholder="#bfa67a" oninput="syncColorPicker('primaryColor',this.value)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Ana Renk Koyu</label>
+                                    <div style="display:flex;gap:8px;align-items:center;">
+                                        <input type="color" id="primaryDarkColorPicker" style="width:44px;height:38px;border:none;background:none;cursor:pointer;" oninput="syncColorField('primaryDarkColor',this.value)">
+                                        <input class="form-control" type="text" id="primaryDarkColor" placeholder="#a88d5e" oninput="syncColorPicker('primaryDarkColor',this.value)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">İkincil Renk (Header/Nav)</label>
+                                    <div style="display:flex;gap:8px;align-items:center;">
+                                        <input type="color" id="secondaryColorPicker" style="width:44px;height:38px;border:none;background:none;cursor:pointer;" oninput="syncColorField('secondaryColor',this.value)">
+                                        <input class="form-control" type="text" id="secondaryColor" placeholder="#1a2a3a" oninput="syncColorPicker('secondaryColor',this.value)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Metin Rengi</label>
+                                    <div style="display:flex;gap:8px;align-items:center;">
+                                        <input type="color" id="textColorPicker" style="width:44px;height:38px;border:none;background:none;cursor:pointer;" oninput="syncColorField('textColor',this.value)">
+                                        <input class="form-control" type="text" id="textColor" placeholder="#2d3436" oninput="syncColorPicker('textColor',this.value)">
+                                    </div>
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Header Arka Plan</label>
+                                    <input class="form-control" type="text" id="headerBgColor" placeholder="rgba(255,255,255,0.95)">
+                                </div>
+                                <div class="form-group span2">
+                                    <label class="form-label">Özel CSS</label>
+                                    <textarea class="form-control" id="customCss" rows="6" placeholder=".nav-link { letter-spacing: 2px; }"></textarea>
+                                </div>
+                                <div class="form-group span2" style="display:flex;gap:10px;align-items:center;">
+                                    <button type="button" class="btn btn-ghost btn-sm" onclick="resetThemeDefaults()"><i class="fas fa-undo"></i> Varsayılan Renklere Dön</button>
+                                    <div id="settingsThemePreview" style="flex:1;display:flex;gap:8px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);">
+                                        <span id="themePreviewPrimary" style="flex:1;height:28px;border-radius:6px;background:#bfa67a;"></span>
+                                        <span id="themePreviewSecondary" style="flex:1;height:28px;border-radius:6px;background:#1a2a3a;"></span>
+                                        <span id="themePreviewText" style="flex:1;height:28px;border-radius:6px;background:#2d3436;"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2630,13 +2748,7 @@
                 { id: 3, name: 'project-1.jpg', url: 'https://via.placeholder.com/400x250/34495e/ffffff?text=Project+1', size: '89 KB', date: today() },
                 { id: 4, name: 'about-image.jpg', url: 'https://via.placeholder.com/600x400/34495e/ffffff?text=About+Image', size: '156 KB', date: today() }
             ]);
-            if (!getData(KEYS.settings)) setData(KEYS.settings, {
-                siteTitle: 'İPEK - İnce Düşünülmüş Yaşam Alanları',
-                siteDescription: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.',
-                contactEmail: 'info@ipek.com.tr', contactPhone: '+90 212 555 00 00',
-                contactAddress: 'Maslak, Büyükdere Cad. No:123, Sarıyer/İstanbul',
-                metaKeywords: 'ipek,inşaat,konut,arsa', faviconUrl: '', googleAnalytics: ''
-            });
+            if (!getData(KEYS.settings)) setData(KEYS.settings, getDefaultSiteSettings());
             if (!getData(KEYS.cards)) setData(KEYS.cards, [
                 { id: 1, title: 'İpek Reserve', page: 'index.html', order: 1, status: 'Yaşam Başladı', description: 'Premium yaşam alanları', image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Reserve', features: 'Deniz Manzarası, Lüks Tasarım', price: '₺8.000.000 - ₺15.000.000', link: '#', buttonText: 'Keşfet' },
                 { id: 2, title: 'İpek Sapanca', page: 'index.html', order: 2, status: 'Yaşam Başladı', description: "Sapanca'ya Şimdi İpek'den Bakın", image: 'https://via.placeholder.com/400x300/34495e/ffffff?text=İpek+Sapanca', features: 'Doğa Manzarası, Göl Yakınlığı', price: '₺2.500.000 - ₺5.000.000', link: '#', buttonText: 'Keşfet' },
@@ -3679,24 +3791,167 @@
         // ===========================
         // SETTINGS
         // ===========================
-        function loadSettings() {
-            const s = getData(KEYS.settings) || {};
-            ['siteTitle', 'siteDescription', 'metaKeywords', 'faviconUrl', 'contactEmail', 'contactPhone', 'contactAddress', 'googleAnalytics'].forEach(k => {
+        const SITE_SETTINGS_FIELDS = [
+            'siteTitle', 'siteDescription', 'metaKeywords', 'seoRobots', 'ogImageUrl', 'canonicalBaseUrl',
+            'brandName', 'brandAccent', 'logoUrl', 'logoAlt', 'logoLink', 'faviconUrl',
+            'primaryColor', 'primaryDarkColor', 'secondaryColor', 'textColor', 'headerBgColor', 'customCss',
+            'contactEmail', 'contactPhone', 'contactAddress', 'googleAnalytics'
+        ];
+
+        function getDefaultSiteSettings() {
+            return {
+                siteTitle: 'İPEK - İnce Düşünülmüş Yaşam Alanları',
+                siteDescription: '2010 yılından beri metrekarelerle değil santimetrekarelerle çalışarak, ince düşünülmüş yaşam alanları tasarlıyoruz.',
+                metaKeywords: 'ipek, inşaat, konut, arsa, proje',
+                seoRobots: 'index,follow',
+                ogImageUrl: '',
+                canonicalBaseUrl: '',
+                brandName: 'İPEK',
+                brandAccent: '.',
+                logoUrl: '',
+                logoAlt: 'İPEK Logo',
+                logoLink: 'index.html',
+                faviconUrl: '',
+                primaryColor: '#bfa67a',
+                primaryDarkColor: '#a88d5e',
+                secondaryColor: '#1a2a3a',
+                textColor: '#2d3436',
+                headerBgColor: 'rgba(255, 255, 255, 0.95)',
+                customCss: '',
+                contactEmail: 'info@ipek.com.tr',
+                contactPhone: '+90 212 555 00 00',
+                contactAddress: 'Maslak, Büyükdere Cad. No:123, Sarıyer/İstanbul',
+                googleAnalytics: ''
+            };
+        }
+
+        function readSettingsForm() {
+            const existing = getData(KEYS.settings) || {};
+            const s = { ...getDefaultSiteSettings(), ...existing };
+            SITE_SETTINGS_FIELDS.forEach(k => {
                 const el = document.getElementById(k);
-                if (el) el.value = s[k] || '';
+                if (el) s[k] = el.value;
             });
+            return s;
+        }
+
+        function loadSettings() {
+            const defaults = getDefaultSiteSettings();
+            const s = { ...defaults, ...(getData(KEYS.settings) || {}) };
+            SITE_SETTINGS_FIELDS.forEach(k => {
+                const el = document.getElementById(k);
+                if (el) el.value = s[k] != null ? s[k] : '';
+            });
+            ['primaryColor', 'primaryDarkColor', 'secondaryColor', 'textColor'].forEach(k => {
+                syncColorPicker(k, document.getElementById(k)?.value || defaults[k]);
+            });
+            updateSettingsPreview();
         }
 
         function saveSettings(e) {
             e.preventDefault();
-            const s = {};
-            ['siteTitle', 'siteDescription', 'metaKeywords', 'faviconUrl', 'contactEmail', 'contactPhone', 'contactAddress', 'googleAnalytics'].forEach(k => {
-                const el = document.getElementById(k);
-                if (el) s[k] = el.value;
-            });
+            const s = readSettingsForm();
+            if (!s.siteTitle || !s.siteTitle.trim()) {
+                toast('Site başlığı zorunludur.', 'error');
+                return;
+            }
             setData(KEYS.settings, s);
             addActivity('Site ayarları güncellendi', 'success');
-            toast('Ayarlar kaydedildi!', 'success');
+            toast('Ayarlar kaydedildi! Canlı sitede görünmesi için sayfayı yenileyin.', 'success');
+            updateSettingsPreview();
+        }
+
+        function syncColorField(textId, value) {
+            const text = document.getElementById(textId);
+            if (text) text.value = value;
+            updateThemePreview();
+        }
+
+        function syncColorPicker(textId, value) {
+            const picker = document.getElementById(textId + 'Picker');
+            if (picker && /^#[0-9A-Fa-f]{6}$/.test(value)) picker.value = value;
+            updateThemePreview();
+        }
+
+        function updateThemePreview() {
+            const primary = document.getElementById('primaryColor')?.value || '#bfa67a';
+            const secondary = document.getElementById('secondaryColor')?.value || '#1a2a3a';
+            const text = document.getElementById('textColor')?.value || '#2d3436';
+            const p = document.getElementById('themePreviewPrimary');
+            const s = document.getElementById('themePreviewSecondary');
+            const t = document.getElementById('themePreviewText');
+            if (p) p.style.background = primary;
+            if (s) s.style.background = secondary;
+            if (t) t.style.background = text;
+        }
+
+        function updateSettingsPreview() {
+            const brandName = document.getElementById('brandName')?.value || 'İPEK';
+            const brandAccent = document.getElementById('brandAccent')?.value ?? '.';
+            const logoUrl = document.getElementById('logoUrl')?.value || '';
+            const brandPreview = document.getElementById('settingsBrandPreview');
+            if (brandPreview) {
+                if (logoUrl) {
+                    brandPreview.innerHTML = `<img src="${escapeHtml(logoUrl)}" alt="logo" style="max-height:48px;max-width:180px;object-fit:contain;" onerror="this.style.display='none'">`;
+                } else {
+                    brandPreview.innerHTML = `<span style="font-size:1.4rem;font-weight:800;color:var(--secondary,#1a2a3a);letter-spacing:2px;">${escapeHtml(brandName)}<span style="color:var(--accent,#bfa67a);">${escapeHtml(brandAccent)}</span></span>`;
+                }
+            }
+            const faviconUrl = document.getElementById('faviconUrl')?.value || '';
+            const favPreview = document.getElementById('settingsFaviconPreview');
+            if (favPreview) {
+                favPreview.innerHTML = faviconUrl
+                    ? `<img src="${escapeHtml(faviconUrl)}" alt="favicon" style="width:32px;height:32px;object-fit:contain;" onerror="this.outerHTML='<span style=color:var(--text3)>Geçersiz URL</span>'"><span style="font-size:12px;color:var(--text2);">Sekme ikonu önizlemesi</span>`
+                    : '<span style="font-size:12px;color:var(--text3);">Favicon seçilmedi</span>';
+            }
+            updateThemePreview();
+        }
+
+        function resetThemeDefaults() {
+            const d = getDefaultSiteSettings();
+            ['primaryColor', 'primaryDarkColor', 'secondaryColor', 'textColor', 'headerBgColor', 'customCss'].forEach(k => {
+                const el = document.getElementById(k);
+                if (el) el.value = d[k] || '';
+            });
+            ['primaryColor', 'primaryDarkColor', 'secondaryColor', 'textColor'].forEach(k => syncColorPicker(k, d[k]));
+            updateSettingsPreview();
+            toast('Tema renkleri varsayılana alındı. Kaydetmeyi unutmayın.', 'info');
+        }
+
+        async function handleSettingsLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const url = await uploadImageToServer(file, { skipSizeCheck: true });
+                document.getElementById('logoUrl').value = url;
+                const images = getData(KEYS.images) || [];
+                const newId = Math.max(0, ...images.map(i => Number(i.id) || 0)) + 1;
+                images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                setData(KEYS.images, images);
+                updateSettingsPreview();
+                toast('Logo yüklendi!', 'success');
+            } catch (err) {
+                toast('Logo yüklenemedi.', 'error');
+            }
+            event.target.value = '';
+        }
+
+        async function handleSettingsFaviconUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const url = await uploadImageToServer(file, { skipSizeCheck: true });
+                document.getElementById('faviconUrl').value = url;
+                const images = getData(KEYS.images) || [];
+                const newId = Math.max(0, ...images.map(i => Number(i.id) || 0)) + 1;
+                images.push({ id: newId, name: file.name, url, size: formatSize(file.size), date: today() });
+                setData(KEYS.images, images);
+                updateSettingsPreview();
+                toast('Favicon yüklendi!', 'success');
+            } catch (err) {
+                toast('Favicon yüklenemedi.', 'error');
+            }
+            event.target.value = '';
         }
 
         // ===========================

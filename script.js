@@ -115,6 +115,60 @@ const DEFAULT_SECTION_PRESETS = [
 const CLOUD_STATE_ENDPOINT = '/api/state';
 let cloudStateHydrated = false;
 
+function getHeroSectionForPage(sections, currentPage) {
+    return sections.find(s => s.key === 'home-hero' && currentPage === 'index.html') ||
+        sections.find(s => s.type === 'hero' && (s.page === 'index.html' || s.page === currentPage));
+}
+
+function preloadHeroImage(url) {
+    if (!url) return Promise.resolve(false);
+    if (window.__IPEK_HERO_PRELOADED__ === url) return Promise.resolve(true);
+
+    return new Promise(resolve => {
+        const img = new Image();
+        let settled = false;
+        const done = ok => {
+            if (settled) return;
+            settled = true;
+            if (ok) window.__IPEK_HERO_PRELOADED__ = url;
+            resolve(ok);
+        };
+        img.onload = () => done(true);
+        img.onerror = () => done(false);
+        img.src = url;
+        if (img.decode) {
+            img.decode().then(() => done(true)).catch(() => done(true));
+        }
+    });
+}
+
+function applyHeroBackground(heroEl, url) {
+    if (!heroEl || !url) return Promise.resolve();
+
+    heroEl.classList.add('has-bg-image');
+    heroEl.classList.remove('hero-bg-ready');
+    heroEl.style.backgroundImage = '';
+
+    return preloadHeroImage(url).then(ok => {
+        if (!ok) {
+            heroEl.classList.remove('has-bg-image', 'hero-bg-ready');
+            return;
+        }
+        heroEl.style.setProperty('--hero-bg-url', `url("${String(url).replace(/"/g, '\\"')}")`);
+        requestAnimationFrame(() => heroEl.classList.add('hero-bg-ready'));
+    });
+}
+
+function loadHeroSideImage(imgEl, url) {
+    if (!imgEl || !url) return;
+    imgEl.classList.remove('is-loaded');
+    preloadHeroImage(url).then(ok => {
+        if (!ok) return;
+        imgEl.src = url;
+        requestAnimationFrame(() => imgEl.classList.add('is-loaded'));
+    });
+}
+
 window.__ipekCloudReady = (async function hydrateCloudStateEarly() {
     try {
         const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
@@ -125,6 +179,19 @@ window.__ipekCloudReady = (async function hydrateCloudStateEarly() {
             if (typeof raw === 'string') localStorage.setItem(key, raw);
         });
         cloudStateHydrated = true;
+
+        try {
+            const sections = JSON.parse(localStorage.getItem(DATA_KEYS.sections) || '[]');
+            const page = (location.pathname.split('/').pop() || 'index.html');
+            const pageFile = page.includes('.') ? page : page + '.html';
+            const hero = getHeroSectionForPage(sections, pageFile);
+            if (hero && hero.bgImage) {
+                window.__IPEK_HERO_BG_URL__ = hero.bgImage;
+                await preloadHeroImage(hero.bgImage);
+            }
+        } catch (e) {
+            /* ignore */
+        }
     } catch (e) {
         console.warn('Cloud state could not be loaded:', e);
     }
@@ -149,7 +216,12 @@ function setText(selector, value) {
 function setImage(selector, url) {
     if (!url) return;
     const element = document.querySelector(selector);
-    if (element) element.src = url;
+    if (!element) return;
+    if (element.id === 'hero-img') {
+        loadHeroSideImage(element, url);
+        return;
+    }
+    element.src = url;
 }
 
 function setHtml(selector, html) {
@@ -286,6 +358,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     loadDynamicNav();
     loadDynamicSettings();
+
+    if (window.IPEKSiteSettings && typeof window.IPEKSiteSettings.apply === 'function') {
+        window.IPEKSiteSettings.apply();
+    }
 
     // Run content loading
     loadDynamicContent();
@@ -477,27 +553,25 @@ function loadDynamicContent() {
     }
     applyManagedSections(currentPage, sections);
 
-    const heroSection = sections.find(s => s.type === 'hero' && (s.page === 'index.html' || s.page === currentPage));
+    const heroSection = getHeroSectionForPage(sections, currentPage);
     if (heroSection) {
         const heroTitle = document.getElementById('hero-title');
         if (heroTitle) heroTitle.innerHTML = `${heroSection.title} <br> <span style="font-weight: 300;">${heroSection.subtitle || ''}</span>`;
 
         const heroEl = document.querySelector('.hero');
-        if (heroEl) {
-            if (heroSection.bgImage) {
-                heroEl.style.backgroundImage = `linear-gradient(rgba(26, 42, 58, 0.72), rgba(26, 42, 58, 0.72)), url('${heroSection.bgImage}')`;
-                heroEl.style.backgroundSize = 'cover';
-                heroEl.style.backgroundPosition = 'center';
-                heroEl.style.backgroundRepeat = 'no-repeat';
-                heroEl.classList.add('has-bg-image');
-            } else {
-                heroEl.style.backgroundImage = '';
-                heroEl.classList.remove('has-bg-image');
-            }
+        if (heroSection.bgImage && heroEl) {
+            applyHeroBackground(heroEl, heroSection.bgImage);
+        } else if (heroEl) {
+            heroEl.style.backgroundImage = '';
+            heroEl.classList.remove('has-bg-image', 'hero-bg-ready');
         }
 
         const heroImg = document.getElementById('hero-img');
-        if (heroImg && heroSection.bgImage) heroImg.src = heroSection.bgImage;
+        if (heroImg && heroSection.bgImage) {
+            loadHeroSideImage(heroImg, heroSection.bgImage);
+        } else if (heroImg && heroImg.dataset.fallback) {
+            loadHeroSideImage(heroImg, heroImg.dataset.fallback);
+        }
     }
 
     const projectsGrid = document.getElementById('projects-grid') || document.getElementById('projectsGrid');
@@ -768,10 +842,15 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
     });
 });
 
-// Observe all images
+// Observe images except hero (hero has its own preload + fade)
 document.addEventListener('DOMContentLoaded', () => {
-    const images = document.querySelectorAll('img');
+    const images = document.querySelectorAll('img:not(#hero-img):not([data-eager])');
     images.forEach(img => imageObserver.observe(img));
+
+    const heroImg = document.getElementById('hero-img');
+    if (heroImg && heroImg.src && !heroImg.classList.contains('is-loaded')) {
+        loadHeroSideImage(heroImg, heroImg.src);
+    }
 });
 
 // Parallax effect for hero section

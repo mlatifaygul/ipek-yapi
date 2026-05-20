@@ -424,7 +424,9 @@
                 // Load footer
                 FooterBuilder.build();
 
-                // Admin link removed
+                if (window.IPEKSiteSettings && typeof window.IPEKSiteSettings.apply === 'function') {
+                    window.IPEKSiteSettings.apply();
+                }
 
                 console.log('✅ IPEK Frontend Integration Loaded Successfully');
             } catch (error) {
