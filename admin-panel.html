@@ -2225,6 +2225,7 @@
             settings: 'ipek_settings',
             cards: 'ipek_cards',
             sections: 'ipek_sections',
+            deletedSections: 'ipek_deleted_sections',
             activities: 'ipek_activities'
         };
 
@@ -2257,6 +2258,9 @@
         };
         let cloudSyncTimer = null;
         let isCloudSyncing = false;
+        let cloudStateLoaded = false;
+        let lastCloudUpdatedAt = null;
+        let suppressCloudSync = false;
 
         function getData(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
         function escapeHtml(value) {
@@ -2342,22 +2346,136 @@
             });
             if (changed) setData(KEYS.pages, existingPages);
         }
+        function getDeletedSectionKeys() {
+            try {
+                return new Set(JSON.parse(localStorage.getItem(KEYS.deletedSections) || '[]'));
+            } catch (e) {
+                return new Set();
+            }
+        }
+
+        function addDeletedSectionKey(key) {
+            if (!key) return;
+            const deleted = getDeletedSectionKeys();
+            deleted.add(key);
+            localStorage.setItem(KEYS.deletedSections, JSON.stringify([...deleted]));
+            if (!suppressCloudSync) scheduleCloudSync();
+        }
+
+        function removeDeletedSectionKey(key) {
+            if (!key) return;
+            const deleted = getDeletedSectionKeys();
+            if (!deleted.delete(key)) return;
+            localStorage.setItem(KEYS.deletedSections, JSON.stringify([...deleted]));
+            if (!suppressCloudSync) scheduleCloudSync();
+        }
+
+        function makeSectionKey(name, page) {
+            const slug = String(name || 'section')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '') || 'section';
+            const pageSlug = String(page || 'page').replace(/\.html$/i, '').replace(/[^a-z0-9]+/gi, '-');
+            return `${pageSlug}-${slug}`;
+        }
+
+        function parseSectionRef(ref) {
+            const value = String(ref ?? '');
+            if (value.startsWith('key:')) return { type: 'key', key: value.slice(4) };
+            const id = parseInt(value, 10);
+            return { type: 'id', id: Number.isNaN(id) ? null : id };
+        }
+
+        function sectionMatches(section, parsed) {
+            if (!section || !parsed) return false;
+            if (parsed.type === 'key') return section.key === parsed.key;
+            return section.id === parsed.id;
+        }
+
+        function findSection(sections, parsed) {
+            if (!parsed) return null;
+            if (parsed.type === 'key') return sections.find(s => s.key === parsed.key) || null;
+            return sections.find(s => s.id === parsed.id) || null;
+        }
+
+        function findSectionIndex(sections, parsed) {
+            if (!parsed) return -1;
+            if (parsed.type === 'key') return sections.findIndex(s => s.key === parsed.key);
+            return sections.findIndex(s => s.id === parsed.id);
+        }
+
+        function sectionRef(section) {
+            if (section.id != null && !Number.isNaN(Number(section.id))) return String(section.id);
+            if (section.key) return `key:${section.key}`;
+            return `key:${makeSectionKey(section.name, section.page)}`;
+        }
+
+        function normalizeSections(sections) {
+            const list = Array.isArray(sections) ? sections.map(s => ({ ...s })) : [];
+            const seenIds = new Set();
+            const seenKeys = new Set();
+            let maxId = 0;
+
+            list.forEach(section => {
+                if (section.id != null && !Number.isNaN(Number(section.id))) {
+                    maxId = Math.max(maxId, Number(section.id));
+                }
+            });
+
+            const normalized = [];
+            list.forEach(section => {
+                if (section.id != null && !Number.isNaN(Number(section.id))) {
+                    section.id = Number(section.id);
+                    if (seenIds.has(section.id)) return;
+                    seenIds.add(section.id);
+                } else {
+                    maxId += 1;
+                    section.id = maxId;
+                    seenIds.add(section.id);
+                }
+
+                if (!section.key && section.name && section.page) {
+                    section.key = makeSectionKey(section.name, section.page);
+                }
+
+                if (section.key) {
+                    if (seenKeys.has(section.key)) return;
+                    seenKeys.add(section.key);
+                }
+
+                normalized.push(section);
+            });
+
+            return normalized.sort((a, b) => (a.order || 0) - (b.order || 0));
+        }
+
+        function getSectionsData() {
+            return normalizeSections(getData(KEYS.sections) || []);
+        }
+
+        function persistSections(sections) {
+            setData(KEYS.sections, normalizeSections(sections));
+        }
+
         function ensureSectionPresets() {
-            const existingSections = getData(KEYS.sections) || [];
+            const deletedKeys = getDeletedSectionKeys();
+            const existingSections = normalizeSections(getData(KEYS.sections) || []);
             const keys = new Set(existingSections.map(section => section.key).filter(Boolean));
             let changed = false;
             getDefaultSectionPresets().forEach(section => {
-                if (!keys.has(section.key)) {
-                    existingSections.push(section);
-                    changed = true;
-                }
+                if (!section.key || deletedKeys.has(section.key) || keys.has(section.key)) return;
+                existingSections.push(section);
+                keys.add(section.key);
+                changed = true;
             });
-            if (changed) setData(KEYS.sections, existingSections);
+            if (changed) persistSections(existingSections);
         }
         function setData(key, val) { 
             try {
                 localStorage.setItem(key, JSON.stringify(val));
-                scheduleCloudSync();
+                if (!suppressCloudSync) scheduleCloudSync();
             } catch (e) {
                 console.error('LocalStorage error:', e);
                 if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
@@ -2379,14 +2497,25 @@
         async function loadCloudState() {
             try {
                 const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
-                if (!res.ok) return;
+                if (!res.ok) {
+                    console.warn('Cloud state load failed:', res.status);
+                    return false;
+                }
                 const payload = await res.json();
-                if (!payload || !payload.ok || !payload.state) return;
+                if (!payload || !payload.ok) {
+                    console.warn('Cloud state load failed:', payload && payload.error);
+                    return false;
+                }
+                if (payload.updatedAt) lastCloudUpdatedAt = payload.updatedAt;
+                if (!payload.state || typeof payload.state !== 'object') return false;
                 Object.entries(payload.state).forEach(([key, raw]) => {
                     if (typeof raw === 'string') localStorage.setItem(key, raw);
                 });
+                cloudStateLoaded = Object.keys(payload.state).length > 0;
+                return cloudStateLoaded;
             } catch (err) {
                 console.warn('Cloud state load skipped:', err);
+                return false;
             }
         }
 
@@ -2396,14 +2525,25 @@
         }
 
         async function syncCloudState() {
-            if (isCloudSyncing) return;
+            if (isCloudSyncing || suppressCloudSync) return;
             isCloudSyncing = true;
             try {
-                await fetch(CLOUD_STATE_ENDPOINT, {
+                const res = await fetch(CLOUD_STATE_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ state: getStateSnapshot() })
+                    body: JSON.stringify({
+                        state: getStateSnapshot(),
+                        baseUpdatedAt: lastCloudUpdatedAt
+                    })
                 });
+                if (res.status === 409) {
+                    console.warn('Cloud state conflict — reloading server data');
+                    await loadCloudState();
+                    return;
+                }
+                if (!res.ok) return;
+                const payload = await res.json();
+                if (payload && payload.updatedAt) lastCloudUpdatedAt = payload.updatedAt;
             } catch (err) {
                 console.warn('Cloud state sync failed:', err);
             } finally {
@@ -2420,8 +2560,8 @@
             });
         }
 
-        async function uploadImageToServer(file) {
-            if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+        async function uploadImageToServer(file, options = {}) {
+            if (!options.skipSizeCheck && file.size > MAX_UPLOAD_SIZE_BYTES) {
                 throw new Error('File too large');
             }
             const dataUrl = await fileToDataURL(file);
@@ -2441,6 +2581,12 @@
             }
         }
         function initData() {
+            if (cloudStateLoaded) {
+                ensureSitePages();
+                ensureSectionPresets();
+                syncPageOptions();
+                return;
+            }
             if (!getData(KEYS.nav)) setData(KEYS.nav, [
                 { id: 1, name: 'Ana Sayfa', url: 'index.html', order: 1, active: true, subItems: [] },
                 {
@@ -2779,12 +2925,13 @@
         // ===========================
         function renderSections() {
             const filter = document.getElementById('sectionPageFilter').value;
-            let sections = getData(KEYS.sections) || getData('ipek_sections') || [];
+            let sections = getSectionsData();
             if (filter) sections = sections.filter(s => s.page === filter);
-            sections.sort((a, b) => a.order - b.order);
             const el = document.getElementById('sectionsList');
             if (!sections.length) { el.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:30px;">Bölüm bulunamadı.</p>'; return; }
-            el.innerHTML = sections.map(s => `
+            el.innerHTML = sections.map(s => {
+                const ref = sectionRef(s);
+                return `
         <div class="content-item">
             <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
             ${s.bgImage ? `<img class="ci-thumb" src="${escapeHtml(s.bgImage)}" style="width:80px;height:50px;object-fit:cover;">` : `<div class="ci-thumb-placeholder"><i class="fas fa-layer-group"></i></div>`}
@@ -2794,16 +2941,17 @@
                 <div style="font-size:12px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(s.title)}</div>
             </div>
             <div style="display:flex;gap:6px;">
-                <button class="btn btn-icon edit" onclick="editSection(${s.id})" title="Düzenle"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-icon del" data-text="${escapeHtml(`${s.name} bölümünü silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('section',${s.id},this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-icon edit" data-ref="${escapeHtml(ref)}" onclick="editSection(this.dataset.ref)" title="Düzenle"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-icon del" data-ref="${escapeHtml(ref)}" data-text="${escapeHtml(`${s.name} bölümünü silmek istediğinizden emin misiniz?`)}" onclick="deleteConfirm('section',this.dataset.ref,this.dataset.text)" title="Sil"><i class="fas fa-trash"></i></button>
             </div>
-        </div>`).join('');
+        </div>`;
+            }).join('');
         }
 
-        function openSectionModal(id = null) {
-            document.getElementById('sectionId').value = id || '';
+        function openSectionModal(ref = null) {
+            document.getElementById('sectionId').value = ref || '';
             document.getElementById('sectionKey').value = '';
-            document.getElementById('sectionModalTitle').textContent = id ? 'Bölümü Düzenle' : 'Yeni Bölüm Ekle';
+            document.getElementById('sectionModalTitle').textContent = ref ? 'Bölümü Düzenle' : 'Yeni Bölüm Ekle';
             ['sectionName', 'sectionTitle', 'sectionSubtitle', 'sectionBgImage'].forEach(f => document.getElementById(f).value = '');
             document.getElementById('sectionContent').value = '';
             document.getElementById('sectionOrder').value = 1;
@@ -2811,11 +2959,12 @@
             document.getElementById('sectionPage').value = 'index.html';
             setSectionImgPreview('');
             switchSectionImgTab('url', document.querySelector('#sectionModal .img-picker-tab'));
-            
-            if (id) {
-                const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
-                const s = sections.find(x => x.id === id);
+
+            if (ref) {
+                const sections = getSectionsData();
+                const s = findSection(sections, parseSectionRef(ref));
                 if (s) {
+                    document.getElementById('sectionId').value = sectionRef(s);
                     document.getElementById('sectionKey').value = s.key || '';
                     document.getElementById('sectionName').value = s.name || '';
                     document.getElementById('sectionTitle').value = s.title || '';
@@ -2831,41 +2980,69 @@
             openModal('sectionModal');
         }
 
-        function editSection(id) { openSectionModal(id); }
+        function editSection(ref) { openSectionModal(ref); }
 
         function saveSection() {
             const name = document.getElementById('sectionName').value.trim();
             const page = document.getElementById('sectionPage').value;
             if (!name || !page) { toast('Ad ve sayfa zorunludur.', 'error'); return; }
-            const id = parseInt(document.getElementById('sectionId').value) || null;
-            const sections = getData(KEYS.sections) || getData('ipek_sections') || [];
-            const data = { 
-                key: document.getElementById('sectionKey').value || undefined,
-                name, 
-                page, 
-                order: parseInt(document.getElementById('sectionOrder').value) || 1, 
+            const refValue = document.getElementById('sectionId').value.trim();
+            const keyInput = document.getElementById('sectionKey').value.trim();
+            const sections = getSectionsData();
+            const data = {
+                name,
+                page,
+                order: parseInt(document.getElementById('sectionOrder').value) || 1,
                 type: document.getElementById('sectionType').value,
                 title: document.getElementById('sectionTitle').value,
                 subtitle: document.getElementById('sectionSubtitle').value,
                 content: document.getElementById('sectionContent').value,
                 bgImage: document.getElementById('sectionBgImage').value
             };
-            if (id) {
-                const idx = sections.findIndex(s => s.id === id);
-                if (idx >= 0) sections[idx] = { ...sections[idx], ...data };
-            } else {
-                const newId = Math.max(0, ...sections.map(s => s.id)) + 1;
-                sections.push({ id: newId, ...data });
+
+            let updated = false;
+            if (refValue) {
+                const parsed = parseSectionRef(refValue);
+                const idx = findSectionIndex(sections, parsed);
+                if (idx >= 0) {
+                    const existing = sections[idx];
+                    data.key = keyInput || existing.key || makeSectionKey(name, page);
+                    sections[idx] = { ...existing, ...data };
+                    removeDeletedSectionKey(data.key);
+                    updated = true;
+                }
             }
-            setData(KEYS.sections, sections);
-            addActivity(`Bölüm "${name}" ${id ? 'güncellendi' : 'eklendi'}`, 'success');
-            closeModal('sectionModal'); renderSections();
-            toast(`Bölüm ${id ? 'güncellendi' : 'eklendi'}!`, 'success');
+
+            if (!updated) {
+                data.key = keyInput || makeSectionKey(name, page);
+                const duplicateIdx = sections.findIndex(s => s.key === data.key);
+                if (duplicateIdx >= 0) {
+                    sections[duplicateIdx] = { ...sections[duplicateIdx], ...data };
+                    removeDeletedSectionKey(data.key);
+                } else {
+                    const newId = Math.max(0, ...sections.map(s => Number(s.id) || 0)) + 1;
+                    sections.push({ id: newId, ...data });
+                    removeDeletedSectionKey(data.key);
+                }
+            }
+
+            persistSections(sections);
+            addActivity(`Bölüm "${name}" ${refValue ? 'güncellendi' : 'eklendi'}`, 'success');
+            closeModal('sectionModal');
+            renderSections();
+            toast(`Bölüm ${refValue ? 'güncellendi' : 'eklendi'}!`, 'success');
         }
 
-        function deleteSection(id) {
-            const sections = (getData(KEYS.sections) || []).filter(s => s.id !== id);
-            setData(KEYS.sections, sections); renderSections(); updateStats(); toast('Bölüm silindi', 'info');
+        function deleteSection(ref) {
+            const parsed = parseSectionRef(ref);
+            const sections = getSectionsData();
+            const target = findSection(sections, parsed);
+            if (target && target.key) addDeletedSectionKey(target.key);
+            const filtered = sections.filter(s => !sectionMatches(s, parsed));
+            persistSections(filtered);
+            renderSections();
+            updateStats();
+            toast('Bölüm silindi', 'info');
         }
 
         function switchSectionImgTab(tab, el) {
@@ -3111,7 +3288,7 @@
             if (!files.length) return;
             for (const file of files) {
                 try {
-                    const url = await uploadImageToServer(file);
+                    const url = await uploadImageToServer(file, { skipSizeCheck: true });
                     currentProjectGallery.push(url);
                     // Add to global media library so it is visible in Library tab
                     const images = getData(KEYS.images) || [];
@@ -3284,7 +3461,7 @@
             const file = event.target.files[0];
             if (!file) return;
             try {
-                const url = await uploadImageToServer(file);
+                const url = await uploadImageToServer(file, { skipSizeCheck: true });
                 document.getElementById('projectImage').value = url;
                 setProjImgPreview(url);
                 const images = getData(KEYS.images) || [];
@@ -3629,10 +3806,18 @@
             document.getElementById('sidebarName').textContent = uname;
             document.getElementById('sidebarAvatar').textContent = uname.charAt(0).toUpperCase();
 
+            suppressCloudSync = true;
             await loadCloudState();
             initData();
+            const existingSections = getData(KEYS.sections);
+            if (existingSections && existingSections.length) {
+                localStorage.setItem(KEYS.sections, JSON.stringify(normalizeSections(existingSections)));
+            }
+            suppressCloudSync = false;
             renderDashboard();
-            scheduleCloudSync();
+            if (!cloudStateLoaded) {
+                await syncCloudState();
+            }
         });
     </script>
 </body>

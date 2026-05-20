@@ -394,19 +394,22 @@
     // Main Initialization
     const IPEKFrontend = {
         init: function () {
-            // Wait for DOM to be ready
+            const run = () => { this.load().catch(err => console.error('IPEK frontend load failed:', err)); };
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => this.load());
+                document.addEventListener('DOMContentLoaded', run);
             } else {
-                this.load();
+                run();
             }
         },
 
-        load: function () {
+        load: async function () {
             console.log('🚀 IPEK Frontend Integration Loading...');
 
-            // Initialize default data if available (e.g. from admin-data.js)
-            // This is crucial for Vercel deployments where localStorage is initially empty
+            if (window.__ipekCloudReady) {
+                await window.__ipekCloudReady;
+            }
+
+            // Fill only missing keys after Neon state is loaded
             if (typeof window.initializeEnhancedData === 'function') {
                 window.initializeEnhancedData();
             }

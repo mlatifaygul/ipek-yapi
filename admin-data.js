@@ -1139,5 +1139,4 @@ window.İPEKAdminEnhanced = {
     generateCardsHTML
 };
 
-// Auto-initialize when script loads
-initializeEnhancedData();
+// Defaults are applied after cloud hydrate in script.js / admin panel init.

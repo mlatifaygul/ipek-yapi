@@ -65,6 +65,7 @@ yapi-proje/
 
 - Admin panelde yapılan içerik değişiklikleri `/api/state` üzerinden Neon PostgreSQL tablosuna (`site_state`) yazılır.
 - Tarayıcı çerezi veya localStorage temizlense bile frontend açılışta aynı endpoint'ten state'i tekrar çekip yükler.
+- Redeploy sonrası verilerin sıfırlanmaması için admin panel açılışında otomatik “sunucuya yaz” kaldırıldı; Neon’daki kayıt önceliklidir ve daha yeni sunucu verisi varken eski localStorage ile üzerine yazılmaz.
 
 ## Özellik Detayları
 

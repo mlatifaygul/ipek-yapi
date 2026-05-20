@@ -115,6 +115,21 @@ const DEFAULT_SECTION_PRESETS = [
 const CLOUD_STATE_ENDPOINT = '/api/state';
 let cloudStateHydrated = false;
 
+window.__ipekCloudReady = (async function hydrateCloudStateEarly() {
+    try {
+        const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
+        if (!res.ok) return;
+        const payload = await res.json();
+        if (!payload || !payload.ok || !payload.state) return;
+        Object.entries(payload.state).forEach(([key, raw]) => {
+            if (typeof raw === 'string') localStorage.setItem(key, raw);
+        });
+        cloudStateHydrated = true;
+    } catch (e) {
+        console.warn('Cloud state could not be loaded:', e);
+    }
+})();
+
 function getLocalData(key) {
     try {
         const data = localStorage.getItem(key);
@@ -255,19 +270,11 @@ const SECTION_BINDINGS = {
 };
 
 async function hydrateCloudState() {
-    if (cloudStateHydrated) return;
-    try {
-        const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
-        if (!res.ok) return;
-        const payload = await res.json();
-        if (!payload || !payload.ok || !payload.state) return;
-        Object.entries(payload.state).forEach(([key, raw]) => {
-            if (typeof raw === 'string') localStorage.setItem(key, raw);
-        });
-        cloudStateHydrated = true;
-    } catch (e) {
-        console.warn('Cloud state could not be loaded:', e);
+    if (window.__ipekCloudReady) {
+        await window.__ipekCloudReady;
+        return;
     }
+    if (cloudStateHydrated) return;
 }
 
 // Initialize Dynamic Content
@@ -399,6 +406,9 @@ function checkAndInitData() {
         };
         localStorage.setItem(DATA_KEYS.settings, JSON.stringify(defaultSettings));
     }
+    if (typeof window.initializeEnhancedData === 'function') {
+        window.initializeEnhancedData();
+    }
     ensureDynamicSeedData();
 }
 
@@ -427,13 +437,18 @@ function ensureDynamicSeedData() {
 
     const sections = getLocalData(DATA_KEYS.sections) || [];
     const sectionKeys = new Set(sections.map(section => section.key).filter(Boolean));
+    let deletedSectionKeys = new Set();
+    try {
+        deletedSectionKeys = new Set(JSON.parse(localStorage.getItem('ipek_deleted_sections') || '[]'));
+    } catch (e) {
+        deletedSectionKeys = new Set();
+    }
     let sectionsChanged = false;
 
     DEFAULT_SECTION_PRESETS.forEach(section => {
-        if (!sectionKeys.has(section.key)) {
-            sections.push(section);
-            sectionsChanged = true;
-        }
+        if (!section.key || sectionKeys.has(section.key) || deletedSectionKeys.has(section.key)) return;
+        sections.push(section);
+        sectionsChanged = true;
     });
 
     if (sectionsChanged) {

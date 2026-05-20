@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
       const db = getPool();
       const result = await db.query(
         `
-        SELECT state
+        SELECT state, updated_at
         FROM site_state
         WHERE state_key = $1
         LIMIT 1
@@ -49,11 +49,15 @@ module.exports = async function handler(req, res) {
         [STATE_KEY]
       );
       if (!result.rows || result.rows.length === 0) {
-        return res.status(200).json({ ok: true, state: null });
+        return res.status(200).json({ ok: true, state: null, updatedAt: null });
       }
-      return res.status(200).json({ ok: true, state: normalizeStatePayload(result.rows[0].state) });
+      return res.status(200).json({
+        ok: true,
+        state: normalizeStatePayload(result.rows[0].state),
+        updatedAt: result.rows[0].updated_at || null
+      });
     } catch (error) {
-      return res.status(200).json({ ok: true, state: null });
+      return res.status(503).json({ ok: false, error: 'State read failed' });
     }
   }
 
@@ -66,7 +70,32 @@ module.exports = async function handler(req, res) {
 
       await ensureStateTable();
       const db = getPool();
-      await db.query(
+      const baseUpdatedAt = req.body && req.body.baseUpdatedAt ? req.body.baseUpdatedAt : null;
+
+      if (baseUpdatedAt) {
+        const existing = await db.query(
+          `
+          SELECT updated_at
+          FROM site_state
+          WHERE state_key = $1
+          LIMIT 1
+        `,
+          [STATE_KEY]
+        );
+        if (existing.rows && existing.rows.length > 0) {
+          const serverUpdatedAt = new Date(existing.rows[0].updated_at).getTime();
+          const clientBase = new Date(baseUpdatedAt).getTime();
+          if (!Number.isNaN(serverUpdatedAt) && !Number.isNaN(clientBase) && serverUpdatedAt > clientBase) {
+            return res.status(409).json({
+              ok: false,
+              error: 'Conflict',
+              updatedAt: existing.rows[0].updated_at
+            });
+          }
+        }
+      }
+
+      const saved = await db.query(
         `
         INSERT INTO site_state (state_key, state, updated_at)
         VALUES ($1, $2::jsonb, NOW())
@@ -74,11 +103,15 @@ module.exports = async function handler(req, res) {
         DO UPDATE SET
           state = EXCLUDED.state,
           updated_at = NOW()
+        RETURNING updated_at
       `,
         [STATE_KEY, JSON.stringify(state)]
       );
 
-      return res.status(200).json({ ok: true });
+      return res.status(200).json({
+        ok: true,
+        updatedAt: saved.rows[0] ? saved.rows[0].updated_at : null
+      });
     } catch (error) {
       return res.status(500).json({ ok: false, error: error.message || 'State save failed' });
     }
