@@ -91,15 +91,6 @@ function initializeEnhancedData() {
                 updated: '2024-05-10'
             },
             {
-                title: 'Biz Kimiz (Gelişmiş)',
-                file: 'biz-kimiz-new.html',
-                description: 'İPEK Hakkımızda - Resimli ve Zengin İçerik',
-                keywords: 'ipek, hakkımızda, şirket, ekip, vizyon',
-                template: 'default',
-                active: true,
-                updated: '2024-05-10'
-            },
-            {
                 title: 'Projeler',
                 file: 'projeler.html',
                 description: 'İPEK Projeleri Sayfası',
@@ -118,15 +109,6 @@ function initializeEnhancedData() {
                 updated: '2024-05-10'
             },
             {
-                title: 'İpek Keşifleri (Gelişmiş)',
-                file: 'ipek-kesifleri-new.html',
-                description: 'İPEK Keşifleri - Foldhome ve İnovasyon',
-                keywords: 'ipek, keşifler, foldhome, inovasyon',
-                template: 'default',
-                active: true,
-                updated: '2024-05-10'
-            },
-            {
                 title: 'İletişim',
                 file: 'iletisim.html',
                 description: 'İPEK İletişim Sayfası',
@@ -134,16 +116,6 @@ function initializeEnhancedData() {
                 template: 'default',
                 active: true,
                 updated: '2024-05-10'
-            },
-            {
-                title: 'İletişim (Gelişmiş)',
-                file: 'iletisim-new.html',
-                description: 'İPEK İletişim - Google Harita ve Detaylı Bilgiler',
-                keywords: 'ipek, iletişim, harita, adres, telefon',
-                template: 'default',
-                active: true,
-                updated: '2024-05-10'
-            }
         ];
         localStorage.setItem('ipek_pages', JSON.stringify(defaultPages));
     }
@@ -184,201 +156,6 @@ function initializeEnhancedData() {
                 title: 'Birikiminizle Birlikte Hayallerinizi Büyütün.',
                 subtitle: 'Hayalinizdeki İpek Arsa\'ya Şimdi Sahip Olun',
                 content: 'İpek Arsa bölümü içeriği',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            // Biz Kimiz Bölümleri
-            {
-                id: 4,
-                name: 'Biz Kimiz Hero',
-                page: 'biz-kimiz-new.html',
-                type: 'hero',
-                order: 1,
-                title: '2010 Yılından Beri İnce Düşünülmüş Yaşam Alanları',
-                subtitle: 'Metrekarelerle değil, santimetrekarelerle çalışarak hayata geçirdiğimiz projelerimizle Türkiye\'nin lider inşaat şirketlerinden biri olmayı sürdürüyoruz.',
-                content: 'Hero istatistikleri ve içerik',
-                bgImage: 'https://via.placeholder.com/1920x600/2c3e50/ffffff?text=İPEK+Hakkımızda',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 5,
-                name: 'Hikayemiz',
-                page: 'biz-kimiz-new.html',
-                type: 'text',
-                order: 2,
-                title: 'Hikayemiz',
-                subtitle: '2010 yılında, inşaat sektörüne farklı bir bakış açısı getirmek için yola çıktık.',
-                content: 'Sadece binalar değil, aynı zamanda yaşam kalitesini artıran, estetik ve fonksiyonelliği bir araya getiren mekanlar yaratma tutkusuyla İPEK\'i kurduk. İlk projemizden bu yana, her bir santimetreyi önemseyen bir anlayışla çalışıyoruz. Bize göre mükemmellik, detaylarda gizlidir. Bu nedenle projelerimizde her zaman en kaliteli malzemeleri, en son teknolojiyi ve en iyi mimari çözümleri kullanıyoruz.',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 6,
-                name: 'Değerlerimiz',
-                page: 'biz-kimiz-new.html',
-                type: 'card',
-                order: 3,
-                title: 'Değerlerimiz',
-                subtitle: 'Temel değerlerimiz',
-                content: '6 değer kartı içeriği',
-                bgImage: '',
-                bgColor: '#f8f9fa'
-            },
-            {
-                id: 7,
-                name: 'Zaman Çizelgesi',
-                page: 'biz-kimiz-new.html',
-                type: 'custom',
-                order: 4,
-                title: 'Zaman Çizelgemiz',
-                subtitle: 'Yolculuğumuz',
-                content: 'Timeline bileşenleri',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 8,
-                name: 'Lider Ekibimiz',
-                page: 'biz-kimiz-new.html',
-                type: 'card',
-                order: 5,
-                title: 'Lider Ekibimiz',
-                subtitle: 'Yönetim kadromuz',
-                content: '4 kişilik ekip kartları',
-                bgImage: '',
-                bgColor: '#f8f9fa'
-            },
-            {
-                id: 9,
-                name: 'Ödüllerimiz',
-                page: 'biz-kimiz-new.html',
-                type: 'card',
-                order: 6,
-                title: 'Ödüllerimiz',
-                subtitle: 'Başarılarımız',
-                content: 'Ödül kartları',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            // İpek Keşifleri Bölümleri
-            {
-                id: 10,
-                name: 'İpek Keşifleri Hero',
-                page: 'ipek-kesifleri-new.html',
-                type: 'hero',
-                order: 1,
-                title: 'Foldhome İle Kişiye Özel Kullanım Alanlarını Keşfedin',
-                subtitle: 'Bir İpek keşfi olan Foldhome ile evinizde olmasını hayal ettiğiniz ama bir eve sığamayacak alanlar dilediğiniz zaman evinize ekleniyor.',
-                content: 'Hero içeriği',
-                bgImage: 'https://via.placeholder.com/1920x800/2c3e50/ffffff?text=Foldhome+İnovasyonu',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 11,
-                name: 'Öne Çıkan Foldhome',
-                page: 'ipek-kesifleri-new.html',
-                type: 'feature',
-                order: 2,
-                title: 'Evine Ekstra Alanlar Kat',
-                subtitle: 'Foldhome özellikleri',
-                content: 'Foldhome detaylı açıklama',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 12,
-                name: 'Tasarım ve İnovasyon',
-                page: 'ipek-kesifleri-new.html',
-                type: 'card',
-                order: 3,
-                title: 'Tasarım ve İnovasyon',
-                subtitle: 'İnovasyon konseptleri',
-                content: '4 inovasyon kartı',
-                bgImage: '',
-                bgColor: '#f8f9fa'
-            },
-            {
-                id: 13,
-                name: 'Keşif Kategorileri',
-                page: 'ipek-kesifleri-new.html',
-                type: 'card',
-                order: 4,
-                title: 'Keşif Kategorileri',
-                subtitle: 'Ana kategoriler',
-                content: '4 kategori kartı',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 14,
-                name: 'Tüm Keşifler',
-                page: 'ipek-kesifleri-new.html',
-                type: 'card',
-                order: 5,
-                title: 'Tüm Keşifler',
-                subtitle: 'Keşif kartları',
-                content: '6 keşif kartı',
-                bgImage: '',
-                bgColor: '#f8f9fa'
-            },
-            // İletişim Bölümleri
-            {
-                id: 15,
-                name: 'İletişim Hero',
-                page: 'iletisim-new.html',
-                type: 'hero',
-                order: 1,
-                title: 'İletişim',
-                subtitle: 'Projelerimiz hakkında daha fazla bilgi almak, sorularınızı sormak veya bizimle iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.',
-                content: 'Hero içeriği',
-                bgImage: 'https://via.placeholder.com/1920x600/2c3e50/ffffff?text=İletişim+İPEK',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 16,
-                name: 'İletişim Bilgileri',
-                page: 'iletisim-new.html',
-                type: 'contact',
-                order: 2,
-                title: 'Bize Ulaşın',
-                subtitle: 'İletişim formu ve bilgiler',
-                content: 'İletişim formu ve bilgi kartları',
-                bgImage: '',
-                bgColor: '#f8f9fa'
-            },
-            {
-                id: 17,
-                name: 'Harita',
-                page: 'iletisim-new.html',
-                type: 'custom',
-                order: 3,
-                title: 'Konumumuz',
-                subtitle: 'Google Harita',
-                content: 'Google Maps iframe',
-                bgImage: '',
-                bgColor: '#ffffff'
-            },
-            {
-                id: 18,
-                name: 'Satış Ofisleri',
-                page: 'iletisim-new.html',
-                type: 'card',
-                order: 4,
-                title: 'Satış Ofislerimiz',
-                subtitle: 'Türkiye geneli ofisler',
-                content: '4 ofis kartı',
-                bgImage: '',
-                bgColor: '#f8f9fa'
-            },
-            {
-                id: 19,
-                name: 'SSS',
-                page: 'iletisim-new.html',
-                type: 'custom',
-                order: 5,
-                title: 'Sıkça Sorulan Sorular',
-                subtitle: 'FAQ bölümü',
-                content: '5 soru-cevap',
                 bgImage: '',
                 bgColor: '#ffffff'
             }
