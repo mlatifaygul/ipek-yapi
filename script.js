@@ -183,6 +183,19 @@ function revealHomeHero() {
     document.documentElement.classList.add('ipek-hero-ready');
 }
 
+function revealPageContent() {
+    // Güvenlik zamanlayıcısını temizle
+    if (window.__ipekSafetyTimer) {
+        clearTimeout(window.__ipekSafetyTimer);
+        window.__ipekSafetyTimer = null;
+    }
+    document.documentElement.classList.remove('ipek-content-pending');
+    // rAF ile geçiş stilinin uygulanmasını garantile
+    requestAnimationFrame(function () {
+        document.documentElement.classList.add('ipek-content-ready');
+    });
+}
+
 window.__ipekCloudReady = (async function hydrateCloudStateEarly() {
     try {
         const res = await fetch(CLOUD_STATE_ENDPOINT, { cache: 'no-store' });
@@ -437,6 +450,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     await loadDynamicContent();
+
+    // Tüm dinamik içerik yüklendi — sayfayı göster
+    revealPageContent();
 
     if (document.documentElement.classList.contains('ipek-hero-pending')) {
         setTimeout(revealHomeHero, 6000);
