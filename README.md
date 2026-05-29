@@ -46,6 +46,8 @@ yapi-proje/
 ## Kurulum ve Çalıştırma
 
 1. Projeyi bilgisayarınıza klonlayın
+2. Vercel projesine Neon bağlayın (Storage -> Marketplace -> Neon)
+3. `DATABASE_URL` değişkeninin Production ortamında tanımlı olduğundan emin olun
 2. Yerel bir sunucu başlatın:
    ```bash
    # Node.js ile
@@ -58,6 +60,12 @@ yapi-proje/
    php -S localhost:8000
    ```
 3. Tarayıcıda `http://localhost:8000` adresini açın
+
+## Admin Veri Kalıcılığı
+
+- Admin panelde yapılan içerik değişiklikleri `/api/state` üzerinden Neon PostgreSQL tablosuna (`site_state`) yazılır.
+- Tarayıcı çerezi veya localStorage temizlense bile frontend açılışta aynı endpoint'ten state'i tekrar çekip yükler.
+- Redeploy sonrası verilerin sıfırlanmaması için admin panel açılışında otomatik “sunucuya yaz” kaldırıldı; Neon’daki kayıt önceliklidir ve daha yeni sunucu verisi varken eski localStorage ile üzerine yazılmaz.
 
 ## Özellik Detayları
 

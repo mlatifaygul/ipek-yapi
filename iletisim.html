@@ -435,45 +435,13 @@
         <section class="contact-content">
             <div class="container">
                 <div class="contact-grid">
-                    <!-- Contact Form -->
-                    <div class="contact-form-section">
-                        <h2 class="form-title">Bize Ulaşın</h2>
-                        <form class="contact-form" id="contactForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName">Adınız</label>
-                                    <input type="text" id="firstName" name="firstName" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">Soyadınız</label>
-                                    <input type="text" id="lastName" name="lastName" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">E-posta</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Telefon</label>
-                                <input type="tel" id="phone" name="phone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="subject">Konu</label>
-                                <select id="subject" name="subject" required>
-                                    <option value="">Konu Seçin</option>
-                                    <option value="proje">Proje Bilgisi</option>
-                                    <option value="satış">Satış</option>
-                                    <option value="yatirim">Yatırım</option>
-                                    <option value="ik">İnsan Kaynakları</option>
-                                    <option value="diger">Diğer</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Mesajınız</label>
-                                <textarea id="message" name="message" required></textarea>
-                            </div>
-                            <button type="submit" class="submit-btn">Gönder</button>
-                        </form>
+                    <!-- Map Section -->
+                    <div class="contact-form-section" style="padding: 0; overflow: hidden; height: 550px; position: relative;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3002.6385969124875!2d29.0075!3d41.1085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDEuMTA4NTAwMCwgMjkuMDA3NTAwMDA!5e0!3m2!1str!2str!4v1234567890"
+                            width="100%" height="100%" style="border:0; display:block;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
                     </div>
 
                     <!-- Contact Info -->
@@ -527,15 +495,6 @@
             </div>
         </section>
 
-        <!-- Map Section -->
-        <section class="map-section">
-            <div class="map-container">
-                <div class="map-overlay">
-                    <h3>Merkez Ofisimiz</h3>
-                    <p>Maslak'taki merkez ofisimizi ziyaret edebilirsiniz. Randevu almanızı öneririz.</p>
-                </div>
-            </div>
-        </section>
 
         <!-- Offices Section -->
         <section class="offices-section">
@@ -629,11 +588,30 @@
         </section>
     </main>
 
+    <script src="admin-data.js"></script>
+    <script src="ipek-frontend.js"></script>
+    <script src="ipek-site-settings.js"></script>
     <script src="script.js"></script>
     <script>
+        // Parse URL params for project parameter
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectParam = urlParams.get('project');
+            if (projectParam) {
+                const subjectSelect = document.getElementById('subject');
+                const messageTextarea = document.getElementById('message');
+                if (subjectSelect) subjectSelect.value = 'proje';
+                if (messageTextarea) {
+                    messageTextarea.value = `Merhaba, "${decodeURIComponent(projectParam)}" projeniz hakkında detaylı bilgi almak istiyorum. Sizi Arayalım talebi bırakıyorum.`;
+                }
+            }
+        });
+
         // Contact form handling
-        document.getElementById('contactForm').addEventListener('submit', function (e) {
-            e.preventDefault();
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
@@ -670,7 +648,8 @@
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }, 2000);
-        });
+            });
+        }
 
         // FAQ functionality
         document.querySelectorAll('.faq-question').forEach(question => {
@@ -691,9 +670,11 @@
         });
 
         // Phone number formatting
-        document.getElementById('phone').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\s/g, '');
-            let formattedValue = '';
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = '';
 
             if (value.length > 0) {
                 if (value.startsWith('0')) {
@@ -721,7 +702,8 @@
             }
 
             e.target.value = formattedValue;
-        });
+            });
+        }
     </script>
 </body>
 

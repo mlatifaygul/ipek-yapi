@@ -262,26 +262,26 @@
     <!-- About Page -->
     <main class="about-page">
         <!-- Hero Section -->
-        <section class="hero-section">
+        <section class="hero-section" data-ipek-section="about-hero">
             <div class="container">
                 <div class="hero-content">
-                    <h1>2010 Yılından Beri İnce Düşünülmüş Yaşam Alanları</h1>
-                    <p>Metrekarelerle değil, santimetrekarelerle çalışarak hayata geçirdiğimiz projelerimizle
+                    <h1 data-ipek-field="title">2010 Yılından Beri İnce Düşünülmüş Yaşam Alanları</h1>
+                    <p data-ipek-field="subtitle">Metrekarelerle değil, santimetrekarelerle çalışarak hayata geçirdiğimiz projelerimizle
                         Türkiye'nin lider inşaat şirketlerinden biri olmayı sürdürüyoruz.</p>
                 </div>
             </div>
         </section>
 
         <!-- Vision Section -->
-        <section class="content-section">
+        <section class="content-section" data-ipek-section="about-vision">
             <div class="container">
                 <div class="section-content">
-                    <h2>Vizyonumuz</h2>
-                    <p>Müşterilerimize sadece binalar değil, aynı zamanda yaşam kalitesini artıran, estetik ve
+                    <h2 data-ipek-field="title">Vizyonumuz</h2>
+                    <p data-ipek-field="subtitle">Müşterilerimize sadece binalar değil, aynı zamanda yaşam kalitesini artıran, estetik ve
                         fonksiyonelliği bir araya getiren yaşam alanları sunmak. Her projemizde yenilikçi çözümlerle
                         sektörde fark yaratmak ve Türkiye'yi global marka haline getirmek.</p>
 
-                    <div class="values-grid">
+                    <div class="values-grid" data-ipek-field="content">
                         <div class="value-card">
                             <div class="value-icon">
                                 <i class="fas fa-eye"></i>
@@ -316,11 +316,11 @@
         </section>
 
         <!-- Manifesto Section -->
-        <section id="manifesto" class="content-section">
+        <section id="manifesto" class="content-section" data-ipek-section="about-manifesto">
             <div class="container">
                 <div class="section-content">
-                    <h2>Manifesto</h2>
-                    <p>Biz İPEK olarak, inşaatı sadece bir sektör değil, bir sanat ve bir sorumluluk olarak görüyoruz.
+                    <h2 data-ipek-field="title">Manifesto</h2>
+                    <p data-ipek-field="subtitle">Biz İPEK olarak, inşaatı sadece bir sektör değil, bir sanat ve bir sorumluluk olarak görüyoruz.
                         Her çivinin, her duvarın arkasında bir hayat olduğunun bilinciyle hareket ediyoruz.</p>
                     <p>Santimetrekareleri önemsiyoruz çünkü detaylar bütünü oluşturur. Mükemmeli ararken standardı
                         yükseltiyoruz. Sadece evler değil, yaşam alanları inşa ediyoruz.</p>
@@ -331,11 +331,11 @@
         </section>
 
         <!-- Timeline Section -->
-        <section id="tarihce" class="content-section">
+        <section id="tarihce" class="content-section" data-ipek-section="about-history">
             <div class="container">
                 <div class="section-content">
-                    <h2>Tarihçe</h2>
-                    <div class="timeline">
+                    <h2 data-ipek-field="title">Tarihçe</h2>
+                    <div class="timeline" data-ipek-field="content">
                         <div class="timeline-item">
                             <div class="timeline-content">
                                 <h3>İPEK Kuruldu</h3>
@@ -401,6 +401,9 @@
         </section>
     </main>
 
+    <script src="admin-data.js"></script>
+    <script src="ipek-frontend.js"></script>
+    <script src="ipek-site-settings.js"></script>
     <script src="script.js"></script>
     <script>
         // Counter animation
